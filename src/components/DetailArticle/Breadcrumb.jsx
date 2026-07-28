@@ -1,12 +1,12 @@
 import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-function BreadcrumbDetailArticle({ articleId }) {
+function BreadcrumbDetailArticle({ articleTitle }) {
   return (
-    <Breadcrumb className='ml-15px'>
+    <Breadcrumb className="breadcrumb-modern">
       <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
-      <Breadcrumb.Item active>Artikel</Breadcrumb.Item>
-      <Breadcrumb.Item active>{articleId}</Breadcrumb.Item>
+      <Breadcrumb.Item href='/'>Artikel</Breadcrumb.Item>
+      <Breadcrumb.Item active>{articleTitle || 'Detail Artikel'}</Breadcrumb.Item>
     </Breadcrumb>
   );
 }

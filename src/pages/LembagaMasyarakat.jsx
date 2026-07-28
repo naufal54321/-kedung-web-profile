@@ -1,37 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import LembagaTabs from '../components/Lembaga/LembagaTabs';
-import Breadcrumb from '../components/Lembaga/Breadcrumb';
-import Loader from '../components/LoaderCustom'; // Import komponen Loader
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import CSS untuk AOS
+import api from '../utils/api';
+import ProfilHero from '../components/Profil/ProfilHero';
+import ProfilCard from '../components/Profil/ProfilCard';
 
 function LembagaMasyarakat() {
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah halaman sedang memuat
+  const [lembagas, setLembagas] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false); // Set loading menjadi false setelah data berhasil dimuat
-      // Initialize AOS setelah data dimuat
-      AOS.init();
-    }, 2000); // 6 detik
-  }, []);
+    const fetchData = async () => {
+      try {
+        const data = await api.getAllLembagas()
+        setLembagas(data)
+      } catch (error) {
+        console.error('Error fetching lembagas:', error)
+      }
+      setLoading(false)
+    }
+    fetchData()
+  }, [])
 
   return (
-    <section className='poppins-medium'>
-      <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3 mx-4'>
-        <Breadcrumb />
-      </div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <div className='bg-white p-4 rounded mt-2 mx-4 mb-3 text-center' data-aos="fade-up">
-            <h4>Lembaga Masyarakat</h4>
-          </div>
-          <LembagaTabs></LembagaTabs>
-        </>
-      )}
-    </section>
+    <main className="profil-page">
+      <ProfilHero
+        title="Lembaga Masyarakat"
+        subtitle="Organisasi dan kelembagaan yang ada di Padukuhan Kedung"
+      />
+      <div className="container py-4">
+        <ProfilCard>
+          <LembagaTabs lembagas={lembagas} loading={loading} />
+        </ProfilCard>
+    </div>
+  </main>
   )
 }
 

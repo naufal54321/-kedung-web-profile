@@ -1,52 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAllDevelopers } from '../../utils/developer';
 import { FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa';
 
-class DeveloperCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      developers: [],
-    };
-  }
+const DeveloperCard = () => {
+  const [developers, setDevelopers] = useState([]);
 
-  componentDidMount() {
-    const developers = getAllDevelopers();
-    this.setState({ developers });
-  }
+  useEffect(() => {
+    setDevelopers(getAllDevelopers());
+  }, []);
 
-  openSocialMedia(url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
+  const openSocialMedia = (url) => {
+    if (url) window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
-  render() {
-    return (
-      <div className="container mb-4 d-flex flex-wrap gap-4 justify-content-center mx-auto">
-        {this.state.developers.map((developer) => (
-          <div key={developer.id} className="card border shadow developer-item" style={{ width: '20rem' }}>
-            <div className="bg-secondary-green rounded-top p-3 position-relative mb-5" style={{ height: '100px' }}>
-              <img className="card-img-top w-50 position-absolute top-100 start-50 translate-middle rounded-circle border-green" src={developer.imageUrl} alt={developer.name} />
+  return (
+    <div className="row g-4 justify-content-center">
+      {developers.map((developer) => (
+        <div key={developer.id} className="col-md-4 col-sm-6">
+          <div className="dev-card">
+            <div className="dev-card-avatar">
+              <img src={developer.imageUrl} alt={developer.name} loading="lazy" />
             </div>
-            <div className="card-body mt-5 d-flex flex-column justify-content-evenly align-items-center">
-              <h5 className="card-title m-0">{developer.name}</h5>
-              <p className="m-0">{developer.job}</p>
-            </div>
-            <div className="bg-primary-green d-flex justify-content-center rounded-bottom">
-              <button className="btn text-white" onClick={() => this.openSocialMedia(developer.instagram)}>
-                <FaInstagram />
-              </button>
-              <button className="btn text-white" onClick={() => this.openSocialMedia(developer.github)}>
-                <FaGithub />
-              </button>
-              <button className="btn text-white" onClick={() => this.openSocialMedia(developer.linkedin)}>
-                <FaLinkedin />
-              </button>
+            <h5 className="dev-card-name">{developer.name}</h5>
+            <p className="dev-card-job">{developer.job}</p>
+            <div className="dev-card-social">
+              {developer.instagram && (
+                <button className="dev-social-btn" onClick={() => openSocialMedia(developer.instagram)}>
+                  <FaInstagram />
+                </button>
+              )}
+              {developer.github && (
+                <button className="dev-social-btn" onClick={() => openSocialMedia(developer.github)}>
+                  <FaGithub />
+                </button>
+              )}
+              {developer.linkedin && (
+                <button className="dev-social-btn" onClick={() => openSocialMedia(developer.linkedin)}>
+                  <FaLinkedin />
+                </button>
+              )}
             </div>
           </div>
-        ))}
-      </div>
-    );
-  }
-}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default DeveloperCard;

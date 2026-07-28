@@ -4,30 +4,29 @@ import CustomPagination from './CustomPagination';
 
 const ArticleList = ({ articles }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 3;
+  const articlesPerPage = 6;
 
-  // Menghitung indeks awal dan akhir artikel untuk halaman saat ini
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  
-  // Mengurutkan artikel berdasarkan tanggal publish date
-  const sortedArticles = articles.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+
+  const sortedArticles = [...articles].sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
 
   const currentArticles = sortedArticles.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  // Fungsi untuk mengubah halaman
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="container">
-      <div className="row">
-        {currentArticles.map((article) => (
-          <div key={article.id} className="col-md-12">
-            <ArticleItem article={article} />
+    <div>
+      <div className="row g-4">
+        {currentArticles.map((article, index) => (
+          <div key={article.id} className="col-md-6">
+            <ArticleItem article={article} index={index} />
           </div>
         ))}
       </div>
-      <CustomPagination currentPage={currentPage} totalPages={Math.ceil(articles.length / articlesPerPage)} paginate={paginate} />
+      <div className="mt-4">
+        <CustomPagination currentPage={currentPage} totalPages={Math.ceil(articles.length / articlesPerPage)} paginate={paginate} />
+      </div>
     </div>
   );
 };

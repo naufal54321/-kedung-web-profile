@@ -1,19 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 function Loader() {
-  const [isVisible, setIsVisible] = useState(true);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 6000);
-
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
-  return isVisible ? (
+  return (
     <div className="loader-container">
       <div className="loader">
         <div className="box box0">
@@ -45,7 +33,7 @@ function Loader() {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default Loader;

@@ -11,7 +11,7 @@ const ArticleList = ({ articles }) => {
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   
   // Mengurutkan artikel berdasarkan tanggal publish date
-  const sortedArticles = articles.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+  const sortedArticles = [...articles].sort((a, b) => (b.publishDate || '').localeCompare(a.publishDate || ''));
 
   const currentArticles = sortedArticles.slice(indexOfFirstArticle, indexOfLastArticle);
 
@@ -19,7 +19,7 @@ const ArticleList = ({ articles }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="container">
+    <div>
       <div className="row">
         {currentArticles.map((article) => (
           <div key={article.id} className="col-md-12">

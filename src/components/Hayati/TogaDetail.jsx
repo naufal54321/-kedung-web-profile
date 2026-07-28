@@ -20,7 +20,7 @@ function TogaDetail() {
       }
     };
 
-    setTimeout(fetchTogaDetail, 2000); // Tambahkan setTimeout untuk menunda pemanggilan fetchTogaDetail selama 6 detik
+    fetchTogaDetail();
   }, [id]);
 
   if (loading) {
@@ -35,12 +35,12 @@ function TogaDetail() {
     <div className="container mt-4 bg-white p-4 rounded mb-4">
       <div className="row">
         <div className="col-md-6">
-          <img src={toga.imgUrl} alt={toga.name} className="img-fluid rounded" />
+          <img src={toga.imgUrl} alt={toga.name} loading="lazy" className="img-fluid rounded" />
         </div>
         <div className="col-md-6">
           <h4 className='p-2 text-center border-bottom border-success'>{toga.name}</h4>
           <ul>
-            {toga.manfaat.map((manfaat, index) => (
+            {(toga.manfaat ?? []).map((manfaat, index) => (
               <li key={index}>
                 <strong>Khasiat:</strong> {manfaat.khasiat}<br />
                 <strong>Cara Pengolahan:</strong> {manfaat.cara}

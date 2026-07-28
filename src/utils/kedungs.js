@@ -1,5 +1,11 @@
 let kedungs = [
     {
+      id: 'kedung-utama',
+      name: 'Peta Padukuhan Kedung',
+      link: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7533.694553265367!2d110.30073044999999!3d-7.8843899!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aff3381899a6b%3A0x301b6a7581f8fd4e!2sKedung%2C%20Guwosari%2C%20Kec.%20Pajangan%2C%20Kabupaten%20Bantul%2C%20Daerah%20Istimewa%20Yogyakarta!5e1!3m2!1sid!2sid!4v1784773917193!5m2!1sid!2sid',
+      isMain: true
+    },
+    {
       id: 'kedung-1',
       name: 'Kedung 1',
       link: 'https://www.google.com/maps/d/u/0/embed?mid=1nUZNsSP7ro-jZAqgE3r74K75KtguF_M',

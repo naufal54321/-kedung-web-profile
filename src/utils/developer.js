@@ -26,6 +26,15 @@ let developers = [
     github: 'https://github.com/NanaBanana14',
     imageUrl: '/img/developer/ika.png',
   },
+  {
+    id: 'developer-4',
+    name: 'Naufal',
+    job: 'Pengembang Website',
+    linkedin: '',
+    instagram: '',
+    github: 'https://github.com/naufal54321',
+    imageUrl: '/img/developer/nopal.png',
+  },
 ];
 
 function getAllDevelopers() {

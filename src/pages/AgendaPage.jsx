@@ -1,75 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Spinner, Nav } from 'react-bootstrap';
+import { FaCalendarAlt, FaList } from 'react-icons/fa';
 import AgendaList from '../components/agenda/AgendaList';
+import CustomCalendar from '../components/agenda/CustomCalendar'; // ✅ Import baru
 import api from '../utils/api';
-import BreadcrumbDetailAgenda from '../components/agenda/Breadcrumb';
 import CustomPagination from '../components/agenda/CustomPagination';
-import Loader from '../components/LoaderCustom'; // Import komponen Loader
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import CSS untuk AOS
+import ProfilHero from '../components/Profil/ProfilHero';
+import ProfilCard from '../components/Profil/ProfilCard';
 
 const AgendaPage = () => {
   const [agendas, setAgendas] = useState([]);
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah halaman sedang memuat
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Number of items to show per page
+  const [filter, setFilter] = useState('semua');
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchAgendas = async () => {
-      setTimeout(async () => { // Tambahkan setTimeout untuk menunda pemanggilan fetchAgendas selama 6 detik
-        try {
-          const fetchedAgendas = await api.getAllAgendas();
-          setAgendas(fetchedAgendas);
-          setLoading(false); // Set loading menjadi false setelah data dimuat
-          // Initialize AOS setelah data dimuat
-          AOS.init();
-        } catch (error) {
-          console.error('Error fetching agendas:', error);
-          setLoading(false); // Set loading menjadi false jika terjadi kesalahan saat memuat data
-        }
-      }, 6000); // 6 detik
+      try {
+        const fetchedAgendas = await api.getAllAgendas();
+        setAgendas(fetchedAgendas);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching agendas:', error);
+        setLoading(false);
+      }
     };
-
     fetchAgendas();
   }, []);
 
-  // Logic for pagination
+  const today = new Date();
+  const filteredAgendas = agendas.filter((a) => {
+    if (filter === 'semua') return true;
+    if (filter === 'akan-datang') return new Date(a.dateEnd) >= today && new Date(a.dateStart) > today;
+    if (filter === 'berlangsung') return new Date(a.dateStart) <= today && new Date(a.dateEnd) >= today;
+    if (filter === 'selesai') return new Date(a.dateEnd) < today;
+    return true;
+  });
+
+  const sorted = [...filteredAgendas].sort((a, b) => new Date(b.dateStart) - new Date(a.dateStart));
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = agendas.slice(indexOfFirstItem, indexOfLastItem);
-
+  const currentItems = sorted.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <section>
-      <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3 nav-margin mx-4' data-aos="zoom-out">
-        <BreadcrumbDetailAgenda />
-      </div>
-      <div>
-        <div className='bg-white mx-4 p-3 rounded text-center'><h3>Agenda</h3></div>
-      </div>
-      <Container>
-        {loading ? (
-          <Loader /> // Tampilkan loader jika loading adalah true
-        ) : (
-          <>
-            <Row className='mt-3'>
-              <Col md={6} lg={4} className='mx-md-auto mx-lg-4 p-2 rounded' data-aos="zoom-in">
-                <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto' }}>
-                  <AgendaList agendas={currentItems} />
+    <main className="profil-page">
+      <ProfilHero title="Agenda" subtitle="Jadwal kegiatan dan acara di Padukuhan Kedung" />
+
+      <Container className="py-4">
+        <div className="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3" data-aos="fade-up">
+          <Nav variant="pills" className="gap-1">
+            <Nav.Item>
+              <Nav.Link active={filter === 'semua'} onClick={() => { setFilter('semua'); setCurrentPage(1); }}
+                className={filter === 'semua' ? 'bg-success text-white' : 'text-dark bg-white'}>
+                Semua
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link active={filter === 'akan-datang'} onClick={() => { setFilter('akan-datang'); setCurrentPage(1); }}
+                className={filter === 'akan-datang' ? 'bg-success text-white' : 'text-dark bg-white'}>
+                Akan Datang
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link active={filter === 'berlangsung'} onClick={() => { setFilter('berlangsung'); setCurrentPage(1); }}
+                className={filter === 'berlangsung' ? 'bg-success text-white' : 'text-dark bg-white'}>
+                Berlangsung
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link active={filter === 'selesai'} onClick={() => { setFilter('selesai'); setCurrentPage(1); }}
+                className={filter === 'selesai' ? 'bg-success text-white' : 'text-dark bg-white'}>
+                Selesai
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </div>
+
+        <Row className="g-4">
+          <Col lg={8}>
+            {loading ? (
+              <div className="d-flex justify-content-center py-5"><Spinner animation="border" variant="success" /></div>
+            ) : currentItems.length === 0 ? (
+              <div className="text-center py-5 text-muted">
+                <FaList size={40} className="mb-3 opacity-50" />
+                <p>Tidak ada agenda {filter !== 'semua' ? 'dengan status ini' : ''}</p>
+              </div>
+            ) : (
+              <>
+                <AgendaList agendas={currentItems} />
+                {sorted.length > itemsPerPage && (
+                  <div className="mt-4">
+                    <CustomPagination currentPage={currentPage} totalPages={Math.ceil(sorted.length / itemsPerPage)} paginate={paginate} />
+                  </div>
+                )}
+              </>
+            )}
+          </Col>
+          <Col lg={4}>
+            {/* ✅ Kalender Kustom pengganti Google Calendar */}
+            <ProfilCard>
+              <h5 className="profil-card-title">
+                <FaCalendarAlt className="me-2" />
+                Kalender Agenda
+              </h5>
+              {loading ? (
+                <div className="d-flex justify-content-center py-4">
+                  <Spinner animation="border" variant="success" size="sm" />
                 </div>
-                <CustomPagination currentPage={currentPage} totalPages={Math.ceil(agendas.length / itemsPerPage)} paginate={paginate} />
-              </Col>
-              <Col md={6} lg={2} className='p-2 rounded mx-md-auto mx-lg-4' data-aos="zoom-in">
-                <section className="embed-responsive embed-responsive-16by9">
-                  <iframe className="embed-responsive-item calendar-custom bg-white rounded p-4" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=UTC&bgcolor=%2333B679&src=cGFkdWt1aGFua2VkdW5nQGdtYWlsLmNvbQ&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=aWQuaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23039BE5&color=%2333B679&color=%230B8043"></iframe>
-                </section>
-              </Col>
-            </Row>
-          </>
-        )}
+              ) : (
+                <CustomCalendar agendas={agendas} />
+              )}
+            </ProfilCard>
+          </Col>
+        </Row>
       </Container>
-    </section>
+    </main>
   );
 };
 

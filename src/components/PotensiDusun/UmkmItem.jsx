@@ -1,55 +1,54 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { FaWhatsapp, FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { FaUser, FaCalendarAlt } from 'react-icons/fa';
 
 const UmkmItem = ({ umkm }) => {
-  const truncateDescription = (description) => {
-    const words = description.split(' ');
-    if (words.length > 25) {
-      return words.slice(0, 25).join(' ') + '...';
-    } else {
-      return description;
-    }
+  const truncateDesc = (text) => {
+    const words = text?.split(' ') || [];
+    return words.length > 20 ? words.slice(0, 20).join(' ') + '...' : text;
   };
 
+  const formatPrice = (price) => {
+    if (!price) return null;
+    const prefix = price.toLowerCase().includes('mulai') ? '' : 'Mulai ';
+    const clean = price.replace(/^Mulai\s*/i, '');
+    return `${prefix}${clean.startsWith('Rp') ? clean : `Rp ${clean}`}`;
+  };
+
+  const price = formatPrice(umkm.price);
+  const waUrl = umkm.contact
+    ? `https://wa.me/${umkm.contact.replace(/[^0-9]/g, '')}`
+    : null;
+
   return (
-    <div className="mb-4 shadow poppins-medium">
-      <Row>
-        <Col xs={12} md={4}>
-          <div style={{ height: '200px', overflow: 'hidden' }}>
-            <img 
-              src={umkm.imgUrl} 
-              className="img-fluid rounded"
-              alt={umkm.name}
-              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-            />
+    <div className="umkm-new-card">
+      {/* Clickable card → detail */}
+      <Link to={`/detail-Umkm/${umkm.id}`} className="text-decoration-none d-block">
+        <div className="umkm-new-image">
+          <img src={umkm.imgUrl} alt={umkm.name} />
+          <span className="umkm-new-badge">{umkm.category || 'UMKM'}</span>
+        </div>
+        <div className="umkm-new-body">
+          <h3 className="umkm-new-name">{umkm.name}</h3>
+          <p className="umkm-new-desc">{truncateDesc(umkm.description)}</p>
+          <div className="umkm-new-footer">
+            {price && <span className="umkm-new-price">{price}</span>}
+            <span className="umkm-new-link">Lihat Detail <FaArrowRight size={12} /></span>
           </div>
-        </Col>
-        <Col xs={12} md={8} className='position-relative'>
-          <div className="p-3 custom-font">
-            <h5>
-              <Link to={`/detail-Umkm/${umkm.id}`} className="text-decoration-none text-dark">{umkm.name}</Link>
-            </h5>
-            <div className="d-flex align-items-center mb-4 mt-4">
-              <FaUser className="mr-2 icon-space" />
-              <p className="mb-0"> {umkm.owner}</p>
-              <div className="flex-fill"></div> {/* Ini adalah spacer */}
-              <FaCalendarAlt className="mr-2 icon-space" />
-              <p className="mb-0"> {umkm.category}</p>
-            </div>
-            <p className='custom-font'>{truncateDescription(umkm.description)}</p>
-            <Button
-              as={Link}
-              to={`/detail-Umkm/${umkm.id}`}
-              className="position-absolute button-new bottom-0 end-0 mx-4 mb-4"
-              variant="success"
-            >
-              Lihat Detail
-            </Button>
-          </div>
-        </Col>
-      </Row>
+        </div>
+      </Link>
+
+      {/* WhatsApp button — outside Link */}
+      {waUrl && (
+        <div className="umkm-new-wa-wrapper">
+          <button
+            className="umkm-new-btn"
+            onClick={() => window.open(waUrl, '_blank')}
+          >
+            <FaWhatsapp size={14} /> Hubungi Penjual
+          </button>
+        </div>
+      )}
     </div>
   );
 };

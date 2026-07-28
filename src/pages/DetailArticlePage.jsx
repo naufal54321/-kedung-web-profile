@@ -3,13 +3,10 @@ import ArticleDetail from '../components/DetailArticle/ArticleDetail';
 import ArticleList from '../components/DetailArticle/ArticleList';
 import { useParams } from 'react-router-dom';
 import api from '../utils/api';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailArticle from '../components/DetailArticle/Breadcrumb';
-import Loader from '../components/LoaderCustom';
 import AgendaList from '../components/agenda/AgendaList';
 import CustomPagination from '../components/agenda/CustomPagination';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
 const DetailArticlePage = () => {
   const [articles, setArticles] = useState([]);
@@ -25,7 +22,6 @@ const DetailArticlePage = () => {
         const articlesData = await api.getAllArticles();
         setArticles(articlesData);
         setLoading(false);
-        AOS.init();
       } catch (error) {
         console.error('Error fetching articles:', error);
         setLoading(false);
@@ -45,7 +41,7 @@ const DetailArticlePage = () => {
     fetchAgendas();
   }, []);
 
-  const article = articles.find((article) => article.id.toString() === id);
+  const article = articles.find((a) => a.id.toString() === id);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -53,42 +49,48 @@ const DetailArticlePage = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  return (
-    <section>
-      <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3 nav-margin mx-4' data-aos="fade-up">
-        <BreadcrumbDetailArticle articleId={id} />
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <Spinner animation="border" variant="success" />
       </div>
-      <Container>
-        {loading ? (
-          <Loader />
-        ) : (
-          <Row>
-            <Col lg={8} md={12} data-aos="zoom-out">
-              <div className="article-detail">
-                {article && <ArticleDetail article={article} />}
-              </div>
-            </Col>
-            <Col lg={4} md={12} data-aos="zoom-in">
-              <Row>
-                <Col md={12}>
-                  <div className="article-list">
-                    <h4 className='text-center bg-white p-2 rounded mt-3 mx-3'>Artikel Lainnya</h4>
-                    <ArticleList articles={articles} />
-                  </div>
-                </Col>
-                <Col md={12}>
-                  <div className="agenda-list mx-2">
-                    <h4 className='text-center bg-white p-2 rounded mt-3'>Daftar Agenda Terkait</h4>
-                    <AgendaList agendas={currentItems} />
-                    <CustomPagination currentPage={currentPage} totalPages={Math.ceil(agendas.length / itemsPerPage)} paginate={paginate} />
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        )}
+    );
+  }
+
+  if (!article) {
+    return (
+      <Container className="text-center py-5">
+        <h4 className="text-muted">Artikel tidak ditemukan</h4>
       </Container>
-    </section>
+    );
+  }
+
+  return (
+    <main className="detail-page">
+      <Container>
+        <div className="detail-breadcrumb" data-aos="fade-up">
+          <BreadcrumbDetailArticle articleTitle={article.title} />
+        </div>
+        <Row>
+          <Col lg={8} data-aos="fade-up">
+            <ArticleDetail article={article} />
+          </Col>
+          <Col lg={4} data-aos="fade-up" data-aos-delay="100">
+            <div className="sidebar-wrapper">
+              <div className="sidebar-section">
+                <h5 className="sidebar-title">Artikel Lainnya</h5>
+                <ArticleList articles={articles} />
+              </div>
+              <div className="sidebar-section">
+                <h5 className="sidebar-title">Daftar Agenda Terkait</h5>
+                <AgendaList agendas={currentItems} />
+                <CustomPagination currentPage={currentPage} totalPages={Math.ceil(agendas.length / itemsPerPage)} paginate={paginate} />
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </main>
   );
 };
 

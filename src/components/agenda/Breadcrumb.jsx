@@ -1,9 +1,9 @@
 import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-function BreadcrumbDetailAgenda({ agendaId }) {
+function BreadcrumbDetailAgenda() {
   return (
-    <Breadcrumb className='ml-15px'>
+    <Breadcrumb className="breadcrumb-modern">
       <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
       <Breadcrumb.Item active>Agenda</Breadcrumb.Item>
     </Breadcrumb>

@@ -1,12 +1,12 @@
 import React from 'react';
 import AgendaItem from './AgendaItem';
 
-const AgendaList = ({ agendas, handleAgendaClick }) => {
+const AgendaList = ({ agendas }) => {
   return (
-    <div className="d-flex flex-wrap">
+    <div className="row g-4">
       {agendas.map((agenda) => (
-        <div key={agenda.id} className="flex-grow-1" style={{ margin: '0 10px 10px 0' }}>
-          <AgendaItem agenda={agenda} handleAgendaClick={handleAgendaClick} />
+        <div key={agenda.id} className="col-md-6">
+          <AgendaItem agenda={agenda} />
         </div>
       ))}
     </div>

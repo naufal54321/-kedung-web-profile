@@ -1,19 +1,28 @@
 import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
+import { FaHistory, FaUsers, FaBullseye, FaLeaf } from 'react-icons/fa';
 
-function DropdownButton () {
+function DropdownButton() {
   return (
     <Dropdown>
-      <Dropdown.Toggle variant='success' className='bg-transparent text-dark border-light' id="dropdown-basic">
-        Profile Dusun
+      <Dropdown.Toggle variant='success' className='bg-transparent text-dark border-0 fw-medium' id="dropdown-basic">
+        Profile Padukuhan
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
-        <Dropdown.Item as={Link} to="/Sejarah">Sejarah</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/Struktur-Pemerintahan">Struktur Pemerintahan</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/Visi-Misi">Visi dan Misi</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/Hayati-NonHayati">Sumber Hayati & Non-Hayati</Dropdown.Item>
+      <Dropdown.Menu className="shadow-sm border-0 mt-2">
+        <Dropdown.Item as={Link} to="/Sejarah" className="py-2 d-flex align-items-center gap-2">
+          <FaHistory className="text-success" /> Sejarah
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to="/Struktur-Pemerintahan" className="py-2 d-flex align-items-center gap-2">
+          <FaUsers className="text-success" /> Struktur Pemerintahan
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to="/Visi-Misi" className="py-2 d-flex align-items-center gap-2">
+          <FaBullseye className="text-success" /> Visi dan Misi
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to="/Hayati-NonHayati" className="py-2 d-flex align-items-center gap-2">
+          <FaLeaf className="text-success" /> Sumber Hayati & Non-Hayati
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

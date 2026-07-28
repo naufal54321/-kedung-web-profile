@@ -1,106 +1,140 @@
-import React, { useEffect } from 'react';
-import { Col, Row, Card, Button } from 'react-bootstrap';
-import { FaShoppingBag, FaMoneyBillWave } from 'react-icons/fa';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React from 'react';
+import { Col, Row, Button } from 'react-bootstrap';
+import { FaShoppingBag, FaMoneyBillWave, FaUser, FaTag, FaPhone, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 
 const UmkmDetail = ({ umkm }) => {
-  useEffect(() => {
-    AOS.init({ duration: 1000 });
-  }, []);
-
-  const handleGoFoodClick = () => {
-    window.open(umkm.gofood, '_blank');
+  const handleOpenUrl = (url) => {
+    if (url) window.open(url, '_blank');
   };
 
-  const handleShopeeFoodClick = () => {
-    window.open(umkm.shopeefood, '_blank');
-  };
-
-  const handleGrabFoodClick = () => {
-    window.open(umkm.grabfood, '_blank');
+  const formatRupiah = (price) => {
+    if (!price) return '-';
+    if (price.includes('Rp')) return price;
+    return `Rp ${price}`;
   };
 
   return (
-    <section className='custom-font'>
-      <h4 className='bg-white rounded p-4 text-center mt-3' data-aos="zoom-out-down">{umkm.name}</h4>
-      <div className='bg-white p-2 rounded mt-3 mb-3'>
-        <Row>
-          {/* For mobile view, move image and iframe to be above the right-aligned column */}
-          <Col xs={12} md={12}>
-            <div className='d-flex align-items-center flex-column-reverse flex-md-row'>
-            <Col xs={12} md={8} className='text-content-right' data-aos="zoom-out-down" style={{ textAlign: 'justify' }}>
-                <p className='bg-secondary-green p-4 rounded mx-4'>Owner: {umkm.owner}</p>
-                <div className='mx-4 p-4 bg-secondary-green rounded' data-aos="zoom-out-down">
-                  
-                  <table>
-                    <tbody>
-                      <tr><td>Kategori</td><td>:</td><td>{umkm.category}</td></tr>
-                      <tr><td>Harga</td><td>:</td><td>{umkm.price}</td></tr>
-                      <tr><td>Kontak</td><td>:</td><td>{umkm.contact}</td></tr>
-                    </tbody>
-                  </table>
-                  <p className='mt-2'>{umkm.description}</p>
-                  <div className="mt-4">
-                    <Button className="mx-2" variant="success" onClick={handleGoFoodClick}>
-                      <FaShoppingBag /> GoFood
-                    </Button>
-                    <Button className="mx-2" variant="success" onClick={handleShopeeFoodClick}>
-                      <FaShoppingBag /> ShopeeFood
-                    </Button>
-                    <Button className="mx-2" variant="success" onClick={handleGrabFoodClick}>
-                      <FaShoppingBag /> GrabFood
-                    </Button>
+    <div className="umkm-detail-wrapper">
+      <div className="umkm-detail-hero" data-aos="fade-up">
+        <img src={umkm.imgUrl} alt={umkm.name} loading="eager" />
+        <div className="umkm-detail-hero-overlay" />
+        <div className="umkm-detail-hero-content">
+          <h1 className="umkm-detail-title">{umkm.name}</h1>
+          <p className="umkm-detail-owner"><FaUser /> {umkm.owner}</p>
+        </div>
+      </div>
+
+      <div className="umkm-detail-info" data-aos="fade-up">
+        <Row className="g-3">
+          <Col md={8}>
+            <div className="info-card">
+              <h5 className="info-card-title">Informasi UMKM</h5>
+              <div className="info-grid">
+                <div className="info-item">
+                  <FaTag className="info-icon" />
+                  <div>
+                    <span className="info-label">Kategori</span>
+                    <span className="info-value">{umkm.category || '-'}</span>
                   </div>
                 </div>
-              </Col>
-              <Col xs={12} md={4}>
-                <div style={{ height: '250px', overflow: 'hidden' }}>
-                <img className='img-fluid rounded p-4' data-aos="zoom-out-down" src={umkm.imgUrl} alt={umkm.name} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                <div className="info-item">
+                  <FaMoneyBillWave className="info-icon" />
+                  <div>
+                    <span className="info-label">Harga</span>
+                    <span className="info-value">{formatRupiah(umkm.price)}</span>
+                  </div>
                 </div>
-                <div className='mt-2 p-4'>
-                  <iframe
-                      title="Google Maps"
-                      src={umkm.address}
-                      width="600"
-                      height="450"
-                      className='bg-white w-100 height-umkm-map'
-                      allowFullScreen={true}
-                      loading="lazy"
-                      data-aos="zoom-out-down"
-                      style={{ border: 0 }}
-                    ></iframe>
+                <div className="info-item">
+                  <FaPhone className="info-icon" />
+                  <div>
+                    <span className="info-label">Kontak</span>
+                    <span className="info-value">{umkm.contact || '-'}</span>
+                  </div>
                 </div>
-              </Col>
+                <div className="info-item">
+                  <FaMapMarkerAlt className="info-icon" />
+                  <div>
+                    <span className="info-label">Alamat</span>
+                    <span className="info-value">
+                      {umkm.address ? <a href={umkm.address} target="_blank" rel="noopener noreferrer">Lihat Peta</a> : '-'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p className="info-description">{umkm.description}</p>
             </div>
           </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <div className="p-4" data-aos="zoom-out-down">
-              <h5 className='bg-secondary-green p-4 rounded text-center'>KATALOG</h5>
-              <Row>
-                {Object.values(umkm.catalogue).map(catalog => (
-                  <Col md={3} key={catalog.id}>
-                    <Card>
-                      <div style={{ height: '200px', overflow: 'hidden' }}>
-                        <Card.Img variant="top" src={catalog.imgUrl} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                      </div>
-                      <Card.Body className='bg-secondary-green mx-2 mt-2 mb-2 rounded'>
-                        <Card.Title className='custom-font'>{catalog.name}</Card.Title>
-                          <Card.Text>
-                            Price: <FaMoneyBillWave className="mr-2" /> {catalog.price}
-                          </Card.Text>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
+
+          <Col md={4}>
+            <div className="info-card">
+              <h5 className="info-card-title">Pesan Sekarang</h5>
+              <div className="d-flex flex-column gap-2">
+                {umkm.gofood && (
+                  <Button variant="danger" className="food-btn" onClick={() => handleOpenUrl(umkm.gofood)}>
+                    <FaShoppingBag /> GoFood
+                  </Button>
+                )}
+                {umkm.shopeefood && (
+                  <Button variant="warning" className="food-btn text-dark" onClick={() => handleOpenUrl(umkm.shopeefood)}>
+                    <FaShoppingBag /> ShopeeFood
+                  </Button>
+                )}
+                {umkm.grabfood && (
+                  <Button variant="success" className="food-btn" onClick={() => handleOpenUrl(umkm.grabfood)}>
+                    <FaShoppingBag /> GrabFood
+                  </Button>
+                )}
+                {umkm.contact && (
+                  <Button variant="success" className="food-btn" onClick={() => handleOpenUrl(`https://wa.me/${umkm.contact.replace(/[^0-9]/g, '')}`)}>
+                    <FaWhatsapp size={16} /> WhatsApp
+                  </Button>
+                )}
+                {!umkm.gofood && !umkm.shopeefood && !umkm.grabfood && !umkm.contact && (
+                  <p className="text-muted text-center mb-0">Belum tersedia</p>
+                )}
+              </div>
             </div>
+
+            {umkm.address && (
+              <div className="info-card mt-3">
+                <h5 className="info-card-title">Lokasi</h5>
+                <iframe
+                  title="Google Maps"
+                  src={umkm.address}
+                  width="100%"
+                  height="200"
+                  className="rounded"
+                  allowFullScreen={true}
+                  loading="lazy"
+                  style={{ border: 0 }}
+                />
+              </div>
+            )}
           </Col>
         </Row>
       </div>
-    </section>
+
+      {umkm.catalogue && Object.keys(umkm.catalogue).length > 0 && (
+        <div className="umkm-catalogue" data-aos="fade-up">
+          <h5 className="catalogue-title">Katalog Produk</h5>
+          <Row className="g-3">
+            {Object.entries(umkm.catalogue).map(([key, catalog]) => (
+              <Col md={3} key={key}>
+                <div className="catalogue-card">
+                  <div className="catalogue-card-image">
+                    <img src={catalog.imgUrl} alt={catalog.name} loading="lazy" />
+                  </div>
+                  <div className="catalogue-card-body">
+                    <h6 className="catalogue-card-name">{catalog.name}</h6>
+                    <span className="catalogue-card-price"><FaMoneyBillWave /> {catalog.price}</span>
+                  </div>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      )}
+    </div>
   );
 };
 

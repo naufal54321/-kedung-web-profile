@@ -1,50 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import BreadcrumbPotensi from '../components/PotensiDusun/BreadcrumbPotensi';
-import UmkmList from '../components/PotensiDusun/UmkmList';
+import { Container, Spinner, Nav } from 'react-bootstrap';
 import api from '../utils/api';
-import Loader from '../components/LoaderCustom'; // Import komponen Loader
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import CSS untuk AOS
+import UmkmList from '../components/PotensiDusun/UmkmList';
+import { Link } from 'react-router-dom';
+import { FaArrowRight, FaStore } from 'react-icons/fa';
 
 function PotensiDusun() {
   const [umkmList, setUmkmList] = useState([]);
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah halaman sedang memuat
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('semua');
 
   useEffect(() => {
-    const fetchUmkmData = async () => {
+    const fetchData = async () => {
       try {
-        const umkmData = await api.getAllUmkm();
-        setUmkmList(umkmData);
-        setLoading(false); // Set loading menjadi false setelah data berhasil dimuat
-        // Initialize AOS setelah data dimuat
-        AOS.init();
+        const data = await api.getAllUmkm();
+        setUmkmList(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching UMKM:', error);
-        setLoading(false); // Set loading menjadi false jika terjadi kesalahan saat memuat data
+        setLoading(false);
       }
     };
-
-    setTimeout(fetchUmkmData, 2000); // 6 detik
+    fetchData();
   }, []);
 
-  return (
-    <section>
-      <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3 mx-4'>
-        <BreadcrumbPotensi />
+  const categories = ['semua', ...new Set(umkmList.map((u) => u.category).filter(Boolean))];
+  const filtered = filter === 'semua' ? umkmList : umkmList.filter((u) => u.category === filter);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <Spinner animation="border" variant="success" />
       </div>
-      {loading ? (
-        <Loader /> // Tampilkan Loader jika loading adalah true
-      ) : (
-        <>
-          <div className='mx-4 mt-4 shadow-sm p-3 mb-2 bg-white rounded' data-aos="fade-up">
-            <h2 className='text-uppercase font-weight-bold'>Potensi Dukuh</h2>
+    );
+  }
+
+  return (
+    <main className="potensi-page">
+      {/* Hero Section */}
+      <section className="potensi-hero">
+        <div className="potensi-hero-orb" />
+        <div className="potensi-hero-content">
+          <span className="potensi-badge">Potensi Padukuhan</span>
+          <h1 className="potensi-hero-title">UMKM Lokal Kedung</h1>
+          <p className="potensi-hero-desc">
+            Mendukung karya dan karsa masyarakat Padukuhan Kedung. Temukan produk-produk unggulan lokal dari hasil bumi hingga kerajinan tangan berkualitas.
+          </p>
+        </div>
+      </section>
+
+      {/* Filter */}
+      <Container className="mt-5 mb-4">
+        <div className="d-flex flex-wrap gap-2 justify-content-center">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`potensi-filter-btn ${filter === cat ? 'active' : ''}`}
+            >
+              {cat === 'semua' ? 'Semua Kategori' : cat}
+            </button>
+          ))}
+        </div>
+      </Container>
+
+      {/* UMKM Grid */}
+      <Container className="pb-5">
+        {filtered.length === 0 ? (
+          <p className="text-center text-muted py-5">Belum ada UMKM di kategori ini.</p>
+        ) : (
+          <UmkmList umkmList={filtered} />
+        )}
+      </Container>
+
+      {/* CTA Banner */}
+      <Container className="pb-5">
+        <div className="potensi-cta">
+          <div className="potensi-cta-bg-orb" />
+          <div className="potensi-cta-content">
+            <h2 className="potensi-cta-title">Miliki Usaha di Kedung?</h2>
+            <p className="potensi-cta-desc">
+              Daftarkan produk atau jasa Anda di direktori UMKM Padukuhan Kedung untuk menjangkau pasar yang lebih luas secara gratis.
+            </p>
+            <Link to="/Daftar-UMKM" className="potensi-cta-btn text-decoration-none">
+              Daftarkan Usaha <FaArrowRight size={14} />
+            </Link>
           </div>
-          <div className='mx-4 mt-4 shadow-sm p-3 mb-3 bg-white rounded' data-aos="fade-down">
-            <UmkmList umkmList={umkmList} />
+          <div className="potensi-cta-icon">
+            <FaStore size={80} />
           </div>
-        </>
-      )}
-    </section>
+        </div>
+      </Container>
+    </main>
   );
 }
 

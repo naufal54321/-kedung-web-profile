@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import UmkmDetail from '../components/DetailPotensi/UmkmDetail';
 import { useParams } from 'react-router-dom';
 import api from '../utils/api';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailUmkm from '../components/DetailPotensi/Breadcrumb';
-import Loader from '../components/LoaderCustom'; // Import komponen Loader
 
 const DetailUmkmPage = () => {
   const [umkm, setUmkm] = useState(null);
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah halaman sedang memuat
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
@@ -16,28 +15,40 @@ const DetailUmkmPage = () => {
       try {
         const umkmData = await api.getUmkmDetail(id);
         setUmkm(umkmData);
-        setLoading(false); // Set loading menjadi false setelah data detail berhasil dimuat
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching umkm detail:', error);
-        setLoading(false); // Set loading menjadi false jika terjadi kesalahan saat memuat data
+        setLoading(false);
       }
     };
-
-    setTimeout(fetchUmkm, 2000); // Tambahkan setTimeout untuk menunda pemanggilan fetchUmkm selama 6 detik
+    fetchUmkm();
   }, [id]);
 
-  return (
-    <section className='mx-4'>
-      <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3'>
-        <BreadcrumbDetailUmkm umkmId={id} />
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+        <Spinner animation="border" variant="success" />
       </div>
-      {/* Tampilkan Loader jika loading adalah true */}
-      {loading ? (
-        <Loader />
-      ) : (
-        umkm && <UmkmDetail umkm={umkm} />
-      )}
-    </section>
+    );
+  }
+
+  if (!umkm) {
+    return (
+      <Container className="text-center py-5">
+        <h4 className="text-muted">UMKM tidak ditemukan</h4>
+      </Container>
+    );
+  }
+
+  return (
+    <main className="detail-page">
+      <Container>
+        <div className="detail-breadcrumb" data-aos="fade-up">
+          <BreadcrumbDetailUmkm umkmName={umkm.name} />
+        </div>
+        <UmkmDetail umkm={umkm} />
+      </Container>
+    </main>
   );
 };
 

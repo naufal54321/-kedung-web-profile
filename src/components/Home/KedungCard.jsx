@@ -1,19 +1,24 @@
 import React from 'react';
-import { Card, Col } from 'react-bootstrap';
 
 const KedungCard = ({ kedung }) => {
   return (
-    <Col md={4} className='mb-3' >
-      <Card className='shadow p-2 kedung-map-item'>
-        <Card.Title className='text-center rounded shadow mb-3 p-2 bg-white'>{kedung.name}</Card.Title>
-        <iframe
-          className="embed-responsive-item iframe-map-kedung p-2"
-          src={kedung.link}
-          title={kedung.name}
-          allowFullScreen
-        ></iframe>
-      </Card>
-    </Col>
+    <div className="col-md-6 col-lg-4">
+      <div className="kedung-card">
+        <div className="kedung-card-header">
+          <span className="kedung-card-badge">Wilayah</span>
+          <h5 className="kedung-card-name">{kedung.name}</h5>
+        </div>
+        <div className="kedung-card-map">
+          <iframe
+            src={kedung.link}
+            title={kedung.name}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

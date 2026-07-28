@@ -1,12 +1,12 @@
 import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-function BreadcrumbDetailUmkm({ umkmId }) {
+function BreadcrumbDetailUmkm({ umkmName }) {
   return (
-    <Breadcrumb className='ml-15px '>
+    <Breadcrumb className="breadcrumb-modern">
       <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
-      <Breadcrumb.Item active>Potensi Dukuh</Breadcrumb.Item>
-      <Breadcrumb.Item active>{umkmId}</Breadcrumb.Item>
+      <Breadcrumb.Item href='/Potensi-Dukuh'>Potensi Dukuh</Breadcrumb.Item>
+      <Breadcrumb.Item active>{umkmName || 'Detail UMKM'}</Breadcrumb.Item>
     </Breadcrumb>
   );
 }
