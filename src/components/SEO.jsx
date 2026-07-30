@@ -15,6 +15,7 @@ function SEO({ title, description, image, url }) {
     <Helmet>
       <title>{pageTitle}</title>
       <meta name="description" content={pageDesc} />
+      <meta name="google-site-verification" content="Wr73F-3OXjSBvXhsJELY5pCUJjJhA7EO1O2ozdsIVyo" />
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={pageDesc} />
       <meta property="og:image" content={pageImage} />
