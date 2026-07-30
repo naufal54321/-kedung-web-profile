@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaInstagram, FaEnvelope, FaHome, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaInstagram, FaTiktok, FaYoutube, FaEnvelope, FaHome, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function FooterApp() {
@@ -60,6 +60,14 @@ function FooterApp() {
               <div className="d-flex align-items-center gap-2 text-white-50 small">
                 <FaInstagram className="flex-shrink-0" />
                 <a href="https://www.instagram.com/opik.1965/" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">@opik.1965</a>
+              </div>
+              <div className="d-flex align-items-center gap-2 text-white-50 small">
+                <FaTiktok className="flex-shrink-0" />
+                <a href="https://www.tiktok.com/@pemuda.pemudi.ked" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">@pemuda.pemudi.ked</a>
+              </div>
+              <div className="d-flex align-items-center gap-2 text-white-50 small">
+                <FaYoutube className="flex-shrink-0" />
+                <a href="https://www.youtube.com/@PemudaPemudiKedung" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">Pemuda Pemudi Kedung</a>
               </div>
               <div className="d-flex align-items-center gap-2 text-white-50 small">
                 <FaMapMarkerAlt className="flex-shrink-0" />
