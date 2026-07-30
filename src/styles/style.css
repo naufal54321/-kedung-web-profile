@@ -4002,6 +4002,38 @@ textarea.admin-input {
   color: var(--primary);
 }
 
+/* Footer Social */
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  background: #1a4d1a;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-social a {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.footer-social a:hover {
+  background: var(--gradient-green);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,120,73,0.3);
+  border-color: transparent;
+}
+
 @media screen and (min-width: 768px) and (max-width: 991px) {
     .calendar-custom {
       width: 400px;

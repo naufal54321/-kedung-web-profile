@@ -58,18 +58,6 @@ function FooterApp() {
                 <a href="mailto:Padukuhankedung@gmail.com" className="text-white-50 text-decoration-none">Padukuhankedung@gmail.com</a>
               </div>
               <div className="d-flex align-items-center gap-2 text-white-50 small">
-                <FaInstagram className="flex-shrink-0" />
-                <a href="https://www.instagram.com/opik.1965/" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">@opik.1965</a>
-              </div>
-              <div className="d-flex align-items-center gap-2 text-white-50 small">
-                <FaTiktok className="flex-shrink-0" />
-                <a href="https://www.tiktok.com/@pemuda.pemudi.ked" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">@pemuda.pemudi.ked</a>
-              </div>
-              <div className="d-flex align-items-center gap-2 text-white-50 small">
-                <FaYoutube className="flex-shrink-0" />
-                <a href="https://www.youtube.com/@PemudaPemudiKedung" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">Pemuda Pemudi Kedung</a>
-              </div>
-              <div className="d-flex align-items-center gap-2 text-white-50 small">
                 <FaMapMarkerAlt className="flex-shrink-0" />
                 <a href="https://maps.app.goo.gl/fXGrqwhpPoT4eyxY8?g_st=aw" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none">Lihat Peta</a>
               </div>
@@ -77,6 +65,12 @@ function FooterApp() {
           </Col>
         </Row>
       </Container>
+
+      <div className="footer-social">
+        <a href="https://www.instagram.com/opik.1965/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+        <a href="https://www.tiktok.com/@pemuda.pemudi.ked" target="_blank" rel="noopener noreferrer"><FaTiktok /></a>
+        <a href="https://www.youtube.com/@PemudaPemudiKedung" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
+      </div>
 
       <div className="text-center py-3 border-top border-white border-opacity-10" style={{ backgroundColor: '#0f3a0f' }}>
         <a href="https://si.almaata.ac.id/" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none small">
