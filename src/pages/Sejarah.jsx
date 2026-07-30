@@ -1,10 +1,12 @@
 import React from 'react';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
+import SEO from '../components/SEO';
 
 function Sejarah() {
   return (
     <main className="profil-page">
+      <SEO title="Sejarah" description="Sejarah berdirinya Padukuhan Kedung, Kalurahan Guwosari, Kecamatan Pajangan, Kabupaten Bantul, Yogyakarta." />
       <ProfilHero
         title="Sejarah Padukuhan"
         subtitle="Mengenal asal-usul dan perjalanan Padukuhan Kedung dari masa ke masa"

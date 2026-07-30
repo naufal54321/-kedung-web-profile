@@ -2,12 +2,14 @@ import React from 'react';
 import TogaList from '../components/Hayati/TogaList';
 import HayatiList from '../components/Hayati/HayatiList';
 import NonHayatiList from '../components/Hayati/NonHayatiList';
+import SEO from '../components/SEO';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
 
 function Hayati() {
   return (
     <main className="profil-page">
+      <SEO title="Toga &amp; Hayati" description="Kekayaan sumber daya alam hayati dan non hayati Padukuhan Kedung" />
       <ProfilHero
         title="Hayati & Non Hayati"
         subtitle="Kekayaan sumber daya alam Padukuhan Kedung"

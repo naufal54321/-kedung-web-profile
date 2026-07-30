@@ -12,6 +12,7 @@ import ExploreCard from '../components/Home/ExploreCard';
 import AgendaList from '../components/agenda/AgendaList';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaCalendarAlt } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 function HomePage() {
   const [articles, setArticles] = useState([]);
@@ -47,6 +48,7 @@ function HomePage() {
 
   return (
     <div className='bg-grey-custom poppins-medium'>
+      <SEO />
       <CarouselCustom />
       
       <div className='mt-4 mb-5' data-aos="fade-up">

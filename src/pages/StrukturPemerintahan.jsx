@@ -4,6 +4,7 @@ import api from '../utils/api';
 import { Spinner } from 'react-bootstrap';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
+import SEO from '../components/SEO';
 
 function StrukturPemerintahan() {
   const [strukturs, setStrukturs] = useState([]);
@@ -24,6 +25,7 @@ function StrukturPemerintahan() {
 
   return (
     <main className="profil-page">
+      <SEO title="Struktur Pemerintahan" description="Struktur pemerintahan Padukuhan Kedung" />
       <ProfilHero
         title="Struktur Pemerintahan"
         subtitle="Bagan organisasi pemerintahan Padukuhan Kedung"

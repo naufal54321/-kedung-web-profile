@@ -6,6 +6,7 @@ import api from '../utils/api';
 import { formatDate } from '../utils/formatDate';
 import Pagination from 'react-bootstrap/Pagination';
 import ProfilHero from '../components/Profil/ProfilHero';
+import SEO from '../components/SEO';
 
 function SemuaBeritaPage() {
   const [articles, setArticles] = useState([]);
@@ -63,6 +64,7 @@ function SemuaBeritaPage() {
 
   return (
     <main className="profil-page">
+      <SEO title="Berita" description="Informasi terkini seputar Padukuhan Kedung" />
       <ProfilHero title="Semua Berita" subtitle="Informasi terkini seputar Padukuhan Kedung" />
       <Container className="py-4">
         {articles.length === 0 ? (

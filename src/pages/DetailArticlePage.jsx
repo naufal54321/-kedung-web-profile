@@ -6,6 +6,7 @@ import api from '../utils/api';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailArticle from '../components/DetailArticle/Breadcrumb';
 import AgendaList from '../components/agenda/AgendaList';
+import SEO from '../components/SEO';
 import CustomPagination from '../components/agenda/CustomPagination';
 
 const DetailArticlePage = () => {
@@ -67,6 +68,7 @@ const DetailArticlePage = () => {
 
   return (
     <main className="detail-page">
+      <SEO />
       <Container>
         <div className="detail-breadcrumb" data-aos="fade-up">
           <BreadcrumbDetailArticle articleTitle={article.title} />

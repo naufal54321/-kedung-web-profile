@@ -4,6 +4,7 @@ import api from '../utils/api';
 import UmkmList from '../components/PotensiDusun/UmkmList';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStore } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 function PotensiDusun() {
   const [umkmList, setUmkmList] = useState([]);
@@ -37,6 +38,7 @@ function PotensiDusun() {
 
   return (
     <main className="potensi-page">
+      <SEO title="Potensi Dukuh" description="Potensi UMKM Padukuhan Kedung" />
       {/* Hero Section */}
       <section className="potensi-hero">
         <div className="potensi-hero-orb" />

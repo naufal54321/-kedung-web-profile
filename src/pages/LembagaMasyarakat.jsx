@@ -3,6 +3,7 @@ import LembagaTabs from '../components/Lembaga/LembagaTabs';
 import api from '../utils/api';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
+import SEO from '../components/SEO';
 
 function LembagaMasyarakat() {
   const [lembagas, setLembagas] = useState([])
@@ -23,6 +24,7 @@ function LembagaMasyarakat() {
 
   return (
     <main className="profil-page">
+      <SEO title="Lembaga Masyarakat" description="Organisasi dan kelembagaan yang ada di Padukuhan Kedung" />
       <ProfilHero
         title="Lembaga Masyarakat"
         subtitle="Organisasi dan kelembagaan yang ada di Padukuhan Kedung"

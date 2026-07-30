@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import api from '../utils/api';
 import { Container, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailUmkm from '../components/DetailPotensi/Breadcrumb';
+import SEO from '../components/SEO';
 
 const DetailUmkmPage = () => {
   const [umkm, setUmkm] = useState(null);
@@ -42,6 +43,7 @@ const DetailUmkmPage = () => {
 
   return (
     <main className="detail-page">
+      <SEO />
       <Container>
         <div className="detail-breadcrumb" data-aos="fade-up">
           <BreadcrumbDetailUmkm umkmName={umkm.name} />

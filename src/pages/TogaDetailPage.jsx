@@ -4,6 +4,7 @@ import TogaDetail from '../components/Hayati/TogaDetail';
 import BreadcrumbToga from '../components/Hayati/BreadcrumbToga';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import SEO from '../components/SEO';
 
 function TogaDetailPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function TogaDetailPage() {
 
   return (
     <section>
+        <SEO title="Detail Tanaman" description="Detail tanaman obat keluarga (TOGA) Padukuhan Kedung" />
         <div className='shadow-sm p-2 mb-3 bg-breadcrumb-custom mt-3 mx-4' data-aos="zoom-in-left">
             <BreadcrumbToga togaId={id} />
           </div>

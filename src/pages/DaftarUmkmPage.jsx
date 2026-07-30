@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { FaArrowLeft, FaStore } from 'react-icons/fa';
 import api from '../utils/api';
 import config from '../utils/config';
+import SEO from '../components/SEO';
 
 function DaftarUmkmPage() {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ function DaftarUmkmPage() {
 
   return (
     <div className="detail-page">
+      <SEO title="Daftar UMKM" description="Daftarkan UMKM Anda di Padukuhan Kedung" />
       <Container className="py-4" style={{ maxWidth: 650 }}>
         <Link to="/Potensi-Dukuh" className="text-decoration-none text-muted d-inline-flex align-items-center gap-1 mb-3">
           <FaArrowLeft size={14} /> Kembali

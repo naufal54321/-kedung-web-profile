@@ -2,10 +2,12 @@ import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
+import SEO from '../components/SEO';
 
 function VisiMisi() {
   return (
     <main className="profil-page">
+      <SEO title="Visi &amp; Misi" description="Visi dan Misi Padukuhan Kedung" />
       <ProfilHero
         title="Visi & Misi"
         subtitle="Arah dan tujuan pembangunan Padukuhan Kedung"

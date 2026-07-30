@@ -7,6 +7,7 @@ import api from '../utils/api';
 import CustomPagination from '../components/agenda/CustomPagination';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
+import SEO from '../components/SEO';
 
 const AgendaPage = () => {
   const [agendas, setAgendas] = useState([]);
@@ -46,6 +47,7 @@ const AgendaPage = () => {
 
   return (
     <main className="profil-page">
+      <SEO title="Agenda" description="Jadwal kegiatan dan acara di Padukuhan Kedung" />
       <ProfilHero title="Agenda" subtitle="Jadwal kegiatan dan acara di Padukuhan Kedung" />
 
       <Container className="py-4">

@@ -1,0 +1,6 @@
+# robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://kedung-guwosari.vercel.app/sitemap.xml
