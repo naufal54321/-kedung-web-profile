@@ -1,5 +1,4 @@
 // HayatiItem.jsx
-import React from 'react';
 
 const NonHayatiItem = ({ nonhayati }) => {
   return (

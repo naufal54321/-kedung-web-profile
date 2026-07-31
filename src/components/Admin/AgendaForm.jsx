@@ -51,7 +51,7 @@ function AgendaForm() {
       }
       fetchData()
     }
-  }, [id])
+  }, [id, isEdit])
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })

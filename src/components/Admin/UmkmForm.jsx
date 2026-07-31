@@ -33,36 +33,34 @@ function UmkmForm() {
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
-    if (isEdit) {
-      loadUmkm()
+    if (!isEdit) return
+    const loadUmkm = async () => {
+      try {
+        const umkm = await api.getUmkmDetail(id)
+        setForm({
+          name: umkm.name || '',
+          owner: umkm.owner || '',
+          category: umkm.category || '',
+          price: umkm.price || '',
+          contact: umkm.contact || '',
+          description: umkm.description || '',
+          imgUrl: umkm.imgUrl || '',
+          address: umkm.address || '',
+          gofood: umkm.gofood || '',
+          shopeefood: umkm.shopeefood || '',
+          grabfood: umkm.grabfood || '',
+          catalogue: umkm.catalogue || {}
+        })
+        setCatalogueItems(
+          Object.entries(umkm.catalogue ?? {}).map(([key, val]) => ({ key, ...val }))
+        )
+      } catch {
+        setError('Gagal memuat UMKM')
+      }
+      setFetching(false)
     }
-  }, [id])
-
-  const loadUmkm = async () => {
-    try {
-      const umkm = await api.getUmkmDetail(id)
-      setForm({
-        name: umkm.name || '',
-        owner: umkm.owner || '',
-        category: umkm.category || '',
-        price: umkm.price || '',
-        contact: umkm.contact || '',
-        description: umkm.description || '',
-        imgUrl: umkm.imgUrl || '',
-        address: umkm.address || '',
-        gofood: umkm.gofood || '',
-        shopeefood: umkm.shopeefood || '',
-        grabfood: umkm.grabfood || '',
-        catalogue: umkm.catalogue || {}
-      })
-      setCatalogueItems(
-        Object.entries(umkm.catalogue ?? {}).map(([key, val]) => ({ key, ...val }))
-      )
-    } catch {
-      setError('Gagal memuat UMKM')
-    }
-    setFetching(false)
-  }
+    loadUmkm()
+  }, [id, isEdit])
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })

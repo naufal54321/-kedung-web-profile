@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import LembagaTabs from '../components/Lembaga/LembagaTabs';
 import api from '../utils/api';
 import ProfilHero from '../components/Profil/ProfilHero';

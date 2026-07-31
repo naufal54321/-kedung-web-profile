@@ -1,4 +1,3 @@
-import React from 'react';
 import TogaList from '../components/Hayati/TogaList';
 import HayatiList from '../components/Hayati/HayatiList';
 import NonHayatiList from '../components/Hayati/NonHayatiList';

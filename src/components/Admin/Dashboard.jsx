@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Spinner, Alert } from 'react-bootstrap'
@@ -6,6 +6,8 @@ import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPl
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
+
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -18,7 +20,6 @@ const tabs = [
 
 function Dashboard() {
   const location = useLocation()
-  const pathToTab = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda' }
   const isOverview = location.pathname === '/admin'
   const [data, setData] = useState({})
   const [loading, setLoading] = useState({})
@@ -29,7 +30,7 @@ function Dashboard() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const newTab = pathToTab[location.pathname.split('/').pop()] || 'artikel'
+    const newTab = PATH_TO_TAB[location.pathname.split('/').pop()] || 'artikel'
     setTab(newTab)
   }, [location.pathname])
 
@@ -109,7 +110,7 @@ function Dashboard() {
       label: 'Jumlah Data',
       data: tabs.map(t => (data[t.key] || []).length),
       backgroundColor: tabs.map(t => t.bg),
-      borderColor: tabs.map(t => 'transparent'),
+      borderColor: tabs.map(() => 'transparent'),
       borderRadius: 6,
     }]
   }

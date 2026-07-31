@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
 import SEO from '../components/SEO';

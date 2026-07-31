@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { Modal } from 'react-bootstrap'
-import { FaMapMarkerAlt, FaCalendarAlt, FaClock } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa'
 import './CustomCalendar.css'
 
 function CustomCalendar({ agendas = [] }) {

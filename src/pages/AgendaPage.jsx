@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Container, Spinner, Nav } from 'react-bootstrap';
 import { FaCalendarAlt, FaList } from 'react-icons/fa';
 import AgendaList from '../components/agenda/AgendaList';

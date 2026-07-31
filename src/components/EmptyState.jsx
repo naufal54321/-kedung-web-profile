@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaInbox } from 'react-icons/fa'
 
 function EmptyState({ message = 'Belum ada data.', icon: Icon = FaInbox }) {

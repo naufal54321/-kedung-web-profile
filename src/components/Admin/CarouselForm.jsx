@@ -45,7 +45,7 @@ function CarouselForm() {
       }
       fetchData()
     }
-  }, [id])
+  }, [id, isEdit])
 
   const handleChange = (e) => {
     const value = e.target.type === 'number' ? Number(e.target.value) : e.target.value

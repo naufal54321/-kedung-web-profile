@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import OrganizationChart from '../components/Struktur/OrganizationChart';
 import api from '../utils/api';
 import { Spinner } from 'react-bootstrap';

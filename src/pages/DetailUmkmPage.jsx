@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import UmkmDetail from '../components/DetailPotensi/UmkmDetail';
 import { useParams } from 'react-router-dom';
 import api from '../utils/api';

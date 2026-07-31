@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ArticleItem from './ArticleItem';
 import CustomPagination from './CustomPagination';
 

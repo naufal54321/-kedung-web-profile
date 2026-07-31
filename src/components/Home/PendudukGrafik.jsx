@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, LinearScale, CategoryScale, BarController, BarElement } from 'chart.js'; // Import skala linear
 import api from '../../utils/api';

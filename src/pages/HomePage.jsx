@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import CarouselCustom from '../components/Carousel';
 import DeveloperCard from '../components/Home/DeveloperList';
 import ArticleList from '../components/Home/ArticleList';
@@ -9,7 +9,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LocationInfo from '../components/Home/LocationInfo';
 import ExploreCard from '../components/Home/ExploreCard';
-import AgendaList from '../components/agenda/AgendaList';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaCalendarAlt } from 'react-icons/fa';
 import SEO from '../components/SEO';

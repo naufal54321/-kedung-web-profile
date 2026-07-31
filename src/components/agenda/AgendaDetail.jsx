@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import ImagePreview from '../ImagePreview';

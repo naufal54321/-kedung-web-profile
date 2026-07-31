@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAllDevelopers } from '../../utils/developer';
 import { FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa';
 

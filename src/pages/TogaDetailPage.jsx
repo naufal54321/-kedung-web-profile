@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogaDetail from '../components/Hayati/TogaDetail';
 import BreadcrumbToga from '../components/Hayati/BreadcrumbToga';

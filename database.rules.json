@@ -8,7 +8,8 @@
     },
     "umkm": {
       ".read": true,
-      ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('status').val() == 'pending')"
+      ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('status').val() == 'pending')",
+      ".validate": "newData.hasChildren(['name', 'owner', 'category', 'contact']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 200 && newData.child('owner').isString() && newData.child('owner').val().length > 0 && newData.child('owner').val().length <= 100 && newData.child('category').isString() && newData.child('category').val().length > 0 && newData.child('category').val().length <= 100 && newData.child('contact').isString() && newData.child('contact').val().length > 0 && newData.child('contact').val().length <= 30"
     },
     "penduduk": {
       ".read": true

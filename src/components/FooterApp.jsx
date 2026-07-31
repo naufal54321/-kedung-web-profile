@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaTiktok, FaYoutube, FaEnvelope, FaHome, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';

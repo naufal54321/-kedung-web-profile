@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllKedungs } from '../../utils/kedungs';
 import KedungCard from './KedungCard';
 

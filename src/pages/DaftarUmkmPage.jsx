@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Card, Form, Button, Alert, Spinner, Image } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { FaArrowLeft, FaStore } from 'react-icons/fa';
 import api from '../utils/api';
@@ -8,7 +8,6 @@ import config from '../utils/config';
 import SEO from '../components/SEO';
 
 function DaftarUmkmPage() {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
     owner: '',
@@ -16,7 +15,8 @@ function DaftarUmkmPage() {
     price: '',
     contact: '',
     description: '',
-    imgUrl: ''
+    imgUrl: '',
+    website: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -62,12 +62,17 @@ function DaftarUmkmPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (form.website) {
+      return;
+    }
     setLoading(true);
 
     try {
-      await api.publicCreateUmkm(form);
+      const payload = { ...form };
+      delete payload.website;
+      await api.publicCreateUmkm(payload);
       Swal.fire({ icon: 'success', title: 'Terdaftar!', text: 'UMKM berhasil didaftarkan! Data akan ditinjau oleh admin.', timer: 3000, showConfirmButton: false })
-      setForm({ name: '', owner: '', category: '', price: '', contact: '', description: '', imgUrl: '' });
+      setForm({ name: '', owner: '', category: '', price: '', contact: '', description: '', imgUrl: '', website: '' });
     } catch {
       setError('Gagal mendaftarkan UMKM. Silakan coba lagi.');
     }
@@ -132,6 +137,10 @@ function DaftarUmkmPage() {
                   {form.imgUrl && !uploading && <Image src={form.imgUrl} thumbnail style={{ maxHeight: 80 }} className="mt-1" />}
                   <Form.Control type="url" name="imgUrl" value={form.imgUrl} onChange={handleChange} placeholder="Atau masukkan URL gambar" className="mt-2" />
                 </Form.Group>
+
+                <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                  <Form.Control type="text" name="website" value={form.website} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+                </div>
 
                 <Button variant="success" type="submit" disabled={loading || uploading} className="w-100 py-2"
                   style={{ backgroundColor: '#2C5F2D', borderColor: '#2C5F2D' }}>

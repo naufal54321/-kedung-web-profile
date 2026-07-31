@@ -1,4 +1,3 @@
-import React from 'react';
 import UmkmItem from './UmkmItem';
 
 const UmkmList = ({ umkmList }) => {

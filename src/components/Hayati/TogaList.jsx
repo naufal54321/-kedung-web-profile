@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TogaItem from './TogaItem';
 import api from '../../utils/api';
 

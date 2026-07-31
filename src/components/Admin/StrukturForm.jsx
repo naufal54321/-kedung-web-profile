@@ -47,7 +47,7 @@ function StrukturForm() {
       }
       fetchData()
     }
-  }, [id])
+  }, [id, isEdit])
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value

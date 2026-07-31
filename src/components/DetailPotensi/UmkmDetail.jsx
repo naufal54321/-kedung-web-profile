@@ -1,4 +1,3 @@
-import React from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
 import { FaShoppingBag, FaMoneyBillWave, FaUser, FaTag, FaPhone, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 

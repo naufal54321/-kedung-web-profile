@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaUser, FaCalendarAlt } from 'react-icons/fa';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 function ProfilCard({ title, children, className }) {
   return (

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Spinner, Nav } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Container, Spinner } from 'react-bootstrap';
 import api from '../utils/api';
 import UmkmList from '../components/PotensiDusun/UmkmList';
 import { Link } from 'react-router-dom';

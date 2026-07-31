@@ -25,27 +25,25 @@ function ArticleForm() {
   const [uploading, setUploading] = useState({ img: false, additional: false })
 
   useEffect(() => {
-    if (isEdit) {
-      loadArticle()
+    if (!isEdit) return
+    const loadArticle = async () => {
+      try {
+        const article = await api.getArticleDetail(id)
+        setForm({
+          title: article.title || '',
+          body: article.body || '',
+          author: article.author || '',
+          publishDate: article.publishDate || '',
+          imgUrl: article.imgUrl || '',
+          additionalImgUrl: article.additionalImgUrl || ''
+        })
+      } catch {
+        setError('Gagal memuat artikel')
+      }
+      setFetching(false)
     }
-  }, [id])
-
-  const loadArticle = async () => {
-    try {
-      const article = await api.getArticleDetail(id)
-      setForm({
-        title: article.title || '',
-        body: article.body || '',
-        author: article.author || '',
-        publishDate: article.publishDate || '',
-        imgUrl: article.imgUrl || '',
-        additionalImgUrl: article.additionalImgUrl || ''
-      })
-    } catch {
-      setError('Gagal memuat artikel')
-    }
-    setFetching(false)
-  }
+    loadArticle()
+  }, [id, isEdit])
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })

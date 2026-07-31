@@ -1,4 +1,3 @@
-import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
 import { FaHistory, FaUsers, FaBullseye, FaLeaf } from 'react-icons/fa';

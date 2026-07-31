@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 
 const LocationInfo = () => {

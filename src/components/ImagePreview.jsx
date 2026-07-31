@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { FaTimes, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { useEffect } from 'react';
+import { FaTimes } from 'react-icons/fa';
 
 function ImagePreview({ show, imageUrl, onClose, title }) {
   useEffect(() => {
