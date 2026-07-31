@@ -36,7 +36,7 @@ function LoginPage() {
       <div className="admin-login-orb" />
       <div className="admin-login-orb" />
 
-      <div className="admin-login-card" data-aos="fade-up">
+      <div className="admin-login-card">
         <div className="admin-login-logo">
           <FaUserShield />
         </div>

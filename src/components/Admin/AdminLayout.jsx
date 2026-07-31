@@ -99,7 +99,7 @@ function AdminLayout({ children, title }) {
 
       <main className="admin-main">
         {title && (
-          <div className="admin-content-premium" data-aos="fade-up">
+          <div className="admin-content-premium">
             <div className="d-flex align-items-center gap-3">
               {isFormPage && (
                 <a href={getBackLink()} className="text-decoration-none text-muted d-flex align-items-center gap-1 small">

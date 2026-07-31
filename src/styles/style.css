@@ -2792,6 +2792,7 @@ h1, h2, h3 {
   display: flex;
   min-height: 100vh;
   background: #F8FAFC;
+  overflow-x: hidden;
 }
 
 .admin-topbar {
@@ -2902,7 +2903,7 @@ h1, h2, h3 {
   background: #1a4d1a;
   display: flex;
   flex-direction: column;
-  z-index: 997;
+  z-index: 999;
   transition: transform 0.3s ease;
 }
 
@@ -3245,6 +3246,7 @@ h1, h2, h3 {
 .admin-table-wrapper .table-responsive {
   max-height: 560px;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .admin-table-wrapper .table-responsive::-webkit-scrollbar {
@@ -3674,6 +3676,8 @@ textarea.admin-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
   animation: adminFadeIn 0.4s ease;
 }
