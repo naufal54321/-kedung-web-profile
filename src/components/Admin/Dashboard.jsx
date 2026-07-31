@@ -94,11 +94,6 @@ function Dashboard() {
     return paths[key]
   }
 
-  const getDetailLink = (key, id) => {
-    const paths = { artikel: '/detail-Article/', umkm: '/detail-Umkm/' }
-    return paths[key] ? paths[key] + id : null
-  }
-
   const getPaginated = (key) => {
     const items = data[key] || []
     const currentPage = page[key] || 1
@@ -214,10 +209,6 @@ function Dashboard() {
                       {(tab === 'umkm' && (item.status || 'approved') === 'pending') && (
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
-                      )}
-                      {getDetailLink(tab, item.id) && (
-                        <Button variant="none" size="sm" className="admin-action-btn admin-action-view me-1"
-                          onClick={() => window.open(getDetailLink(tab, item.id), '_blank')} title="Lihat"><FaExternalLinkAlt /></Button>
                       )}
                       <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
                         onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
