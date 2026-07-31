@@ -4588,6 +4588,19 @@ textarea.admin-input {
     height: 450px;
   }
   .animated-button {
-    display: none;
+    padding: 10px 22px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

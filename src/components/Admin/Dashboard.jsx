@@ -6,6 +6,7 @@ import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPl
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
+import CountUp from '../CountUp'
 
 const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda' }
 
@@ -356,7 +357,7 @@ function Dashboard() {
               <div key={t.key} className="admin-stat-card admin-stat-gradient">
                 <div className="admin-stat-icon" style={{ background: t.bg, color: t.color }}><t.icon /></div>
                 <div className="admin-stat-info">
-                  <span className="admin-stat-count">{count}</span>
+                  <span className="admin-stat-count"><CountUp value={count} /></span>
                   <span className="admin-stat-label">{t.label}</span>
                 </div>
                 {pending > 0 && <span className="admin-stat-badge">{pending} pending</span>}
