@@ -293,7 +293,7 @@ h1, h2, h3 {
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background-color: #e8f5e9;
+    background-color: var(--secondary);
     color: var(--primary);
 }
 
@@ -1852,7 +1852,7 @@ h1, h2, h3 {
 }
 
 .meta-separator {
-  color: #ddd;
+  color: var(--border-color);
   font-weight: 300;
 }
 
@@ -1904,7 +1904,7 @@ h1, h2, h3 {
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e8f5e9;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .sidebar-article-item {
@@ -1916,7 +1916,7 @@ h1, h2, h3 {
 }
 
 .sidebar-article-item:hover {
-  border-color: #c8e6c9;
+  border-color: var(--primary-soft);
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
@@ -2035,10 +2035,10 @@ h1, h2, h3 {
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #2C5F2D;
+  color: var(--primary);
   margin-bottom: 1rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
 }
 
 .potensi-hero-title {
@@ -2237,7 +2237,7 @@ h1, h2, h3 {
 }
 
 .umkm-new-featured {
-  border-color: #c8e6c9;
+  border-color: var(--primary-soft);
   box-shadow: 0 8px 25px rgba(46,125,50,0.08);
 }
 
@@ -2420,7 +2420,7 @@ h1, h2, h3 {
   color: var(--text-primary);
   margin-bottom: 1rem;
   padding-bottom: 0.6rem;
-  border-bottom: 2px solid #e8f5e9;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .profil-text {
@@ -2534,7 +2534,7 @@ h1, h2, h3 {
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e8f5e9;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .info-grid {
@@ -2620,7 +2620,7 @@ h1, h2, h3 {
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e8f5e9;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .catalogue-card {
@@ -2687,7 +2687,7 @@ h1, h2, h3 {
 .agenda-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-  border-color: #c8e6c9;
+  border-color: var(--primary-soft);
 }
 
 .agenda-card-image {
@@ -4352,8 +4352,8 @@ textarea.admin-input {
 
 .kedung-card-badge {
   font-size: 0.65rem;
-  background: #e8f5e9;
-  color: #2C5F2D;
+  background: var(--secondary);
+  color: var(--primary);
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
   font-weight: 600;
