@@ -20,7 +20,7 @@ const AgendaDetailModal = ({ show, handleClose, agenda }) => {
         <Row className="g-3">
           {imgUrl && (
             <Col md={6}>
-              <img src={imgUrl} alt={name} loading="lazy" className="rounded w-100" style={{ maxHeight: 300, objectFit: 'contain', background: '#f5f5f5', cursor: 'pointer' }} onClick={() => setPreview({ url: imgUrl, title: name })} />
+              <img src={imgUrl} alt={name} loading="lazy" className="rounded w-100" style={{ maxHeight: 300, objectFit: 'contain', background: 'var(--bg)', cursor: 'pointer' }} onClick={() => setPreview({ url: imgUrl, title: name })} />
             </Col>
           )}
           <Col md={imgUrl ? 6 : 12}>

@@ -26,6 +26,10 @@ const PopulationChart = () => {
     return <div>Loading...</div>;
   }
 
+  const cs = getComputedStyle(document.documentElement);
+  const tickColor = cs.getPropertyValue('--text-muted').trim() || '#6b7280';
+  const gridColor = cs.getPropertyValue('--border-color').trim() || '#e5e7eb';
+
   const { lelaki, perempuan, tahun, total } = populationData;
 
   const data = {
@@ -45,6 +49,12 @@ const PopulationChart = () => {
     scales: {
       y: {
         beginAtZero: true,
+        ticks: { color: tickColor },
+        grid: { color: gridColor },
+      },
+      x: {
+        ticks: { color: tickColor },
+        grid: { color: gridColor },
       },
     },
   };

@@ -440,7 +440,7 @@ h1, h2, h3 {
   right: 32%;
   bottom: -11px;
   /* change the back groung color on switching from light to dark mood */
-  background: #e8e8e8;
+  background: var(--bg);
   transform: translateZ(200px) rotate(var(--r));
   -webkit-animation: mask var(--duration) linear forwards infinite;
   animation: mask var(--duration) linear forwards infinite;
@@ -1207,8 +1207,8 @@ h1, h2, h3 {
   font-size: 12px;
   letter-spacing: 2.5px;
   font-weight: 500;
-  color: #000;
-  background-color: #fff;
+  color: var(--text-primary);
+  background-color: var(--card);
   border: none;
   border-radius: 45px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
@@ -1380,7 +1380,7 @@ h1, h2, h3 {
 }
 
 .location-card {
-  background: #fff;
+  background: var(--card);
   border-radius: var(--radius-lg);
   padding: 3.5rem 3rem;
   text-align: center;
@@ -1464,7 +1464,7 @@ h1, h2, h3 {
 }
 
 .location-subtitle {
-  color: #555;
+  color: var(--text-muted);
   font-size: 1rem;
   margin-bottom: 1.2rem;
   display: flex;
@@ -1481,7 +1481,7 @@ h1, h2, h3 {
 }
 
 .location-desc {
-  color: #555;
+  color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.9;
   max-width: 700px;
@@ -1501,7 +1501,7 @@ h1, h2, h3 {
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem 2rem;
-  background: #fff;
+  background: var(--card);
   border-radius: var(--radius-md);
   min-width: 140px;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1545,14 +1545,14 @@ h1, h2, h3 {
 
 .stat-label {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
 }
 
 .news-card {
-  background: #fff;
+  background: var(--card);
   border-radius: var(--radius-sm);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -1604,7 +1604,7 @@ h1, h2, h3 {
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.5rem;
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.75rem;
 }
 
@@ -1627,7 +1627,7 @@ h1, h2, h3 {
 }
 
 .news-card-desc {
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.85rem;
   line-height: 1.6;
   margin-bottom: 0.75rem;
@@ -1708,7 +1708,7 @@ h1, h2, h3 {
 }
 
 .breadcrumb-modern {
-  background: #fff;
+  background: var(--card);
   padding: 0.75rem 1.25rem;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
@@ -1716,7 +1716,7 @@ h1, h2, h3 {
 
 .breadcrumb-modern .breadcrumb-item {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .breadcrumb-modern .breadcrumb-item a {
@@ -1725,7 +1725,7 @@ h1, h2, h3 {
 }
 
 .article-detail {
-  background: #fff;
+  background: var(--card);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
@@ -1840,7 +1840,7 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.85rem;
   flex-wrap: wrap;
 }
@@ -1858,14 +1858,14 @@ h1, h2, h3 {
 
 .detail-divider {
   height: 1px;
-  background: #e8e8e8;
+  background: var(--border-color);
   margin: 1.25rem 0;
 }
 
 .detail-body {
   font-size: 1.15rem;
   line-height: 1.9;
-  color: #444;
+  color: var(--text-primary);
 }
 
 .detail-body p {
@@ -1891,7 +1891,7 @@ h1, h2, h3 {
 }
 
 .sidebar-section {
-  background: #fff;
+  background: var(--card);
   border-radius: 12px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -1912,7 +1912,7 @@ h1, h2, h3 {
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-color);
 }
 
 .sidebar-article-item:hover {
@@ -1950,7 +1950,7 @@ h1, h2, h3 {
 .sidebar-article-title {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 2px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1963,7 +1963,7 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #999;
+  color: var(--text-muted);
   font-size: 0.65rem;
   margin-bottom: 2px;
 }
@@ -2031,7 +2031,7 @@ h1, h2, h3 {
 .potensi-badge {
   display: inline-block;
   padding: 0.35rem 1rem;
-  background: #fff;
+  background: var(--card);
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
@@ -2051,7 +2051,7 @@ h1, h2, h3 {
 
 .potensi-hero-desc {
   font-size: 1.05rem;
-  color: #555;
+  color: var(--text-muted);
   line-height: 1.7;
   max-width: 600px;
   margin: 0 auto;
@@ -2060,9 +2060,9 @@ h1, h2, h3 {
 .potensi-filter-btn {
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-  color: #333;
+  border: 1px solid var(--border-color);
+  background: var(--card);
+  color: var(--text-primary);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -2070,8 +2070,8 @@ h1, h2, h3 {
 }
 
 .potensi-filter-btn:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
+  background: var(--bg);
+  border-color: var(--border-color);
 }
 
 .potensi-filter-btn.active {
@@ -2082,10 +2082,10 @@ h1, h2, h3 {
 
 /* Modern UMKM Card */
 .umkm-new-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-color);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   height: 100%;
 }
@@ -2099,7 +2099,7 @@ h1, h2, h3 {
   position: relative;
   height: 200px;
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--bg);
 }
 
 .umkm-new-image.featured {
@@ -2160,7 +2160,7 @@ h1, h2, h3 {
 
 .umkm-new-desc {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-muted);
   line-height: 1.5;
   margin-bottom: 0.75rem;
   display: -webkit-box;
@@ -2179,7 +2179,7 @@ h1, h2, h3 {
   align-items: center;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
   gap: 0.5rem;
   flex-wrap: wrap;
 }
@@ -2286,7 +2286,7 @@ h1, h2, h3 {
 
 .potensi-cta-desc {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-muted);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -2396,13 +2396,13 @@ h1, h2, h3 {
 
 .profil-hero-desc {
   font-size: 0.95rem;
-  color: #555;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 0 auto;
 }
 
 .profil-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 16px;
   padding: 1.75rem;
   margin-bottom: 1.5rem;
@@ -2426,7 +2426,7 @@ h1, h2, h3 {
 .profil-text {
   font-size: 0.95rem;
   line-height: 1.8;
-  color: #555;
+  color: var(--text-primary);
 }
 
 .profil-list {
@@ -2437,7 +2437,7 @@ h1, h2, h3 {
 .profil-list li {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: #555;
+  color: var(--text-primary);
   margin-bottom: 0.3rem;
 }
 
@@ -2522,7 +2522,7 @@ h1, h2, h3 {
 }
 
 .info-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 14px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -2560,7 +2560,7 @@ h1, h2, h3 {
 .info-label {
   display: block;
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -2568,7 +2568,7 @@ h1, h2, h3 {
 .info-value {
   display: block;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -2578,7 +2578,7 @@ h1, h2, h3 {
 }
 
 .info-description {
-  color: #555;
+  color: var(--text-muted);
   font-size: 0.88rem;
   line-height: 1.7;
   margin-bottom: 0;
@@ -2598,7 +2598,7 @@ h1, h2, h3 {
 
 /* Catalogue */
 .umkm-catalogue {
-  background: #fff;
+  background: var(--card);
   border-radius: 14px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -2660,7 +2660,7 @@ h1, h2, h3 {
 .catalogue-card-name {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 0.3rem;
 }
 
@@ -2675,13 +2675,13 @@ h1, h2, h3 {
 
 /* ===== AGENDA MODERN ===== */
 .agenda-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   height: 100%;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-color);
 }
 
 .agenda-card:hover {
@@ -4382,7 +4382,7 @@ textarea.admin-input {
 
 .kedung-card-main {
   border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box, var(--gradient-green) border-box;
+  background: linear-gradient(var(--card), var(--card)) padding-box, var(--gradient-green) border-box;
   box-shadow: var(--shadow-md);
 }
 
@@ -4603,4 +4603,12 @@ textarea.admin-input {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+[data-theme='dark'] .bg-white {
+  background-color: var(--card) !important;
+}
+
+[data-theme='dark'] .text-dark {
+  color: var(--text-primary) !important;
 }
