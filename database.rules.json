@@ -1,0 +1,42 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "article": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+    },
+    "umkm": {
+      ".read": true,
+      ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('status').val() == 'pending')"
+    },
+    "penduduk": {
+      ".read": true
+    },
+    "hayati": {
+      ".read": true
+    },
+    "Nonhayati": {
+      ".read": true
+    },
+    "struktur": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+    },
+    "agenda": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+    },
+    "toga": {
+      ".read": true
+    },
+    "lembaga": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+    },
+    "carousel": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+    }
+  }
+}

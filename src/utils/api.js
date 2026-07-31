@@ -1,4 +1,4 @@
-import { auth } from './firebase'
+import { auth, databaseURL } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 
 let currentToken = null
@@ -6,12 +6,12 @@ onAuthStateChanged(auth, async (user) => {
   currentToken = user ? await user.getIdToken() : null
 })
 
-async function getAuthUrl(baseUrl) {
+async function getAuthHeaders() {
   if (!currentToken) {
     const user = auth.currentUser
     currentToken = user ? await user.getIdToken() : null
   }
-  return currentToken ? `${baseUrl}?auth=${currentToken}` : baseUrl
+  return currentToken ? { Authorization: `Bearer ${currentToken}` } : null
 }
 
 function compareUmkm(a, b) {
@@ -23,7 +23,7 @@ function compareUmkm(a, b) {
 }
 
 const api = (() => {
-  const BASE_URL = 'https://kedung-api-7eaed-default-rtdb.asia-southeast1.firebasedatabase.app';
+  const BASE_URL = databaseURL;
 
   async function fetchData(url) {
     try {
@@ -38,10 +38,10 @@ const api = (() => {
 
   async function postData(url, data) {
     try {
-      const authUrl = await getAuthUrl(`${BASE_URL}/${url}`);
-      const response = await fetch(authUrl, {
+      const authHeaders = await getAuthHeaders();
+      const response = await fetch(`${BASE_URL}/${url}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(authHeaders || {}) },
         body: JSON.stringify(data)
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -53,10 +53,10 @@ const api = (() => {
 
   async function putData(url, data) {
     try {
-      const authUrl = await getAuthUrl(`${BASE_URL}/${url}`);
-      const response = await fetch(authUrl, {
+      const authHeaders = await getAuthHeaders();
+      const response = await fetch(`${BASE_URL}/${url}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(authHeaders || {}) },
         body: JSON.stringify(data)
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -68,8 +68,11 @@ const api = (() => {
 
   async function deleteData(url) {
     try {
-      const authUrl = await getAuthUrl(`${BASE_URL}/${url}`);
-      const response = await fetch(authUrl, { method: 'DELETE' });
+      const authHeaders = await getAuthHeaders();
+      const response = await fetch(`${BASE_URL}/${url}`, {
+        method: 'DELETE',
+        headers: { ...(authHeaders || {}) }
+      });
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       return await response.json();
     } catch (error) {
