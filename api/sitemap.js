@@ -50,8 +50,9 @@ export default async function handler(req, res) {
       })
     }
 
+    const uniqueUrls = [...new Map(urls.map(u => [u.loc, u])).values()]
     const lastmod = new Date().toISOString().slice(0, 10)
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${uniqueUrls
       .map(u => `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${u.freq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`)
       .join('\n')}\n</urlset>`
 
