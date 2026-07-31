@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
-import { Table, Button, Spinner, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft } from 'react-icons/fa'
+import { Table, Button, Alert } from 'react-bootstrap'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
@@ -184,9 +184,17 @@ function Dashboard() {
     return (
       <div className="admin-table-wrapper">
         {isLoading ? (
-          <div className="text-center py-5"><Spinner animation="border" variant="success" /></div>
+          <div className="admin-skeleton-table">
+            {Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className="admin-skeleton admin-skeleton-row" />
+            ))}
+          </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-5 text-muted">Belum ada data.</div>
+          <div className="admin-empty">
+            <div className="admin-empty-icon"><FaInbox /></div>
+            <p className="admin-empty-title">Belum Ada Data</p>
+            <p className="admin-empty-sub">Data {tabs.find(t => t.key === tab)?.label || ''} belum tersedia.</p>
+          </div>
         ) : (
           <>
             <Table hover responsive className="admin-table admin-table-premium mb-0">
@@ -248,20 +256,20 @@ function Dashboard() {
         <div className="col-md-7">
           <div className="admin-section-card">
             <div className="admin-section-header">
-              <h6 className="admin-section-title">Total Konten</h6>
+              <h6 className="admin-section-title"><FaChartBar /> Total Konten</h6>
             </div>
             <div className="p-3">
-              {loading.artikel ? <Spinner animation="border" variant="success" size="sm" /> : <AdminChart type="bar" data={barData} />}
+              {loading.artikel ? <div className="admin-skeleton admin-skeleton-chart" /> : <AdminChart type="bar" data={barData} />}
             </div>
           </div>
         </div>
         <div className="col-md-5">
           <div className="admin-section-card">
             <div className="admin-section-header">
-              <h6 className="admin-section-title">Status Agenda</h6>
+              <h6 className="admin-section-title"><FaCalendarCheck /> Status Agenda</h6>
             </div>
             <div className="p-3">
-              {loading.agenda ? <Spinner animation="border" variant="success" size="sm" /> : <AdminChart type="doughnut" data={agendaChartData} height={220} />}
+              {loading.agenda ? <div className="admin-skeleton admin-skeleton-chart" /> : <AdminChart type="doughnut" data={agendaChartData} height={220} />}
             </div>
           </div>
         </div>
@@ -272,7 +280,7 @@ function Dashboard() {
           <div className="col-md-6">
             <div className="admin-section-card">
               <div className="admin-section-header">
-                <h6 className="admin-section-title">UMKM per Kategori</h6>
+                <h6 className="admin-section-title"><FaThLarge /> UMKM per Kategori</h6>
               </div>
               <div className="p-3">
                 <AdminChart type="doughnut" data={doughnutData} height={220} />
@@ -282,7 +290,7 @@ function Dashboard() {
           <div className="col-md-6">
             <div className="admin-section-card">
               <div className="admin-section-header">
-                <h6 className="admin-section-title">Artikel Terbaru</h6>
+                <h6 className="admin-section-title"><FaClock /> Artikel Terbaru</h6>
               </div>
               <div className="p-3">
                 {(data.artikel || []).length === 0 ? (
@@ -315,7 +323,29 @@ function Dashboard() {
   return (
     <AdminLayout title={isOverview ? 'Dashboard' : `Daftar ${tabs.find(t => t.key === tab)?.label || ''}`}>
       <div className="admin-dashboard">
-        {error && <Alert variant="danger" role="alert" className="py-2" dismissible onClose={() => setError('')}>{error}</Alert>}
+        <div className="admin-dashboard-header">
+          <div>
+            <div className="admin-breadcrumb">
+              <Link to="/"><FaHome /> Beranda</Link>
+              <FaChevronRight />
+              <span>Admin</span>
+              <FaChevronRight />
+              <span>{isOverview ? 'Dashboard' : (tabs.find(t => t.key === tab)?.label || '')}</span>
+            </div>
+            <h1 className="admin-dash-title">{isOverview ? 'Dashboard' : `Daftar ${tabs.find(t => t.key === tab)?.label || ''}`}</h1>
+            <p className="admin-dash-subtitle">
+              {isOverview
+                ? 'Ringkasan seluruh konten dan aktivitas Padukuhan Kedung.'
+                : `Kelola data ${(tabs.find(t => t.key === tab)?.label || '').toLowerCase()} pada halaman ini.`}
+            </p>
+          </div>
+          <div className="admin-dash-date">
+            <FaCalendarDay />
+            {now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </div>
+        </div>
+
+        {error && <Alert variant="danger" role="alert" className="admin-alert" dismissible onClose={() => setError('')}><FaExclamationTriangle /> {error}</Alert>}
 
         {/* Stat Cards (shown in both views) */}
         <div className="admin-stats-row">
@@ -337,7 +367,7 @@ function Dashboard() {
 
         {isOverview ? renderOverview() : (<>
           <div className="mb-3">
-            <a href="/admin" className="text-decoration-none text-muted small d-inline-flex align-items-center gap-1">
+            <a href="/admin" className="admin-back-link">
               <FaArrowLeft /> Kembali ke Dashboard
             </a>
           </div>
