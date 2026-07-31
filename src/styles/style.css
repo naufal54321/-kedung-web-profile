@@ -294,7 +294,7 @@ h1, h2, h3 {
 
 .dropdown-menu .dropdown-item:hover {
     background-color: #e8f5e9;
-    color: #1a4d1a;
+    color: var(--primary);
 }
 
 .navbar-toggler {
@@ -1388,7 +1388,7 @@ h1, h2, h3 {
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 1px solid rgba(0,0,0,0.03);
+  border: 1px solid var(--border-color);
 }
 
 .location-card:hover {
@@ -1539,7 +1539,7 @@ h1, h2, h3 {
 .stat-value {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #1a4d1a;
+  color: var(--primary);
   line-height: 1;
 }
 
@@ -1558,7 +1558,7 @@ h1, h2, h3 {
   box-shadow: var(--shadow-sm);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   height: 100%;
-  border: 1px solid rgba(0,0,0,0.03);
+  border: 1px solid var(--border-color);
 }
 
 .news-card:hover {
@@ -1615,7 +1615,7 @@ h1, h2, h3 {
 }
 
 .news-card-title {
-  color: #1a4d1a;
+  color: var(--primary);
   font-weight: 700;
   font-size: 1.05rem;
   line-height: 1.4;
@@ -1831,7 +1831,7 @@ h1, h2, h3 {
 .detail-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   line-height: 1.3;
   margin-bottom: 1rem;
 }
@@ -1900,7 +1900,7 @@ h1, h2, h3 {
 
 .sidebar-title {
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
@@ -2004,7 +2004,7 @@ h1, h2, h3 {
   justify-content: center;
   overflow: hidden;
   padding: 4rem 1rem;
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  background: var(--gradient-light);
 }
 
 .potensi-hero-orb {
@@ -2044,7 +2044,7 @@ h1, h2, h3 {
 .potensi-hero-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1a4d1a;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   line-height: 1.2;
 }
@@ -2150,7 +2150,7 @@ h1, h2, h3 {
 .umkm-new-name {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   margin-bottom: 0.4rem;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -2248,7 +2248,7 @@ h1, h2, h3 {
 /* CTA Banner */
 .potensi-cta {
   position: relative;
-  background: #e8f5e9;
+  background: var(--card);
   border-radius: 20px;
   padding: 2.5rem;
   display: flex;
@@ -2280,7 +2280,7 @@ h1, h2, h3 {
 .potensi-cta-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #1a4d1a;
+  color: var(--primary);
   margin-bottom: 0.5rem;
 }
 
@@ -2362,7 +2362,7 @@ h1, h2, h3 {
   justify-content: center;
   overflow: hidden;
   padding: 3rem 1rem;
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  background: var(--gradient-light);
 }
 
 .profil-hero-orb {
@@ -2389,7 +2389,7 @@ h1, h2, h3 {
 .profil-hero-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a4d1a;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   line-height: 1.2;
 }
@@ -2417,7 +2417,7 @@ h1, h2, h3 {
 .profil-card-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   padding-bottom: 0.6rem;
   border-bottom: 2px solid #e8f5e9;
@@ -2530,7 +2530,7 @@ h1, h2, h3 {
 
 .info-card-title {
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
@@ -2616,7 +2616,7 @@ h1, h2, h3 {
 
 .catalogue-title {
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   font-size: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
@@ -2740,7 +2740,7 @@ h1, h2, h3 {
 .agenda-card-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1a4d1a;
+  color: var(--text-primary);
   margin-bottom: 0.4rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -4611,4 +4611,66 @@ textarea.admin-input {
 
 [data-theme='dark'] .text-dark {
   color: var(--text-primary) !important;
+}
+
+.update-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  box-shadow: var(--shadow-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  animation: toastIn 0.3s ease;
+  max-width: calc(100vw - 2.5rem);
+}
+
+.update-toast-success {
+  border-left-color: #4CAF50;
+}
+
+.update-toast-btn {
+  background: var(--gradient-green);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.update-toast-btn:hover {
+  transform: translateY(-1px);
+}
+
+.update-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

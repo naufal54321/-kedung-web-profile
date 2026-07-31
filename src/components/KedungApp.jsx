@@ -7,6 +7,7 @@ import FooterApp from './FooterApp';
 import AgendaDetailModal from './agenda/AgendaDetail';
 import ScrollToTop from './ScrollOnTop';
 import ScrollTopFab from './ScrollTopFab';
+import UpdatePrompt from './UpdatePrompt';
 import ProtectedRoute from './Admin/ProtectedRoute';
 import LoadingScreen from './LoadingScreen';
 
@@ -108,6 +109,7 @@ function KedungApp() {
       </main>
       {!isAdmin && <FooterApp />}
       {!isAdmin && <ScrollTopFab />}
+      <UpdatePrompt />
     </div>
   );
 }
