@@ -1,18 +1,5 @@
-import { auth, databaseURL } from './firebase'
-import { onAuthStateChanged } from 'firebase/auth'
-
-let currentToken = null
-onAuthStateChanged(auth, async (user) => {
-  currentToken = user ? await user.getIdToken() : null
-})
-
-async function getAuthHeaders() {
-  if (!currentToken) {
-    const user = auth.currentUser
-    currentToken = user ? await user.getIdToken() : null
-  }
-  return currentToken ? { Authorization: `Bearer ${currentToken}` } : null
-}
+import { db, databaseURL } from './firebase'
+import { ref, push, set, remove } from 'firebase/database'
 
 function compareUmkm(a, b) {
   const aFire = a.id && a.id.startsWith('-')
@@ -38,14 +25,8 @@ const api = (() => {
 
   async function postData(url, data) {
     try {
-      const authHeaders = await getAuthHeaders();
-      const response = await fetch(`${BASE_URL}/${url}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...(authHeaders || {}) },
-        body: JSON.stringify(data)
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return await response.json();
+      const result = await push(ref(db, url.replace(/\.json$/, '')), data);
+      return { name: result.key };
     } catch (error) {
       throw new Error('Error posting data: ' + (error?.message || error));
     }
@@ -53,14 +34,8 @@ const api = (() => {
 
   async function putData(url, data) {
     try {
-      const authHeaders = await getAuthHeaders();
-      const response = await fetch(`${BASE_URL}/${url}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...(authHeaders || {}) },
-        body: JSON.stringify(data)
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return await response.json();
+      await set(ref(db, url.replace(/\.json$/, '')), data);
+      return null;
     } catch (error) {
       throw new Error('Error updating data: ' + (error?.message || error));
     }
@@ -68,13 +43,8 @@ const api = (() => {
 
   async function deleteData(url) {
     try {
-      const authHeaders = await getAuthHeaders();
-      const response = await fetch(`${BASE_URL}/${url}`, {
-        method: 'DELETE',
-        headers: { ...(authHeaders || {}) }
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      return await response.json();
+      await remove(ref(db, url.replace(/\.json$/, '')));
+      return null;
     } catch (error) {
       throw new Error('Error deleting data: ' + (error?.message || error));
     }
