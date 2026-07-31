@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import ButtonCustom from './ButtonCustom';
 import api from '../utils/api';
-import { Spinner } from 'react-bootstrap';
 
 const defaultSlides = [
   {
@@ -45,8 +44,8 @@ function CarouselCustom() {
 
   if (loading) {
     return (
-      <div className="home-carousel-wrapper d-flex justify-content-center align-items-center" style={{ height: '90vh' }}>
-        <Spinner animation="border" variant="success" />
+      <div className="home-carousel-wrapper" style={{ height: '90vh' }}>
+        <div className="skeleton skeleton-hero" />
       </div>
     );
   }

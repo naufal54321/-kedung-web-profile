@@ -6,6 +6,7 @@ import NavApp from './NavApp';
 import FooterApp from './FooterApp';
 import AgendaDetailModal from './agenda/AgendaDetail';
 import ScrollToTop from './ScrollOnTop';
+import ScrollTopFab from './ScrollTopFab';
 import ProtectedRoute from './Admin/ProtectedRoute';
 import LoadingScreen from './LoadingScreen';
 
@@ -64,7 +65,8 @@ function KedungApp() {
       <main style={{ paddingTop: isAdmin ? '0' : '80px' }}>
         <ScrollToTop/>
         <Suspense fallback={<LoadingScreen />}>
-          <Routes>
+          <div className="page-transition" key={location.pathname}>
+            <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/Sejarah" element={<Sejarah />} />
             <Route path="/Potensi-Dukuh" element={<PotensiDusun />} />
@@ -100,10 +102,12 @@ function KedungApp() {
             <Route path="/admin/agenda/new" element={<ProtectedRoute><AgendaForm /></ProtectedRoute>} />
             <Route path="/admin/agenda/edit/:id" element={<ProtectedRoute><AgendaForm /></ProtectedRoute>} />
           </Routes>
+          </div>
         </Suspense>
         <AgendaDetailModal show={showAgendaModal} handleClose={handleCloseAgendaModal} agenda={selectedAgenda} />
       </main>
       {!isAdmin && <FooterApp />}
+      {!isAdmin && <ScrollTopFab />}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function FooterApp() {
   return (
-    <footer className="text-white" style={{ backgroundColor: '#1a4d1a' }}>
+    <footer className="app-footer text-white" style={{ backgroundColor: '#1a4d1a' }}>
       <Container className="py-5">
         <Row className="g-4">
           <Col md={4}>

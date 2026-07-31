@@ -7,22 +7,36 @@ import { Link, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthState } from './Admin/useAuthState';
-import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt } from 'react-icons/fa';
+import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon } from 'react-icons/fa';
 
 function NavApp() {
   const { user } = useAuthState();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem('kedung-theme') || 'light');
 
   useEffect(() => {
     AOS.init();
   }, []);
 
   useEffect(() => {
+    if (location.pathname.startsWith('/admin')) {
+      document.documentElement.removeAttribute('data-theme');
+      return;
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('kedung-theme', theme);
+  }, [theme, location.pathname]);
+
+  useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const isHome = location.pathname === '/';
   const navbarState = isHome && !scrolled ? 'navbar-transparent' : 'navbar-solid';
@@ -38,6 +52,9 @@ function NavApp() {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <button type="button" className="theme-toggle ms-2" onClick={toggleTheme} aria-label="Ganti tema" title="Ganti tema">
+          {theme === 'dark' ? <FaSun /> : <FaMoon />}
+        </button>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-lg-center gap-0">
             <Nav.Item>

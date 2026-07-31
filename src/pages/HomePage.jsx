@@ -4,7 +4,6 @@ import DeveloperCard from '../components/Home/DeveloperList';
 import ArticleList from '../components/Home/ArticleList';
 import api from '../utils/api';
 import KedungList from '../components/Home/KedungList';
-import Loader from '../components/LoaderCustom'; 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LocationInfo from '../components/Home/LocationInfo';
@@ -39,8 +38,28 @@ function HomePage() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center bg-grey-custom" style={{ minHeight: '100vh' }}>
-        <Loader />
+      <div className="bg-grey-custom">
+        <div className="skeleton skeleton-hero" />
+        <div className="container py-4">
+          <div className="row g-4">
+            <div className="col-lg-8">
+              <div className="skeleton-card-lg">
+                <div className="skeleton skeleton-line w-40 mb-3" />
+                <div className="skeleton skeleton-line w-90 mb-2" />
+                <div className="skeleton skeleton-line w-80 mb-2" />
+                <div className="skeleton skeleton-line w-70" />
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className="skeleton-card-lg">
+                <div className="skeleton skeleton-line w-50 mb-3" />
+                <div className="skeleton skeleton-line w-85 mb-2" />
+                <div className="skeleton skeleton-line w-75 mb-2" />
+                <div className="skeleton skeleton-line w-60" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
