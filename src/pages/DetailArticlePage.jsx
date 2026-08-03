@@ -44,6 +44,10 @@ const DetailArticlePage = () => {
 
   const article = articles.find((a) => a.id.toString() === id);
 
+  const currentIndex = articles.findIndex((a) => a.id.toString() === id);
+  const previous = currentIndex > 0 ? articles[currentIndex - 1] : null;
+  const next = currentIndex >= 0 && currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = agendas.slice(indexOfFirstItem, indexOfLastItem);
@@ -75,7 +79,7 @@ const DetailArticlePage = () => {
         </div>
         <Row>
           <Col lg={8} data-aos="fade-up">
-            <ArticleDetail article={article} />
+            <ArticleDetail article={article} previous={previous} next={next} />
           </Col>
           <Col lg={4} data-aos="fade-up" data-aos-delay="100">
             <div className="sidebar-wrapper">
