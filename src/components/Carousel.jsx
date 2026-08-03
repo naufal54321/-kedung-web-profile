@@ -5,7 +5,7 @@ import api from '../utils/api';
 
 const defaultSlides = [
   {
-    imageUrl: '/img/carousel/slide-1.jpeg',
+    imageUrl: '/img/carousel/slide-1.webp',
     caption: 'Selamat Datang Di Website Padukuhan Kedung',
     subtitle: 'Website resmi Padukuhan Kedung, Kalurahan Guwosari'
   },
@@ -59,6 +59,7 @@ function CarouselCustom() {
               className="d-block w-100 carousel-image carousel-image-animated"
               src={slide.imageUrl}
               alt={slide.caption || `Slide ${index + 1}`}
+              decoding="async"
             />
             <Carousel.Caption className="carousel-caption-modern d-flex flex-column justify-content-center align-items-center position-absolute top-50 start-50 translate-middle">
               <div className="caption-text">

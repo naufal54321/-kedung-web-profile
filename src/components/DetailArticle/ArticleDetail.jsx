@@ -9,7 +9,7 @@ const ArticleDetail = ({ article }) => {
   return (
     <article className="article-detail">
       <div className="detail-hero">
-        <img src={article?.imgUrl} alt={article?.title} loading="eager" />
+        <img src={article?.imgUrl} alt={article?.title} loading="eager" decoding="async" />
       </div>
 
       <div className="detail-content">

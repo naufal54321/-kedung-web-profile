@@ -77,7 +77,7 @@ function SemuaBeritaPage() {
                   <div className="news-card">
                     <Link to={`/detail-Article/${article.id}`} className="text-decoration-none">
                       <div className="news-card-image">
-                        <img src={article.imgUrl} alt={article.title} />
+                        <img src={article.imgUrl} alt={article.title} loading="lazy" decoding="async" />
                         <div className="news-card-overlay" />
                       </div>
                       <div className="news-card-body">

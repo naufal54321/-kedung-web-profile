@@ -113,6 +113,8 @@ function CustomCalendar({ agendas = [] }) {
                     src={selectedEvent.extendedProps.imgUrl}
                     alt={selectedEvent.title}
                     className="rounded"
+                    loading="lazy"
+                    decoding="async"
                     style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'cover' }}
                   />
                 </div>

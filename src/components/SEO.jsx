@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 const defaultTitle = 'Padukuhan Kedung — Website Resmi';
 const defaultDesc = 'Website resmi Padukuhan Kedung, Kalurahan Guwosari, Kecamatan Pajangan, Kabupaten Bantul, Yogyakarta.';
-const defaultImage = 'https://kedung-guwosari.vercel.app/img/carousel/slide-1.jpeg';
+const defaultImage = 'https://kedung-guwosari.vercel.app/img/carousel/slide-1.webp';
 const siteUrl = 'https://kedung-guwosari.vercel.app';
 
 function SEO({ title, description, image, url }) {

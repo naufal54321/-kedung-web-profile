@@ -22,7 +22,7 @@ function LembagaTabs({ lembagas, loading }) {
         <Tab key={lembaga.id} eventKey={lembaga.id} title={lembaga.name} className="p-4">
           <div className="mx-auto d-flex justify-content-center p-4">
             {lembaga.imgUrl ? (
-              <img className="img-fluid rounded mb-5" src={lembaga.imgUrl} alt={`Struktur ${lembaga.name}`} />
+              <img className="img-fluid rounded mb-5" src={lembaga.imgUrl} alt={`Struktur ${lembaga.name}`} loading="lazy" decoding="async" />
             ) : (
               <p className="text-muted">Belum ada gambar struktur</p>
             )}

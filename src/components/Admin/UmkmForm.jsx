@@ -5,7 +5,7 @@ import { Container, Card, Form, Button, Alert, Spinner, Image, Row, Col } from '
 import { FaPlus, FaTrash } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
-import config from '../../utils/config'
+import uploadToImgBB from '../../utils/imageUpload'
 
 function UmkmForm() {
   const { id } = useParams()
@@ -64,28 +64,6 @@ function UmkmForm() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const uploadToImgBB = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = async () => {
-        const base64 = reader.result.split(',')[1]
-        try {
-          const res = await fetch(`https://api.imgbb.com/1/upload?key=${config.IMGBB_API_KEY}`, {
-            method: 'POST',
-            body: new URLSearchParams({ image: base64 })
-          })
-          const data = await res.json()
-          if (data.success) resolve(data.data.url)
-          else reject(new Error(data.error?.message || 'Gagal upload'))
-        } catch (err) {
-          reject(err)
-        }
-      }
-      reader.onerror = () => reject(new Error('Gagal membaca file'))
-    })
   }
 
   const handleUploadMainImage = async (file) => {

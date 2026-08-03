@@ -10,6 +10,8 @@ function TogaItem({ toga }) {
               src={toga.imgUrl}
               className="card-img-top"
               alt={toga.name}
+              loading="lazy"
+              decoding="async"
               style={{ objectFit: 'cover', width: '100%', height: '100%' }} 
             />
           </div>

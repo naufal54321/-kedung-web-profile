@@ -21,7 +21,18 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,jpeg}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,jpeg,webp}'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.hostname === 'i.ibb.co',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'imgbb-images',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
     }),
   ],

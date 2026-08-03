@@ -9,6 +9,8 @@ const HayatiItem = ({ hayati }) => {
             src={hayati.imgUrl}
             className="card-img-top"
             alt={hayati.name}
+            loading="lazy"
+            decoding="async"
             style={{ objectFit: 'cover', width: '100%', height: '100%' }} 
           />
         </div>

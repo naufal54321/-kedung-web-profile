@@ -9,6 +9,8 @@ const NonHayatiItem = ({ nonhayati }) => {
             src={nonhayati.imgUrl}
             className="card-img-top"
             alt={nonhayati.name}
+            loading="lazy"
+            decoding="async"
             style={{ objectFit: 'cover', width: '100%', height: '100%' }} // Agar gambar dipangkas sesuai dengan dimensi yang ditentukan
           />
         </div>

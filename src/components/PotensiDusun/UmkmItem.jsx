@@ -24,7 +24,7 @@ const UmkmItem = ({ umkm }) => {
       {/* Clickable card → detail */}
       <Link to={`/detail-Umkm/${umkm.id}`} className="text-decoration-none d-block">
         <div className="umkm-new-image">
-          <img src={umkm.imgUrl} alt={umkm.name} />
+          <img src={umkm.imgUrl} alt={umkm.name} loading="lazy" decoding="async" />
           <span className="umkm-new-badge">{umkm.category || 'UMKM'}</span>
         </div>
         <div className="umkm-new-body">
