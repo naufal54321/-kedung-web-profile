@@ -185,6 +185,7 @@ function Dashboard() {
       pesan: [
         { key: 'name', label: 'Nama' },
         { key: 'email', label: 'Email', className: 'd-none d-md-table-cell' },
+        { key: 'phone', label: 'No. WhatsApp / Telepon', render: (item) => item.phone || '-', className: 'd-none d-md-table-cell' },
         { key: 'subject', label: 'Subjek', render: (item) => (
           <div>
             <span className="fw-medium">{item.subject || '-'}</span>
