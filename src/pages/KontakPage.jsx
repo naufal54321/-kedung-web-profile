@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPaperPlane, FaHome } from 'react-icons/fa';
+import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPaperPlane, FaHome, FaExternalLinkAlt } from 'react-icons/fa';
 import api from '../utils/api';
 import SEO from '../components/SEO';
 import ProfilHero from '../components/Profil/ProfilHero';
 
-const WILAYAH = [
-  { label: 'Kedung 1', url: 'https://www.google.com/maps/d/u/0/viewer?mid=1nUZNsSP7ro-jZAqgE3r74K75KtguF_M&femb=1&ll=-7.8856475010263996%2C110.30198600000003&z=18' },
-  { label: 'Kedung 2', url: 'https://goo.gl/maps/XGsiEp7XweDXoQ798' },
-  { label: 'Kedung 3', url: 'https://goo.gl/maps/fYdcp1VFtasSd2Tx7' },
-  { label: 'Kedung 4', url: 'https://www.google.com/maps/d/u/0/viewer?mid=1XR0hTRQRcfa8iykCK_ph-d9ospuOuIM' },
-  { label: 'Kedung 5', url: 'https://goo.gl/maps/o4v7MAnQfYHzKgRu8' },
-  { label: 'Kedung 6', url: 'https://goo.gl/maps/t4em7VVUNS6bCaJr6' },
-];
+const PETA = {
+  embed: 'https://www.google.com/maps?q=-7.8856475010263996,110.30198600000003&z=17&output=embed',
+  besar: 'https://www.google.com/maps?q=-7.8856475010263996,110.30198600000003'
+};
 
 const SOSMED = [
   { icon: FaInstagram, label: 'Instagram', url: 'https://www.instagram.com/opik.1965/' },
@@ -77,20 +73,26 @@ function KontakPage() {
                   <div className="kontak-icon"><FaEnvelope /></div>
                   <div>
                     <span className="fw-semibold d-block">Email</span>
-                    <a href="mailto:Padukuhankedung@gmail.com" className="text-muted small text-decoration-none">Padukuhankedung@gmail.com</a>
+                    <a href="mailto:padukuhankedung@gmail.com" className="text-muted small text-decoration-none">padukuhankedung@gmail.com</a>
                   </div>
                 </div>
                 <div className="d-flex align-items-start gap-3 mb-3">
                   <div className="kontak-icon"><FaMapMarkerAlt /></div>
                   <div>
-                    <span className="fw-semibold d-block">Peta Wilayah</span>
-                    <div className="d-flex flex-wrap gap-2 mt-1">
-                      {WILAYAH.map((w) => (
-                        <a key={w.label} href={w.url} target="_blank" rel="noopener noreferrer"
-                          className="btn btn-sm btn-outline-success rounded-pill px-2 py-0" style={{ fontSize: '0.72rem' }}>
-                          {w.label}
-                        </a>
-                      ))}
+                    <span className="fw-semibold d-block">Peta Utama</span>
+                    <div className="mt-2">
+                      <iframe
+                        src={PETA.embed}
+                        title="Peta Padukuhan Kedung"
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="kontak-map"
+                      />
+                      <a href={PETA.besar} target="_blank" rel="noopener noreferrer"
+                        className="btn btn-sm btn-outline-success rounded-pill mt-2">
+                        <FaExternalLinkAlt className="me-1" />Buka Peta Besar
+                      </a>
                     </div>
                   </div>
                 </div>

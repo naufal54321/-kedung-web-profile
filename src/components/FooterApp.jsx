@@ -55,7 +55,7 @@ function FooterApp() {
               </div>
               <div className="d-flex align-items-center gap-2 text-white-50 small">
                 <FaEnvelope className="flex-shrink-0" />
-                <a href="mailto:Padukuhankedung@gmail.com" className="text-white-50 text-decoration-none">Padukuhankedung@gmail.com</a>
+                <a href="mailto:padukuhankedung@gmail.com" className="text-white-50 text-decoration-none">padukuhankedung@gmail.com</a>
               </div>
               <div className="d-flex align-items-center gap-2 text-white-50 small">
                 <FaMapMarkerAlt className="flex-shrink-0" />
