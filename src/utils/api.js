@@ -1,5 +1,5 @@
 import { db, databaseURL } from './firebase'
-import { ref, push, set, remove } from 'firebase/database'
+import { ref, push, set, remove, get } from 'firebase/database'
 
 function compareUmkm(a, b) {
   const aFire = a.id && a.id.startsWith('-')
@@ -419,7 +419,8 @@ const api = (() => {
 
   async function getAllMessages() {
     try {
-      const response = await fetchData('pesan.json');
+      const snapshot = await get(ref(db, 'pesan'));
+      const response = snapshot.val();
       if (typeof response === 'object' && response !== null) {
         return Object.keys(response).map(key => ({ ...response[key], id: key }))
           .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
