@@ -2236,6 +2236,94 @@ h1, h2, h3 {
   border-color: #2C5F2D;
 }
 
+/* Berita Search & Filters */
+.berita-search {
+  max-width: 480px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.berita-search .berita-search-icon {
+  background: var(--card);
+  border: 1px solid var(--border-color);
+  border-right: none;
+  color: var(--text-muted);
+}
+
+.berita-search .form-control {
+  background: var(--card);
+  border: 1px solid var(--border-color);
+  border-left: none;
+  color: var(--text-primary);
+}
+
+.berita-search .form-control:focus {
+  box-shadow: none;
+  border-color: var(--border-color);
+}
+
+.berita-search .form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.news-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: rgba(44, 95, 45, 0.92);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(2px);
+}
+
+/* Kontak Page */
+.kontak-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(44, 95, 45, 0.1);
+  color: #2C5F2D;
+  font-size: 1rem;
+}
+
+.kontak-sosmed {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.kontak-sosmed:hover {
+  background: #2C5F2D;
+  border-color: #2C5F2D;
+  color: #fff;
+}
+
+.admin-pesan-preview {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 340px;
+}
+
 /* Modern UMKM Card */
 .umkm-new-card {
   background: var(--card);

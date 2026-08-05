@@ -55,7 +55,7 @@ const ArticleDetail = ({ article, previous, next }) => {
         )}
 
         <div className="detail-content">
-          <span className="detail-badge">Berita</span>
+          <span className="detail-badge">{article?.category || 'Berita'}</span>
           <h1 className="detail-title">{article?.title}</h1>
 
           <div className="detail-meta">

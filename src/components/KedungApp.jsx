@@ -25,6 +25,7 @@ const DetailUmkmPage = lazy(() => import('../pages/DetailUmkmPage'));
 const DeveloperCard = lazy(() => import('../components/Home/DeveloperList'));
 const AgendaPage = lazy(() => import('../pages/AgendaPage'));
 const DaftarUmkmPage = lazy(() => import('../pages/DaftarUmkmPage'));
+const KontakPage = lazy(() => import('../pages/KontakPage'));
 const LoginPage = lazy(() => import('./Admin/LoginPage'));
 const Dashboard = lazy(() => import('./Admin/Dashboard'));
 const ArticleForm = lazy(() => import('./Admin/ArticleForm'));
@@ -82,6 +83,7 @@ function KedungApp() {
             <Route path="/Agenda" element={<AgendaPage handleAgendaClick={handleAgendaClick} />} />
             <Route path="/Semua-Berita" element={<SemuaBeritaPage />} />
             <Route path="/Daftar-UMKM" element={<DaftarUmkmPage />} />
+            <Route path="/Kontak" element={<KontakPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/artikel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -90,6 +92,7 @@ function KedungApp() {
             <Route path="/admin/lembaga" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/carousel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/agenda" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/pesan" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/articles/new" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/articles/edit/:id" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/umkm/new" element={<ProtectedRoute><UmkmForm /></ProtectedRoute>} />

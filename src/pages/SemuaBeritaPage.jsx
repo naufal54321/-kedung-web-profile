@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container, Spinner, Form, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaArrowRight, FaUser, FaCalendarAlt } from 'react-icons/fa';
+import { FaArrowRight, FaUser, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 import api from '../utils/api';
 import { formatDate } from '../utils/formatDate';
 import Pagination from 'react-bootstrap/Pagination';
 import ProfilHero from '../components/Profil/ProfilHero';
 import SEO from '../components/SEO';
+import { ARTICLE_CATEGORIES } from '../utils/categories';
 
 function SemuaBeritaPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('semua');
   const itemsPerPage = 9;
 
   useEffect(() => {
@@ -27,10 +30,22 @@ function SemuaBeritaPage() {
     fetchData();
   }, []);
 
+  const categories = ['semua', ...ARTICLE_CATEGORIES];
+
+  const filtered = articles.filter((a) => {
+    const matchCategory = category === 'semua' || (a.category || 'Berita') === category;
+    const q = search.trim().toLowerCase();
+    const matchSearch = !q
+      || (a.title || '').toLowerCase().includes(q)
+      || (a.body || '').toLowerCase().includes(q)
+      || (a.author || '').toLowerCase().includes(q);
+    return matchCategory && matchSearch;
+  });
+
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentItems = articles.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(articles.length / itemsPerPage);
+  const currentItems = filtered.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   const paginate = (page) => setCurrentPage(page);
 
@@ -67,8 +82,31 @@ function SemuaBeritaPage() {
       <SEO title="Berita" description="Informasi terkini seputar Padukuhan Kedung" />
       <ProfilHero title="Semua Berita" subtitle="Informasi terkini seputar Padukuhan Kedung" />
       <Container className="py-4">
-        {articles.length === 0 ? (
-          <p className="text-muted text-center py-5">Belum ada berita.</p>
+        <div className="mb-4" data-aos="fade-up">
+          <InputGroup className="berita-search">
+            <InputGroup.Text className="berita-search-icon"><FaSearch size={14} /></InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Cari judul, isi, atau penulis..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+            />
+          </InputGroup>
+          <div className="d-flex flex-wrap gap-2 berita-filters mt-3">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => { setCategory(cat); setCurrentPage(1); }}
+                className={`potensi-filter-btn ${category === cat ? 'active' : ''}`}
+              >
+                {cat === 'semua' ? 'Semua' : cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        {filtered.length === 0 ? (
+          <p className="text-muted text-center py-5">Tidak ada berita yang cocok.</p>
         ) : (
           <>
             <div className="row g-4" data-aos="fade-up">
@@ -79,6 +117,7 @@ function SemuaBeritaPage() {
                       <div className="news-card-image">
                         <img src={article.imgUrl} alt={article.title} loading="lazy" decoding="async" />
                         <div className="news-card-overlay" />
+                        <span className="news-badge">{article.category || 'Berita'}</span>
                       </div>
                       <div className="news-card-body">
                         <div className="news-card-meta">

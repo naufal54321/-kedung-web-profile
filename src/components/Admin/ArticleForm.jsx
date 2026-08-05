@@ -5,6 +5,7 @@ import { Container, Card, Form, Button, Alert, Spinner, Image } from 'react-boot
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import uploadToImgBB from '../../utils/imageUpload'
+import { ARTICLE_CATEGORIES } from '../../utils/categories'
 
 function ArticleForm() {
   const { id } = useParams()
@@ -15,6 +16,7 @@ function ArticleForm() {
     title: '',
     body: '',
     author: '',
+    category: '',
     publishDate: '',
     imgUrl: '',
     additionalImgUrl: ''
@@ -33,6 +35,7 @@ function ArticleForm() {
           title: article.title || '',
           body: article.body || '',
           author: article.author || '',
+          category: article.category || '',
           publishDate: article.publishDate || '',
           imgUrl: article.imgUrl || '',
           additionalImgUrl: article.additionalImgUrl || ''
@@ -76,7 +79,7 @@ function ArticleForm() {
       } else {
         await api.createArticle(form)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Artikel berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ title: '', body: '', author: '', publishDate: '', imgUrl: '', additionalImgUrl: '' })
+        setForm({ title: '', body: '', author: '', category: '', publishDate: '', imgUrl: '', additionalImgUrl: '' })
       }
     } catch {
       setError('Gagal menyimpan artikel')
@@ -127,6 +130,21 @@ function ArticleForm() {
                 className="admin-input"
                 required
               />
+            </div>
+
+            <div className="admin-input-group">
+              <Form.Label>Kategori</Form.Label>
+              <Form.Select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="admin-input"
+              >
+                <option value="">Pilih Kategori (default: Berita)</option>
+                {ARTICLE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </Form.Select>
             </div>
 
             <div className="admin-input-group">

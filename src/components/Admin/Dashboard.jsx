@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', pesan: 'pesan' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -17,6 +17,7 @@ const tabs = [
   { key: 'lembaga', icon: FaBuilding, label: 'Lembaga', detailsLink: '/admin/lembaga', color: '#fff', bg: 'linear-gradient(135deg, #E65100, #FF7043)' },
   { key: 'carousel', icon: FaImage, label: 'Carousel', detailsLink: '/admin/carousel', color: '#fff', bg: 'linear-gradient(135deg, #00897B, #26A69A)' },
   { key: 'agenda', icon: FaCalendarAlt, label: 'Agenda', detailsLink: '/admin/agenda', color: '#fff', bg: 'linear-gradient(135deg, #F9A825, #FFD54F)' },
+  { key: 'pesan', icon: FaEnvelope, label: 'Pesan Masuk', detailsLink: '/admin/pesan', color: '#fff', bg: 'linear-gradient(135deg, #00695C, #26A69A)' },
 ]
 
 function Dashboard() {
@@ -45,6 +46,7 @@ function Dashboard() {
       lembaga: () => api.getAllLembagas(),
       carousel: () => api.getAllCarousels(),
       agenda: () => api.getAllAgendas(),
+      pesan: () => api.getAllMessages(),
     }
     for (const [key, fn] of Object.entries(fetchers)) {
       setLoading(prev => ({ ...prev, [key]: true }))
@@ -180,6 +182,17 @@ function Dashboard() {
         { key: 'dateStart', label: 'Tanggal', className: 'd-none d-md-table-cell', render: (item) => `${item.dateStart} - ${item.dateEnd}` },
         { key: 'lokasi', label: 'Lokasi', className: 'd-none d-md-table-cell' },
       ],
+      pesan: [
+        { key: 'name', label: 'Nama' },
+        { key: 'email', label: 'Email', className: 'd-none d-md-table-cell' },
+        { key: 'subject', label: 'Subjek', render: (item) => (
+          <div>
+            <span className="fw-medium">{item.subject || '-'}</span>
+            {item.message && <p className="admin-pesan-preview mb-0">{item.message.slice(0, 80)}{item.message.length > 80 ? '...' : ''}</p>}
+          </div>
+        )},
+        { key: 'createdAt', label: 'Diterima', className: 'd-none d-md-table-cell', render: (item) => item.createdAt ? new Date(item.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-' },
+      ],
     }
 
     return (
@@ -220,12 +233,14 @@ function Dashboard() {
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
                       )}
-                      <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
-                        onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
+                      {tab !== 'pesan' && (
+                        <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
+                          onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
+                      )}
                       <Button variant="none" size="sm" className="admin-action-btn admin-action-delete"
                         onClick={() => {
-                          const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda }
-                          handleDelete(tab, item.id, item.name || item.title || item.caption, deletes[tab])
+                          const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, pesan: api.deleteMessage }
+                          handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
                         }} title="Hapus"><FaTrash /></Button>
                     </td>
                   </tr>
@@ -378,9 +393,11 @@ function Dashboard() {
                 Daftar {tabs.find(t => t.key === tab)?.label}
               </h6>
               <div className="admin-section-actions">
-                <button className="admin-btn-primary" onClick={() => navigate(getNewLink(tab))}>
-                  <FaPlus /> Tambah
-                </button>
+                {tab !== 'pesan' && (
+                  <button className="admin-btn-primary" onClick={() => navigate(getNewLink(tab))}>
+                    <FaPlus /> Tambah
+                  </button>
+                )}
               </div>
             </div>
             {renderTable()}

@@ -62,6 +62,7 @@ const DetailArticlePage = () => {
     mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
     description: articleDescription,
     inLanguage: 'id-ID',
+    articleSection: article?.category || 'Berita',
   };
 
   const currentIndex = articles.findIndex((a) => a.id.toString() === id);

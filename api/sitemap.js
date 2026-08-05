@@ -14,6 +14,7 @@ const STATIC_URLS = [
   { loc: '/Semua-Berita', priority: '0.9', freq: 'weekly' },
   { loc: '/Daftar-UMKM', priority: '0.7', freq: 'monthly' },
   { loc: '/Tentang-Developer', priority: '0.5', freq: 'yearly' },
+  { loc: '/Kontak', priority: '0.7', freq: 'yearly' },
 ]
 
 export default async function handler(req, res) {

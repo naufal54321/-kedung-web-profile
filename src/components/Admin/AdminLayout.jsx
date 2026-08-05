@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
-import { FaArrowLeft, FaSignOutAlt, FaBars, FaTimes, FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaHome, FaChartPie, FaUserCircle } from 'react-icons/fa'
+import { FaArrowLeft, FaSignOutAlt, FaBars, FaTimes, FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaHome, FaChartPie, FaUserCircle, FaEnvelope } from 'react-icons/fa'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
 import { useAuthState } from './useAuthState'
@@ -14,6 +14,7 @@ const sidebarItems = [
   { path: '/admin/lembaga', icon: FaBuilding, label: 'Lembaga' },
   { path: '/admin/carousel', icon: FaImage, label: 'Carousel' },
   { path: '/admin/agenda', icon: FaCalendarAlt, label: 'Agenda' },
+  { path: '/admin/pesan', icon: FaEnvelope, label: 'Pesan Masuk' },
 ]
 
 function AdminLayout({ children, title }) {

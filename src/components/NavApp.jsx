@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthState } from './Admin/useAuthState';
-import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon } from 'react-icons/fa';
+import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope } from 'react-icons/fa';
 
 function NavApp() {
   const { user } = useAuthState();
@@ -94,6 +94,12 @@ function NavApp() {
               <Link to="/Tentang-Developer" className={`nav-link rounded px-2 text-nowrap d-flex align-items-center gap-1 ${location.pathname === '/Tentang-Developer' ? 'active' : ''}`}
                 aria-current={location.pathname === '/Tentang-Developer' ? 'page' : undefined}>
                 <FaCode size={14} /> Developer
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link to="/Kontak" className={`nav-link rounded px-2 text-nowrap d-flex align-items-center gap-1 ${location.pathname === '/Kontak' ? 'active' : ''}`}
+                aria-current={location.pathname === '/Kontak' ? 'page' : undefined}>
+                <FaEnvelope size={14} /> Kontak
               </Link>
             </Nav.Item>
             {user && (

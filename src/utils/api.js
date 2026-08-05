@@ -405,6 +405,36 @@ const api = (() => {
     return { id: result.name, ...payload };
   }
 
+  async function publicCreateMessage(data) {
+    const payload = { ...data, createdAt: new Date().toISOString() };
+    const url = `${BASE_URL}/pesan.json`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    return { id: result.name, ...payload };
+  }
+
+  async function getAllMessages() {
+    try {
+      const response = await fetchData('pesan.json');
+      if (typeof response === 'object' && response !== null) {
+        return Object.keys(response).map(key => ({ ...response[key], id: key }))
+          .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      return [];
+    }
+  }
+
+  async function deleteMessage(id) {
+    return await deleteData(`pesan/${id}.json`);
+  }
+
   return {
     getAllArticles,
     getArticleDetail,
@@ -440,6 +470,9 @@ const api = (() => {
     getAllAgendas,
     getAllTogas,
     getTogaDetail,
+    publicCreateMessage,
+    getAllMessages,
+    deleteMessage,
   };  
 })();
 

@@ -30,6 +30,7 @@ function FooterApp() {
               <Link to="/Potensi-Dukuh" className="text-white-50 text-decoration-none small">Potensi Dukuh</Link>
               <Link to="/Agenda" className="text-white-50 text-decoration-none small">Agenda</Link>
               <Link to="/Lembaga-Masyarakat" className="text-white-50 text-decoration-none small">Lembaga</Link>
+              <Link to="/Kontak" className="text-white-50 text-decoration-none small">Kontak</Link>
             </div>
           </Col>
 
