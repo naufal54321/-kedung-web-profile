@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPaperPlane, FaHome, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPaperPlane, FaHome, FaExternalLinkAlt, FaShareAlt } from 'react-icons/fa';
 import api from '../utils/api';
 import SEO from '../components/SEO';
 import ProfilHero from '../components/Profil/ProfilHero';
@@ -97,7 +97,7 @@ function KontakPage() {
                   </div>
                 </div>
                 <div className="d-flex align-items-start gap-3">
-                  <div className="kontak-icon"><FaInstagram /></div>
+                  <div className="kontak-icon"><FaShareAlt /></div>
                   <div>
                     <span className="fw-semibold d-block">Media Sosial</span>
                     <div className="d-flex gap-2 mt-1">
