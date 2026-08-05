@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import ArticleDetail from '../components/DetailArticle/ArticleDetail';
 import ArticleList from '../components/DetailArticle/ArticleList';
 import { useParams } from 'react-router-dom';
@@ -44,6 +45,25 @@ const DetailArticlePage = () => {
 
   const article = articles.find((a) => a.id.toString() === id);
 
+  const articleDescription = article?.body ? article.body.replace(/\s+/g, ' ').slice(0, 160) : undefined;
+  const articleImage = article?.imgUrl || undefined;
+  const articleUrl = `https://kedung-guwosari.vercel.app/detail-Article/${id}`;
+  const publishDate = article?.publishDate ? new Date(article.publishDate).toISOString() : undefined;
+
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article?.title,
+    image: articleImage,
+    datePublished: publishDate,
+    dateModified: publishDate,
+    author: { '@type': 'Person', name: article?.author || 'Pemerintah Padukuhan Kedung' },
+    publisher: { '@type': 'Organization', name: 'Padukuhan Kedung' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+    description: articleDescription,
+    inLanguage: 'id-ID',
+  };
+
   const currentIndex = articles.findIndex((a) => a.id.toString() === id);
   const previous = currentIndex > 0 ? articles[currentIndex - 1] : null;
   const next = currentIndex >= 0 && currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
@@ -72,7 +92,10 @@ const DetailArticlePage = () => {
 
   return (
     <main className="detail-page">
-      <SEO />
+      <SEO title={article.title} description={articleDescription} image={articleImage} url={articleUrl} />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
+      </Helmet>
       <Container>
         <div className="detail-breadcrumb" data-aos="fade-up">
           <BreadcrumbDetailArticle articleTitle={article.title} />
