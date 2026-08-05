@@ -1,5 +1,30 @@
 import { db, databaseURL } from './firebase'
-import { ref, push, set, remove, get } from 'firebase/database'
+import { ref, push, set, remove, get, onValue, runTransaction } from 'firebase/database'
+
+const VISIT_KEY_PREFIX = 'kedung_visit_'
+
+export function visitKeyFor(date = new Date()) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+export function isNewVisit(dateKey) {
+  try {
+    return !localStorage.getItem(`${VISIT_KEY_PREFIX}${dateKey}`)
+  } catch {
+    return false
+  }
+}
+
+export function markVisited(dateKey) {
+  try {
+    localStorage.setItem(`${VISIT_KEY_PREFIX}${dateKey}`, '1')
+  } catch {
+    // penyimpanan lokal tidak tersedia — abaikan
+  }
+}
 
 function compareUmkm(a, b) {
   const aFire = a.id && a.id.startsWith('-')
@@ -436,6 +461,25 @@ const api = (() => {
     return await deleteData(`pesan/${id}.json`);
   }
 
+  async function trackVisit() {
+    const dateKey = visitKeyFor();
+    if (!isNewVisit(dateKey)) return false;
+    try {
+      await runTransaction(ref(db, 'stats/total'), (current) => (current || 0) + 1);
+      await runTransaction(ref(db, `stats/perHari/${dateKey}`), (current) => (current || 0) + 1);
+      markVisited(dateKey);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function getStats(onUpdate) {
+    return onValue(ref(db, 'stats'), (snapshot) => {
+      onUpdate(snapshot.val() || {});
+    });
+  }
+
   return {
     getAllArticles,
     getArticleDetail,
@@ -474,6 +518,8 @@ const api = (() => {
     publicCreateMessage,
     getAllMessages,
     deleteMessage,
+    trackVisit,
+    getStats,
   };  
 })();
 

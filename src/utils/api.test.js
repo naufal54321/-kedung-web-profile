@@ -18,7 +18,7 @@ vi.mock('./firebase', () => ({
   databaseURL: 'https://test-db.firebaseio.com'
 }))
 
-import api from './api'
+import api, { visitKeyFor, isNewVisit, markVisited } from './api'
 
 const mockFetch = () => vi.fn(() => Promise.resolve({
   ok: true,
@@ -72,5 +72,27 @@ describe('api', () => {
     const [url, init] = fetch.mock.calls[0]
     expect(url).toBe('https://test-db.firebaseio.com/umkm.json')
     expect(init.headers.Authorization).toBeUndefined()
+  })
+
+  it('visitKeyFor memformat tanggal lokal YYYY-MM-DD', () => {
+    const key = visitKeyFor(new Date(2026, 7, 5))
+    expect(key).toBe('2026-08-05')
+    const keyPadded = visitKeyFor(new Date(2026, 0, 3))
+    expect(keyPadded).toBe('2026-01-03')
+  })
+
+  it('isNewVisit true lalu markVisited membuat false di hari yang sama', () => {
+    vi.stubGlobal('localStorage', (() => {
+      const store = {}
+      return {
+        getItem: (k) => (k in store ? store[k] : null),
+        setItem: (k, v) => { store[k] = String(v) }
+      }
+    })())
+    const key = visitKeyFor(new Date(2026, 7, 5))
+    expect(isNewVisit(key)).toBe(true)
+    markVisited(key)
+    expect(isNewVisit(key)).toBe(false)
+    vi.unstubAllGlobals()
   })
 })

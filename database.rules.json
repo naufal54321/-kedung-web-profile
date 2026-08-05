@@ -40,6 +40,19 @@
       ".read": true,
       ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
     },
+    "stats": {
+      ".read": true,
+      "total": {
+        ".write": true,
+        ".validate": "newData.isNumber() && newData.val() <= 1000000 && (!data.exists() || (newData.val() <= data.val() + 50 && newData.val() >= data.val() - 1))"
+      },
+      "perHari": {
+        "$date": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() <= 100000 && (!data.exists() || (newData.val() <= data.val() + 50 && newData.val() >= data.val() - 1))"
+        }
+      }
+    },
     "pesan": {
       ".read": "auth != null",
       "$messageId": {

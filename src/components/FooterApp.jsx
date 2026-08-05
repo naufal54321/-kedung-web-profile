@@ -1,6 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaTiktok, FaYoutube, FaEnvelope, FaHome, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import VisitorStats from './VisitorStats';
 
 function FooterApp() {
   return (
@@ -76,6 +77,7 @@ function FooterApp() {
         <a href="https://si.almaata.ac.id/" target="_blank" rel="noopener noreferrer" className="text-white-50 text-decoration-none small">
           © {new Date().getFullYear()} KKN-T 03 Sistem Informasi, Universitas Alma Ata x Tim IT Padukuhan Kedung
         </a>
+        <div className="mt-2 d-flex justify-content-center"><VisitorStats /></div>
       </div>
     </footer>
   );
