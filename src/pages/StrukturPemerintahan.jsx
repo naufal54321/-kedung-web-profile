@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import OrganizationChart from '../components/Struktur/OrganizationChart';
 import api from '../utils/api';
-import { Spinner } from 'react-bootstrap';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
 import SEO from '../components/SEO';
@@ -33,8 +32,14 @@ function StrukturPemerintahan() {
       <div className="container py-4">
         <ProfilCard title="Bagan Struktur Pemerintahan">
           {loading ? (
-            <div className="text-center py-5">
-              <Spinner animation="border" variant="success" />
+            <div className="d-flex flex-wrap justify-content-center gap-4 py-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="skeleton-card-lg" style={{ width: 260, padding: '1.75rem' }}>
+                  <div className="skeleton mx-auto mb-3" style={{ width: 84, height: 84, borderRadius: '50%' }} />
+                  <div className="skeleton skeleton-line w-70 mx-auto mb-2" />
+                  <div className="skeleton skeleton-line w-50 mx-auto" />
+                </div>
+              ))}
             </div>
           ) : strukturs.length === 0 ? (
             <p className="text-muted text-center mb-0">Belum ada data struktur.</p>

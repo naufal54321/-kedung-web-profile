@@ -21,12 +21,10 @@ const NonHayatiList = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row">
-        {nonhayatis.map((nonhayati) => (
-          <NonHayatiItem key={nonhayati.id} nonhayati={nonhayati} />
-        ))}
-      </div>
+    <div className="row g-4">
+      {nonhayatis.map((nonhayati) => (
+        <NonHayatiItem key={nonhayati.id} nonhayati={nonhayati} />
+      ))}
     </div>
   );
 };

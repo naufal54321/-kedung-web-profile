@@ -1,21 +1,13 @@
-// HayatiItem.jsx
-
 const HayatiItem = ({ hayati }) => {
   return (
-    <div className="col-md-3">
-      <div className="card mb-4">
-        <div style={{ height: '200px', overflow: 'hidden' }}>
-          <img
-            src={hayati.imgUrl}
-            className="card-img-top"
-            alt={hayati.name}
-            loading="lazy"
-            decoding="async"
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }} 
-          />
+    <div className="col-6 col-md-4 col-lg-3" data-aos="fade-up">
+      <div className="sda-card">
+        <div className="sda-image">
+          <img src={hayati.imgUrl} alt={hayati.name} loading="lazy" decoding="async" />
+          <span className="sda-badge">Hayati</span>
         </div>
-        <div className="card-body">
-          <h5 className="card-title custom-font text-center">{hayati.name}</h5>
+        <div className="sda-body">
+          <h5 className="sda-name">{hayati.name}</h5>
         </div>
       </div>
     </div>

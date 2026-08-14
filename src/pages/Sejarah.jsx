@@ -1,6 +1,6 @@
 import ProfilHero from '../components/Profil/ProfilHero';
-import ProfilCard from '../components/Profil/ProfilCard';
 import SEO from '../components/SEO';
+import { FaLandmark, FaHistory } from 'react-icons/fa';
 
 function Sejarah() {
   return (
@@ -11,23 +11,29 @@ function Sejarah() {
         subtitle="Mengenal asal-usul dan perjalanan Padukuhan Kedung dari masa ke masa"
       />
       <div className="container py-4">
-        <ProfilCard title="Sejarah Padukuhan">
-          <p className="profil-text">
-            Padukuhan Kedung terletak di Kalurahan Guwosari, Kecamatan Pajangan, 
-            Kabupaten Bantul. Padukuhan Kedung memiliki 4 RT, yang terdiri dari 
-            RT 1, RT 2, RT 3 dan RT 4. Setiap RT memiliki ciri khasnya sendiri. 
-            Jumlah penduduk di Padukuhan Kedung tergolong ramai berdasarkan KK 
+        <div className="vm-card" data-aos="fade-up">
+          <div className="vm-icon vm-icon-visi">
+            <FaLandmark />
+          </div>
+          <h3 className="vm-title">Sejarah Padukuhan</h3>
+          <p className="vm-text">
+            Padukuhan Kedung terletak di Kalurahan Guwosari, Kecamatan Pajangan,
+            Kabupaten Bantul. Padukuhan Kedung memiliki 4 RT, yang terdiri dari
+            RT 1, RT 2, RT 3 dan RT 4. Setiap RT memiliki ciri khasnya sendiri.
+            Jumlah penduduk di Padukuhan Kedung tergolong ramai berdasarkan KK
             (Kartu Keluarga) yang ada di Padukuhan Kedung.
           </p>
-        </ProfilCard>
+        </div>
 
-        <ProfilCard title="Sejarah Kepemimpinan">
-          <p className="profil-text text-muted">
-            Informasi segera menyusul
-          </p>
-        </ProfilCard>
-    </div>
-  </main>
+        <div className="vm-card" data-aos="fade-up" data-aos-delay="100">
+          <div className="vm-icon vm-icon-misi">
+            <FaHistory />
+          </div>
+          <h3 className="vm-title">Sejarah Kepemimpinan</h3>
+          <div className="vm-info-badge">Informasi segera menyusul</div>
+        </div>
+      </div>
+    </main>
   );
 }
 

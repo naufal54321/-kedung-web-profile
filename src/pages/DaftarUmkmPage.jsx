@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Card, Form, Button, Alert, Spinner, Image } from 'react-bootstrap';
+import { Container, Row, Col, Form, Alert, Spinner, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { FaArrowLeft, FaStore } from 'react-icons/fa';
@@ -62,73 +62,84 @@ function DaftarUmkmPage() {
   return (
     <div className="detail-page">
       <SEO title="Daftar UMKM" description="Daftarkan UMKM Anda di Padukuhan Kedung" />
-      <Container className="py-4" style={{ maxWidth: 650 }}>
+      <Container className="py-4" style={{ maxWidth: 720 }}>
         <Link to="/Potensi-Dukuh" className="text-decoration-none text-muted d-inline-flex align-items-center gap-1 mb-3">
           <FaArrowLeft size={14} /> Kembali
         </Link>
 
-        <Card className="border-0 shadow-sm">
-          <Card.Body className="p-4">
-            <div className="text-center mb-4">
-              <FaStore size={40} className="text-success mb-2" />
-              <h4 className="fw-bold" style={{ color: '#1a4d1a' }}>Daftarkan UMKM</h4>
-              <p className="text-muted small">Isi form berikut untuk mendaftarkan usaha Anda di Padukuhan Kedung</p>
+        <div className="public-form-card" data-aos="fade-up">
+          <div className="public-form-header">
+            <div className="public-form-icon">
+              <FaStore />
             </div>
+            <div>
+              <h5>Daftarkan UMKM</h5>
+              <p>Isi form berikut untuk mendaftarkan usaha Anda di Padukuhan Kedung</p>
+            </div>
+          </div>
 
-            {error && <Alert variant="danger" role="alert" className="py-2">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Nama UMKM <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="name" value={form.name} onChange={handleChange} required />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Nama Pemilik <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="owner" value={form.owner} onChange={handleChange} required />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Kategori <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="category" value={form.category} onChange={handleChange} placeholder="Makanan, Kerajinan, Hasil Tani, dll" required />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Harga</Form.Label>
-                  <Form.Control type="text" name="price" value={form.price} onChange={handleChange} placeholder="Rp 15.000" />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Nomor WhatsApp <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="contact" value={form.contact} onChange={handleChange} placeholder="0812-3456-7890" required />
-                  <Form.Text className="text-muted">Digunakan pembeli untuk menghubungi Anda</Form.Text>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Deskripsi</Form.Label>
-                  <Form.Control as="textarea" rows={3} name="description" value={form.description} onChange={handleChange} />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
+          {error && <Alert variant="danger" role="alert" className="py-2">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+                <div className="public-floating-group">
+                  <input type="text" name="name" value={form.name} onChange={handleChange} placeholder=" " required />
+                  <label>Nama UMKM <span className="text-danger">*</span></label>
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="public-floating-group">
+                  <input type="text" name="owner" value={form.owner} onChange={handleChange} placeholder=" " required />
+                  <label>Nama Pemilik <span className="text-danger">*</span></label>
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="public-floating-group">
+                  <input type="text" name="category" value={form.category} onChange={handleChange} placeholder=" " required />
+                  <label>Kategori <span className="text-danger">*</span></label>
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="public-floating-group">
+                  <input type="text" name="price" value={form.price} onChange={handleChange} placeholder=" " />
+                  <label>Harga</label>
+                </div>
+              </Col>
+              <Col md={12}>
+                <div className="public-floating-group">
+                  <input type="text" name="contact" value={form.contact} onChange={handleChange} placeholder=" " required />
+                  <label>Nomor WhatsApp <span className="text-danger">*</span></label>
+                  <span className="public-field-hint">Digunakan pembeli untuk menghubungi Anda</span>
+                </div>
+              </Col>
+              <Col md={12}>
+                <div className="public-floating-group">
+                  <textarea name="description" value={form.description} onChange={handleChange} placeholder=" " />
+                  <label>Deskripsi</label>
+                </div>
+              </Col>
+              <Col md={12}>
+                <Form.Group className="public-field">
                   <Form.Label>Foto Produk</Form.Label>
                   <div className="d-flex align-items-center gap-2 mb-2">
-                    <Form.Control type="file" accept="image/*" onChange={(e) => handleUpload(e.target.files[0])} disabled={uploading} />
+                    <Form.Control type="file" accept="image/*" onChange={(e) => handleUpload(e.target.files[0])} disabled={uploading} className="public-file" />
                     {uploading && <Spinner animation="border" size="sm" variant="success" />}
                   </div>
                   {form.imgUrl && !uploading && <Image src={form.imgUrl} thumbnail style={{ maxHeight: 80 }} className="mt-1" />}
-                  <Form.Control type="url" name="imgUrl" value={form.imgUrl} onChange={handleChange} placeholder="Atau masukkan URL gambar" className="mt-2" />
+                  <Form.Control type="url" name="imgUrl" value={form.imgUrl} onChange={handleChange} placeholder="Atau masukkan URL gambar" className="mt-2 public-file" />
                 </Form.Group>
+              </Col>
+            </Row>
 
-                <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
-                  <Form.Control type="text" name="website" value={form.website} onChange={handleChange} tabIndex={-1} autoComplete="off" />
-                </div>
+            <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+              <input type="text" name="website" value={form.website} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+            </div>
 
-                <Button variant="success" type="submit" disabled={loading || uploading} className="w-100 py-2"
-                  style={{ backgroundColor: '#2C5F2D', borderColor: '#2C5F2D' }}>
-                  {loading ? 'Mendaftarkan...' : 'Daftarkan UMKM'}
-                </Button>
-            </Form>
-          </Card.Body>
-        </Card>
+            <button type="submit" disabled={loading || uploading} className="public-form-btn mt-1">
+              {loading ? 'Mendaftarkan...' : 'Daftarkan UMKM'}
+            </button>
+          </Form>
+        </div>
       </Container>
     </div>
   );

@@ -22,12 +22,10 @@ const HayatiList = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row">
-        {hayatis.map((hayati) => (
-          <HayatiItem key={hayati.id} hayati={hayati} />
-        ))}
-      </div>
+    <div className="row g-4">
+      {hayatis.map((hayati) => (
+        <HayatiItem key={hayati.id} hayati={hayati} />
+      ))}
     </div>
   );
 };

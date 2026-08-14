@@ -19,13 +19,11 @@ function TogaList() {
   }, []);
 
   return (
-    <div className="container">
-        <div className="row">
-          {togas.map((toga) => (
-            <TogaItem key={toga.id} toga={toga} />
-          ))}
-        </div>
-      </div>
+    <div className="row g-4">
+      {togas.map((toga) => (
+        <TogaItem key={toga.id} toga={toga} />
+      ))}
+    </div>
   );
 }
 

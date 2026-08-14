@@ -1,23 +1,18 @@
 import { Link } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';
 
 function TogaItem({ toga }) {
   return (
-    <div className="col-md-3">
-      <Link to={`/toga/${toga.id}`} className="text-decoration-none">
-        <div className="card mb-4 h-100">
-          <div style={{ height: '200px', overflow: 'hidden' }}>
-            <img
-              src={toga.imgUrl}
-              className="card-img-top"
-              alt={toga.name}
-              loading="lazy"
-              decoding="async"
-              style={{ objectFit: 'cover', width: '100%', height: '100%' }} 
-            />
+    <div className="col-6 col-md-4 col-lg-3" data-aos="fade-up">
+      <Link to={`/toga/${toga.id}`} className="text-decoration-none h-100 d-block">
+        <div className="sda-card">
+          <div className="sda-image">
+            <img src={toga.imgUrl} alt={toga.name} loading="lazy" decoding="async" />
+            <span className="sda-badge">TOGA</span>
           </div>
-          <div className="card-body">
-            <h5 className="card-title custom-font text-center mb-4">{toga.name}</h5>
-            <Link to={`/toga/${toga.id}`} className="btn btn-success button-new position-absolute bottom-0 end-0 mx-2 mb-2">Lihat Detail</Link>
+          <div className="sda-body">
+            <h5 className="sda-name">{toga.name}</h5>
+            <span className="sda-link">Lihat Detail <FaArrowRight size={11} /></span>
           </div>
         </div>
       </Link>

@@ -1,10 +1,19 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Spinner } from 'react-bootstrap';
 
 function LembagaTabs({ lembagas, loading }) {
   if (loading) {
-    return <div className="text-center py-5"><Spinner animation="border" variant="success" /></div>
+    return (
+      <div className="d-flex flex-wrap justify-content-center gap-4 py-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="skeleton-card-lg" style={{ width: 320, padding: '1.75rem' }}>
+            <div className="skeleton skeleton-line w-40 mx-auto mb-4" />
+            <div className="skeleton mx-auto mb-3" style={{ width: 260, height: 180 }} />
+            <div className="skeleton skeleton-line w-80 mx-auto" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (!lembagas || lembagas.length === 0) {

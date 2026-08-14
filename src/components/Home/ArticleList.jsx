@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ArticleItem from './ArticleItem';
-import CustomPagination from './CustomPagination';
+import CustomPagination from '../CustomPagination';
 
 const ArticleList = ({ articles }) => {
   const [currentPage, setCurrentPage] = useState(1);

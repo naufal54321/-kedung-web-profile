@@ -9,7 +9,7 @@ import BreadcrumbDetailArticle from '../components/DetailArticle/Breadcrumb';
 import Comments from '../components/DetailArticle/Comments';
 import AgendaList from '../components/agenda/AgendaList';
 import SEO from '../components/SEO';
-import CustomPagination from '../components/agenda/CustomPagination';
+import CustomPagination from '../components/CustomPagination';
 
 const DetailArticlePage = () => {
   const [articles, setArticles] = useState([]);

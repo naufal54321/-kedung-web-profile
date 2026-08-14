@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Container, Spinner, Form, InputGroup } from 'react-bootstrap';
+import { Container, Form, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaUser, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 import api from '../utils/api';
 import { formatDate } from '../utils/formatDate';
-import Pagination from 'react-bootstrap/Pagination';
+import CustomPagination from '../components/CustomPagination';
 import ProfilHero from '../components/Profil/ProfilHero';
 import SEO from '../components/SEO';
 import { ARTICLE_CATEGORIES } from '../utils/categories';
@@ -49,31 +49,28 @@ function SemuaBeritaPage() {
 
   const paginate = (page) => setCurrentPage(page);
 
-  const renderPagination = () => {
-    const items = [];
-    items.push(<Pagination.First key="first" onClick={() => paginate(1)} disabled={currentPage === 1} />);
-    items.push(<Pagination.Prev key="prev" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />);
-    if (currentPage > 3) {
-      items.push(<Pagination.Item key={1} onClick={() => paginate(1)}>{1}</Pagination.Item>);
-      if (currentPage > 4) items.push(<Pagination.Ellipsis key="e1" />);
-    }
-    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-      items.push(<Pagination.Item key={i} active={i === currentPage} onClick={() => paginate(i)}>{i}</Pagination.Item>);
-    }
-    if (currentPage < totalPages - 2) {
-      if (currentPage < totalPages - 3) items.push(<Pagination.Ellipsis key="e2" />);
-      items.push(<Pagination.Item key={totalPages} onClick={() => paginate(totalPages)}>{totalPages}</Pagination.Item>);
-    }
-    items.push(<Pagination.Next key="next" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} />);
-    items.push(<Pagination.Last key="last" onClick={() => paginate(totalPages)} disabled={currentPage === totalPages} />);
-    return items;
-  };
-
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center bg-grey-custom" style={{ minHeight: '60vh' }}>
-        <Spinner animation="border" variant="success" />
-      </div>
+      <main className="profil-page">
+        <ProfilHero title="Semua Berita" subtitle="Informasi terkini seputar Padukuhan Kedung" />
+        <Container className="py-4">
+          <div className="row g-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="col-md-6 col-lg-4">
+                <div className="skeleton-card-lg p-0">
+                  <div className="skeleton" style={{ height: 200, borderRadius: '16px 16px 0 0' }} />
+                  <div className="p-4">
+                    <div className="skeleton skeleton-line w-50 mb-2" />
+                    <div className="skeleton skeleton-line w-90 mb-2" />
+                    <div className="skeleton skeleton-line w-70 mb-2" />
+                    <div className="skeleton skeleton-line w-60" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </main>
     );
   }
 
@@ -137,8 +134,8 @@ function SemuaBeritaPage() {
             </div>
 
             {totalPages > 1 && (
-              <div className="d-flex justify-content-center mt-5">
-                <Pagination className="mb-0">{renderPagination()}</Pagination>
+              <div className="mt-5">
+                <CustomPagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
               </div>
             )}
           </>

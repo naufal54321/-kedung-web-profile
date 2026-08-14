@@ -4,7 +4,7 @@ import { FaCalendarAlt, FaList } from 'react-icons/fa';
 import AgendaList from '../components/agenda/AgendaList';
 import CustomCalendar from '../components/agenda/CustomCalendar'; // ✅ Import baru
 import api from '../utils/api';
-import CustomPagination from '../components/agenda/CustomPagination';
+import CustomPagination from '../components/CustomPagination';
 import ProfilHero from '../components/Profil/ProfilHero';
 import ProfilCard from '../components/Profil/ProfilCard';
 import SEO from '../components/SEO';

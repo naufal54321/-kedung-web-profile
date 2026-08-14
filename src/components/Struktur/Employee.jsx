@@ -1,33 +1,30 @@
-import { Card, ListGroup } from 'react-bootstrap';
+import { FaIdBadge } from 'react-icons/fa';
 
-function Employee({ employee }) {
+function Employee({ employee, isHead }) {
   return (
-    <Card className='card-employes'>
-      <Card.Body>
-        <Card.Title className='text-center bg-secondary-green rounded p-2'>{employee.name}</Card.Title>
-        {employee.imgUrl && <Card.Img variant="top" className='rounded mb-3' src={employee.imgUrl} alt={employee.name} />}
-        {employee.subordinates && (
-          <div>
-            <Card.Title>Bawahan:</Card.Title>
-            <ListGroup>
-              {employee.subordinates.map(subordinate => (
-                <ListGroup.Item key={subordinate.id}>
-                  <Employee employee={subordinate} />
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </div>
+    <div className={`employee-card ${isHead ? 'employee-head' : ''}`}>
+      <div className="employee-avatar">
+        {employee.imgUrl ? (
+          <img src={employee.imgUrl} alt={employee.name} loading="lazy" decoding="async" />
+        ) : (
+          <span>{(employee.name || '?').charAt(0)}</span>
         )}
-        <Card.Text className='bg-secondary-green p-2 font-card-employe rounded'>
-          <table>
-            <tbody>
-              <tr><td>Jabatan</td><td>:</td><td>{employee.job}</td></tr>
-              <tr><td>Kontak</td><td>:</td><td>{employee.contact}</td></tr>
-            </tbody>
-          </table>
-        </Card.Text>
-      </Card.Body>
-    </Card>
+      </div>
+      <h5 className="employee-name">{employee.name}</h5>
+      <span className="employee-job">{employee.job}</span>
+      {employee.contact && (
+        <span className="employee-contact">
+          <FaIdBadge size={11} /> {employee.contact}
+        </span>
+      )}
+      {employee.subordinates && employee.subordinates.length > 0 && (
+        <div className="employee-subordinates">
+          {employee.subordinates.map((subordinate) => (
+            <Employee key={subordinate.id} employee={subordinate} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
