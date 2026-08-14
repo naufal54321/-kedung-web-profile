@@ -461,6 +461,57 @@ const api = (() => {
     return await deleteData(`pesan/${id}.json`);
   }
 
+  async function publicCreateComment(articleId, data) {
+    const payload = { ...data, createdAt: Date.now() };
+    const url = `${BASE_URL}/komentar/${articleId}.json`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    return { id: result.name, ...payload };
+  }
+
+  async function getComments(articleId) {
+    try {
+      const response = await fetchData(`komentar/${articleId}.json`);
+      if (typeof response === 'object' && response !== null) {
+        return Object.keys(response).map(key => ({ ...response[key], id: key }))
+          .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      return [];
+    }
+  }
+
+  async function deleteComment(articleId, commentId) {
+    return await deleteData(`komentar/${articleId}/${commentId}.json`);
+  }
+
+  async function getAllComments() {
+    try {
+      const response = await fetchData('komentar.json');
+      if (typeof response === 'object' && response !== null) {
+        const list = [];
+        Object.entries(response).forEach(([articleId, comments]) => {
+          if (typeof comments === 'object' && comments !== null) {
+            Object.keys(comments).forEach(commentId => {
+              list.push({ ...comments[commentId], id: commentId, articleId });
+            });
+          }
+        });
+        return list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching all comments:', error);
+      return [];
+    }
+  }
+
   async function trackVisit() {
     const dateKey = visitKeyFor();
     if (!isNewVisit(dateKey)) return false;
@@ -518,6 +569,10 @@ const api = (() => {
     publicCreateMessage,
     getAllMessages,
     deleteMessage,
+    publicCreateComment,
+    getComments,
+    deleteComment,
+    getAllComments,
     trackVisit,
     getStats,
   };  

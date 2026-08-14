@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', pesan: 'pesan' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', pesan: 'pesan', komentar: 'komentar' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -18,6 +18,7 @@ const tabs = [
   { key: 'carousel', icon: FaImage, label: 'Carousel', detailsLink: '/admin/carousel', color: '#fff', bg: 'linear-gradient(135deg, #00897B, #26A69A)' },
   { key: 'agenda', icon: FaCalendarAlt, label: 'Agenda', detailsLink: '/admin/agenda', color: '#fff', bg: 'linear-gradient(135deg, #F9A825, #FFD54F)' },
   { key: 'pesan', icon: FaEnvelope, label: 'Pesan Masuk', detailsLink: '/admin/pesan', color: '#fff', bg: 'linear-gradient(135deg, #00695C, #26A69A)' },
+  { key: 'komentar', icon: FaComments, label: 'Komentar', detailsLink: '/admin/komentar', color: '#fff', bg: 'linear-gradient(135deg, #455A64, #78909C)' },
 ]
 
 function Dashboard() {
@@ -47,6 +48,7 @@ function Dashboard() {
       carousel: () => api.getAllCarousels(),
       agenda: () => api.getAllAgendas(),
       pesan: () => api.getAllMessages(),
+      komentar: () => api.getAllComments(),
     }
     for (const [key, fn] of Object.entries(fetchers)) {
       setLoading(prev => ({ ...prev, [key]: true }))
@@ -194,6 +196,17 @@ function Dashboard() {
         )},
         { key: 'createdAt', label: 'Diterima', className: 'd-none d-md-table-cell', render: (item) => item.createdAt ? new Date(item.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-' },
       ],
+      komentar: [
+        { key: 'articleId', label: 'Artikel', render: (item) => {
+          const article = (data.artikel || []).find(a => a.id === item.articleId)
+          return article
+            ? <Link to={`/detail-Article/${article.id}`} target="_blank" className="text-decoration-none fw-medium">{article.title} <FaExternalLinkAlt size={10} className="text-muted" /></Link>
+            : <span className="text-muted">{item.articleId}</span>
+        }},
+        { key: 'name', label: 'Nama', className: 'd-none d-md-table-cell' },
+        { key: 'text', label: 'Komentar', render: (item) => <div><span className="fw-medium">{item.text}</span></div> },
+        { key: 'createdAt', label: 'Waktu', className: 'd-none d-md-table-cell', render: (item) => item.createdAt ? new Date(item.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-' },
+      ],
     }
 
     return (
@@ -234,14 +247,18 @@ function Dashboard() {
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
                       )}
-                      {tab !== 'pesan' && (
+                      {tab !== 'pesan' && tab !== 'komentar' && (
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
                           onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
                       )}
                       <Button variant="none" size="sm" className="admin-action-btn admin-action-delete"
                         onClick={() => {
-                          const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, pesan: api.deleteMessage }
-                          handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
+                          if (tab === 'komentar') {
+                            handleDelete(tab, item.id, item.name || item.text, (commentId) => api.deleteComment(item.articleId, commentId))
+                          } else {
+                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, pesan: api.deleteMessage }
+                            handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
+                          }
                         }} title="Hapus"><FaTrash /></Button>
                     </td>
                   </tr>
@@ -394,7 +411,7 @@ function Dashboard() {
                 Daftar {tabs.find(t => t.key === tab)?.label}
               </h6>
               <div className="admin-section-actions">
-                {tab !== 'pesan' && (
+                {tab !== 'pesan' && tab !== 'komentar' && (
                   <button className="admin-btn-primary" onClick={() => navigate(getNewLink(tab))}>
                     <FaPlus /> Tambah
                   </button>

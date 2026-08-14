@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUser, FaCalendarAlt, FaClock, FaWhatsapp, FaFacebookF, FaLink, FaCheck, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { formatDate } from '../../utils/formatDate';
 import ImagePreview from '../ImagePreview';
+import { waShareUrl } from '../../utils/share';
 
 const readingTime = (text = '') => Math.max(1, Math.ceil(text.trim().split(/\s+/).length / 200));
 
@@ -33,6 +34,7 @@ const ArticleDetail = ({ article, previous, next }) => {
   const middleIndex = Math.floor(paragraphs.length / 2);
   const shareUrl = window.location.href;
   const shareText = `${article?.title} — Padukuhan Kedung`;
+  const waShare = waShareUrl(`${shareText} ${shareUrl}`);
 
   const copyLink = async () => {
     try {
@@ -88,7 +90,7 @@ const ArticleDetail = ({ article, previous, next }) => {
             <span className="detail-share-label">Bagikan:</span>
             <a
               className="share-btn share-btn-wa"
-              href={`https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`}
+              href={waShare}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Bagikan ke WhatsApp"

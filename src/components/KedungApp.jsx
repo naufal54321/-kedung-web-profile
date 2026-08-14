@@ -93,6 +93,7 @@ function KedungApp() {
             <Route path="/admin/carousel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/agenda" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/pesan" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/komentar" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/articles/new" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/articles/edit/:id" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/umkm/new" element={<ProtectedRoute><UmkmForm /></ProtectedRoute>} />

@@ -21,6 +21,8 @@ function UmkmForm() {
     description: '',
     imgUrl: '',
     address: '',
+    lat: '',
+    lng: '',
     gofood: '',
     shopeefood: '',
     grabfood: '',
@@ -46,6 +48,8 @@ function UmkmForm() {
           description: umkm.description || '',
           imgUrl: umkm.imgUrl || '',
           address: umkm.address || '',
+          lat: umkm.lat ?? '',
+          lng: umkm.lng ?? '',
           gofood: umkm.gofood || '',
           shopeefood: umkm.shopeefood || '',
           grabfood: umkm.grabfood || '',
@@ -127,7 +131,7 @@ function UmkmForm() {
       } else {
         await api.createUmkm(payload)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'UMKM berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ name: '', owner: '', category: '', price: '', contact: '', description: '', imgUrl: '', address: '', gofood: '', shopeefood: '', grabfood: '', catalogue: {} })
+        setForm({ name: '', owner: '', category: '', price: '', contact: '', description: '', imgUrl: '', address: '', lat: '', lng: '', gofood: '', shopeefood: '', grabfood: '', catalogue: {} })
         setCatalogueItems([])
       }
     } catch {
@@ -216,6 +220,24 @@ function UmkmForm() {
               <Form.Label>Alamat (URL Google Maps Embed)</Form.Label>
               <Form.Control type="url" name="address" value={form.address} onChange={handleChange} placeholder="https://www.google.com/maps/embed?pb=..." className="admin-input" />
             </div>
+
+            <Row>
+              <Col md={6}>
+                <div className="admin-input-group">
+                  <Form.Label>Latitude (opsional, untuk peta)</Form.Label>
+                  <Form.Control type="number" step="any" name="lat" value={form.lat} onChange={handleChange} placeholder="-7.8867" className="admin-input" />
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="admin-input-group">
+                  <Form.Label>Longitude (opsional, untuk peta)</Form.Label>
+                  <Form.Control type="number" step="any" name="lng" value={form.lng} onChange={handleChange} placeholder="110.3016" className="admin-input" />
+                </div>
+              </Col>
+            </Row>
+            <Form.Text className="text-muted">
+              Cara ambil koordinat: buka <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Google Maps</a>, klik kanan pada lokasi usaha, lalu salin angka latitude dan longitude dari kotak yang muncul.
+            </Form.Text>
 
             <Row>
               <Col md={4}>

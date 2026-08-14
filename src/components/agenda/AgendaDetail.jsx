@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
-import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
 import ImagePreview from '../ImagePreview';
 import { formatDate } from '../../utils/formatDate';
+import { waShareUrl } from '../../utils/share';
 
 const AgendaDetailModal = ({ show, handleClose, agenda }) => {
   const [preview, setPreview] = useState(null);
@@ -10,6 +11,7 @@ const AgendaDetailModal = ({ show, handleClose, agenda }) => {
   if (!agenda) return null;
 
   const { name = '', description = '', dateStart = '', dateEnd = '', lokasi = '', maps = '', imgUrl = '' } = agenda;
+  const shareUrl = waShareUrl(`${name} — Agenda Padukuhan Kedung https://kedung-guwosari.vercel.app/Agenda`);
 
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
@@ -55,6 +57,16 @@ const AgendaDetailModal = ({ show, handleClose, agenda }) => {
         </Row>
       </Modal.Body>
       <Modal.Footer className="border-0 pt-0">
+        <a
+          className="share-btn share-btn-wa me-auto"
+          href={shareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Bagikan ke WhatsApp"
+          title="Bagikan ke WhatsApp"
+        >
+          <FaWhatsapp />
+        </a>
         <Button variant="secondary" onClick={handleClose}>Tutup</Button>
       </Modal.Footer>
       <ImagePreview show={!!preview} imageUrl={preview?.url} title={preview?.title} onClose={() => setPreview(null)} />

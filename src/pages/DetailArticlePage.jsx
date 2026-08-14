@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import api from '../utils/api';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailArticle from '../components/DetailArticle/Breadcrumb';
+import Comments from '../components/DetailArticle/Comments';
 import AgendaList from '../components/agenda/AgendaList';
 import SEO from '../components/SEO';
 import CustomPagination from '../components/agenda/CustomPagination';
@@ -104,6 +105,7 @@ const DetailArticlePage = () => {
         <Row>
           <Col lg={8} data-aos="fade-up">
             <ArticleDetail article={article} previous={previous} next={next} />
+            <Comments articleId={article.id} />
           </Col>
           <Col lg={4} data-aos="fade-up" data-aos-delay="100">
             <div className="sidebar-wrapper">

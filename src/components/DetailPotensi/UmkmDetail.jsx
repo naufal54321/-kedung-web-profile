@@ -1,10 +1,13 @@
 import { Col, Row, Button } from 'react-bootstrap';
 import { FaShoppingBag, FaMoneyBillWave, FaUser, FaTag, FaPhone, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
+import { waShareUrl } from '../../utils/share';
 
 const UmkmDetail = ({ umkm }) => {
   const handleOpenUrl = (url) => {
     if (url) window.open(url, '_blank');
   };
+
+  const shareUrl = waShareUrl(`${umkm.name} — UMKM Padukuhan Kedung https://kedung-guwosari.vercel.app/detail-Umkm/${umkm.id}`);
 
   const formatRupiah = (price) => {
     if (!price) return '-';
@@ -20,6 +23,16 @@ const UmkmDetail = ({ umkm }) => {
         <div className="umkm-detail-hero-content">
           <h1 className="umkm-detail-title">{umkm.name}</h1>
           <p className="umkm-detail-owner"><FaUser /> {umkm.owner}</p>
+          <a
+            className="share-btn share-btn-wa mt-2"
+            href={shareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Bagikan ke WhatsApp"
+            title="Bagikan ke WhatsApp"
+          >
+            <FaWhatsapp />
+          </a>
         </div>
       </div>
 

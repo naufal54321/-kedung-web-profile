@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 import api from '../utils/api';
 import UmkmList from '../components/PotensiDusun/UmkmList';
+import UmkmMap from '../components/PotensiDusun/UmkmMap';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStore } from 'react-icons/fa';
 import SEO from '../components/SEO';
@@ -73,6 +74,12 @@ function PotensiDusun() {
         ) : (
           <UmkmList umkmList={filtered} />
         )}
+      </Container>
+
+      {/* Peta UMKM */}
+      <Container className="pb-5">
+        <h2 className="section-title text-center mb-4">Peta Lokasi UMKM</h2>
+        <UmkmMap umkmList={umkmList} />
       </Container>
 
       {/* CTA Banner */}
