@@ -1,6 +1,6 @@
 import ProfilHero from '../components/Profil/ProfilHero';
 import SEO from '../components/SEO';
-import { FaLandmark, FaHistory } from 'react-icons/fa';
+import { FaLandmark, FaHistory, FaUsers } from 'react-icons/fa';
 
 function Sejarah() {
   return (
@@ -28,6 +28,32 @@ function Sejarah() {
         <div className="vm-card" data-aos="fade-up" data-aos-delay="100">
           <div className="vm-icon vm-icon-misi">
             <FaHistory />
+          </div>
+          <h3 className="vm-title">Asal-usul Nama "Kedung"</h3>
+          <p className="vm-text">
+            Menurut tradisi lokal dan catatan budaya setempat, nama "Kedung" mengacu
+            pada kondisi alam di wilayah tersebut. Padukuhan Kedung meskipun berada
+            di dataran pegunungan, memiliki sumber air yang sangat melimpah pada
+            cekungan atau kolam alami di daerah itu. Dalam bahasa Jawa, "kedung"
+            memang berarti lubuk atau kolam di sungai. Situs Desa Budaya Guwosari
+            mencatat bahwa padukuhan ini dinamai Kedung karena adanya sumber mata
+            air yang melimpah dalam kedung (kolam). Dengan kata lain, keberadaan
+            mata air besar di hamparan kolam alam itulah yang diyakini menjadi
+            asal-usul penamaan Dusun Kedung.
+          </p>
+          <a
+            href="https://budaya.guwosari.desa.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vm-source-link"
+          >
+            Sumber: budaya.guwosari.desa.id
+          </a>
+        </div>
+
+        <div className="vm-card" data-aos="fade-up" data-aos-delay="200">
+          <div className="vm-icon vm-icon-visi">
+            <FaUsers />
           </div>
           <h3 className="vm-title">Sejarah Kepemimpinan</h3>
           <div className="vm-info-badge">Informasi segera menyusul</div>

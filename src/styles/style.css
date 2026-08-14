@@ -5602,6 +5602,27 @@ textarea.admin-input {
   font-weight: 600;
 }
 
+.vm-source-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: 1rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: rgba(21,101,192,0.08);
+  border: 1px dashed rgba(21,101,192,0.35);
+  color: #1565C0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.vm-source-link:hover {
+  background: rgba(21,101,192,0.15);
+  color: #0d47a1;
+}
+
 /* ===== SDA CARDS (TOGA / HAYATI / NON HAYATI) ===== */
 .sda-card {
   background: var(--card);
