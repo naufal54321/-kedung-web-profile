@@ -69,6 +69,15 @@ function HomePage() {
       <SEO />
       <CarouselCustom />
       
+      <div className="container mt-4" data-aos="fade-up">
+        <div className="section-card">
+          <h1 className="home-intro-title">Padukuhan Kedung</h1>
+          <p className="home-intro-text">
+            Padukuhan Kedung adalah salah satu padukuhan di Kalurahan Guwosari, Kapanewon Pajangan, Kabupaten Bantul, Daerah Istimewa Yogyakarta. Website resmi ini menyajikan informasi profil, berita, agenda, potensi UMKM, hingga layanan kontak bagi warga dan masyarakat umum.
+          </p>
+        </div>
+      </div>
+
       <div className='mt-4 mb-5' data-aos="fade-up">
         <LocationInfo />
       </div>

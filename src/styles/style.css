@@ -2341,6 +2341,26 @@ h1, h2, h3 {
   color: rgba(255, 255, 255, 0.85);
 }
 
+.home-intro-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a4d1a;
+  margin-bottom: 0.5rem;
+}
+
+.home-intro-text {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 0;
+  max-width: 75ch;
+}
+
+@media (max-width: 576px) {
+  .home-intro-title {
+    font-size: 1.35rem;
+  }
+}
+
 .admin-pesan-preview {
   font-size: 0.75rem;
   color: var(--text-muted);
