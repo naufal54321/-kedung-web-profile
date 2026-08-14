@@ -77,8 +77,7 @@ function PotensiDusun() {
       </Container>
 
       {/* Peta UMKM */}
-      <Container className="pb-5">
-        <h2 className="section-title text-center mb-4">Peta Lokasi UMKM</h2>
+      <Container className="pb-5" data-aos="fade-up">
         <UmkmMap umkmList={umkmList} />
       </Container>
 
