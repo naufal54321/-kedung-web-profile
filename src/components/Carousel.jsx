@@ -44,7 +44,7 @@ function CarouselCustom() {
 
   if (loading) {
     return (
-      <div className="home-carousel-wrapper" style={{ height: '90vh' }}>
+      <div className="home-carousel-wrapper">
         <div className="skeleton skeleton-hero" />
       </div>
     );
@@ -68,7 +68,7 @@ function CarouselCustom() {
               {slide.subtitle && (
                 <p className="caption-subtitle">{slide.subtitle}</p>
               )}
-              <div className="d-flex justify-content-center mt-5">
+              <div className="d-flex justify-content-center mt-5 caption-cta">
                 <ButtonCustom />
               </div>
             </Carousel.Caption>

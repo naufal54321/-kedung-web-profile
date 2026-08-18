@@ -34,7 +34,7 @@ function StrukturPemerintahan() {
           {loading ? (
             <div className="d-flex flex-wrap justify-content-center gap-4 py-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="skeleton-card-lg" style={{ width: 260, padding: '1.75rem' }}>
+                <div key={i} className="skeleton-card-lg" style={{ width: '100%', maxWidth: 260, padding: '1.75rem' }}>
                   <div className="skeleton mx-auto mb-3" style={{ width: 84, height: 84, borderRadius: '50%' }} />
                   <div className="skeleton skeleton-line w-70 mx-auto mb-2" />
                   <div className="skeleton skeleton-line w-50 mx-auto" />

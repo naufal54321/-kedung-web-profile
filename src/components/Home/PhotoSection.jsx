@@ -9,6 +9,7 @@ function PhotoSection() {
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const stripRef = useRef(null);
 
   useEffect(() => {
@@ -27,16 +28,36 @@ function PhotoSection() {
     return () => { cancelled = true; };
   }, []);
 
+  const cardStep = () => {
+    const strip = stripRef.current;
+    if (!strip) return 300;
+    const card = strip.querySelector('.photo-card');
+    return card ? card.offsetWidth + 24 : 300;
+  };
+
   const scrollByCard = (dir) => {
     const strip = stripRef.current;
     if (!strip) return;
-    const card = strip.querySelector('.photo-card');
-    const width = card ? card.offsetWidth + 24 : 300;
-    strip.scrollBy({ left: dir * width, behavior: 'smooth' });
+    strip.scrollBy({ left: dir * cardStep(), behavior: 'smooth' });
   };
 
-  const openPhoto = (foto) => {
+  const handleScroll = () => {
+    const strip = stripRef.current;
+    if (!strip || fotos.length === 0) return;
+    const idx = Math.round(strip.scrollLeft / cardStep());
+    setActiveIndex(Math.max(0, Math.min(fotos.length - 1, idx)));
+  };
+
+  const scrollToCard = (i) => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    strip.scrollTo({ left: i * cardStep(), behavior: 'smooth' });
+    setActiveIndex(i);
+  };
+
+  const openPhoto = (foto, index) => {
     setActive(foto);
+    setActiveIndex(index);
     setShow(true);
   };
 
@@ -67,27 +88,42 @@ function PhotoSection() {
             <p className="text-muted mb-0">Belum ada foto galeri</p>
           </div>
         ) : (
-          <div className="photo-strip-wrap">
-            <button type="button" className="photo-arrow photo-arrow-left" onClick={() => scrollByCard(-1)} aria-label="Geser ke kiri">
-              <FaChevronLeft />
-            </button>
-            <div className="photo-strip" ref={stripRef}>
-              {fotos.map((foto) => (
-                <button key={foto.id} type="button" className="photo-card" onClick={() => openPhoto(foto)} data-aos="fade-up">
-                  <div className="photo-thumb">
-                    <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" onLoad={(e) => e.currentTarget.classList.add('photo-loaded')} />
-                    <span className="photo-zoom">
-                      <FaExpand />
-                    </span>
-                    {foto.caption && <div className="photo-caption">{foto.caption}</div>}
-                  </div>
-                </button>
-              ))}
+          <>
+            <div className="photo-strip-wrap" data-aos="fade-up">
+              <button type="button" className="photo-arrow photo-arrow-left" onClick={() => scrollByCard(-1)} aria-label="Geser ke kiri">
+                <FaChevronLeft />
+              </button>
+              <div className="photo-strip" ref={stripRef} onScroll={handleScroll}>
+                {fotos.map((foto, i) => (
+                  <button key={foto.id} type="button" className="photo-card" onClick={() => openPhoto(foto, i)}>
+                    <div className="photo-thumb">
+                      <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" onLoad={(e) => e.currentTarget.classList.add('photo-loaded')} />
+                      <span className="photo-zoom">
+                        <FaExpand />
+                      </span>
+                      {foto.caption && <div className="photo-caption">{foto.caption}</div>}
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <button type="button" className="photo-arrow photo-arrow-right" onClick={() => scrollByCard(1)} aria-label="Geser ke kanan">
+                <FaChevronRight />
+              </button>
             </div>
-            <button type="button" className="photo-arrow photo-arrow-right" onClick={() => scrollByCard(1)} aria-label="Geser ke kanan">
-              <FaChevronRight />
-            </button>
-          </div>
+            {fotos.length > 1 && (
+              <div className="photo-dots">
+                {fotos.map((foto, i) => (
+                  <button
+                    key={foto.id}
+                    type="button"
+                    className={`photo-dot${i === activeIndex ? ' active' : ''}`}
+                    onClick={() => scrollToCard(i)}
+                    aria-label={`Ke foto ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 

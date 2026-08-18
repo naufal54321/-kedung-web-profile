@@ -6,7 +6,7 @@ function LembagaTabs({ lembagas, loading }) {
     return (
       <div className="d-flex flex-wrap justify-content-center gap-4 py-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="skeleton-card-lg" style={{ width: 320, padding: '1.75rem' }}>
+          <div key={i} className="skeleton-card-lg" style={{ width: '100%', maxWidth: 320, padding: '1.75rem' }}>
             <div className="skeleton skeleton-line w-40 mx-auto mb-4" />
             <div className="skeleton mx-auto mb-3" style={{ width: 260, height: 180 }} />
             <div className="skeleton skeleton-line w-80 mx-auto" />
