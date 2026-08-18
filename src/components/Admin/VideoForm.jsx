@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../utils/api'
 import { Container, Card, Form, Button, Alert, Spinner, Image, Row, Col } from 'react-bootstrap'
-import { FaYoutube } from 'react-icons/fa'
+import { FaYoutube, FaSync } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
+import { formatDate } from '../../utils/formatDate'
 
 function parseYouTubeId(input) {
   const trimmed = String(input || '').trim()
@@ -28,16 +29,43 @@ function VideoForm() {
   const navigate = useNavigate()
 
   const [rssVideos, setRssVideos] = useState([])
+  const [rssError, setRssError] = useState('')
   const [form, setForm] = useState({ url: '', title: '', published: '' })
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
   const [error, setError] = useState('')
 
+  const loadRssVideos = async (force = false) => {
+    setRssError('')
+    try {
+      const cacheBust = force ? `?refresh=${Date.now()}` : ''
+      const res = await fetch(`/api/youtube-videos.js${cacheBust}`)
+      const data = await res.json()
+      const videos = Array.isArray(data.videos) ? data.videos : []
+      if (videos.length > 0) {
+        setRssVideos(videos)
+        return
+      }
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        const res2 = await fetch(`/api/youtube-videos.js?refresh=${Date.now()}`)
+        const data2 = await res2.json()
+        const videos2 = Array.isArray(data2.videos) ? data2.videos : []
+        if (videos2.length > 0) {
+          setRssVideos(videos2)
+          return
+        }
+      }
+      setRssVideos([])
+      setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.')
+    } catch {
+      setRssVideos([])
+      setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.')
+    }
+  }
+
   useEffect(() => {
-    fetch('/api/youtube-videos.js')
-      .then(r => r.json())
-      .then(res => setRssVideos(res.videos || []))
-      .catch(() => setRssVideos([]))
+    loadRssVideos()
   }, [])
 
   useEffect(() => {
@@ -126,13 +154,19 @@ function VideoForm() {
           <Form onSubmit={handleSubmit}>
             <div className="admin-input-group">
               <Form.Label><FaYoutube className="me-1 text-danger" /> Pilih dari Video Terbaru Channel</Form.Label>
-              <Form.Select value="" onChange={handleRssSelect} className="admin-input">
+              <Form.Select defaultValue="" onChange={handleRssSelect} className="admin-input">
                 <option value="">— Pilih video —</option>
                 {rssVideos.map((v) => (
-                  <option key={v.videoId} value={v.videoId}>{v.title}</option>
+                  <option key={v.videoId} value={v.videoId}>{v.title} — {v.published ? formatDate(v.published) : 'Tanpa tanggal'}</option>
                 ))}
-                {rssVideos.length === 0 && <option value="" disabled>Video tidak dapat dimuat</option>}
+                {rssVideos.length === 0 && <option value="" disabled>{rssError || 'Memuat video...'}</option>}
               </Form.Select>
+              <div className="d-flex align-items-center gap-2 mt-2">
+                <Button variant="outline-success" size="sm" onClick={() => loadRssVideos(true)}>
+                  <FaSync className="me-1" /> Muat Ulang Daftar
+                </Button>
+                {rssError && <span className="text-muted small">{rssError}</span>}
+              </div>
               <Form.Text className="text-muted">Atau masukkan URL / ID video secara manual di bawah.</Form.Text>
             </div>
 

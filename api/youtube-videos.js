@@ -48,10 +48,11 @@ export default async function handler(req, res) {
       }
     }
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
-    res.setHeader('Cache-Control', 'public, max-age=1800')
+    res.setHeader('Cache-Control', videos.length > 0 ? 'public, max-age=1800' : 'no-store')
     res.status(200).json({ videos })
   } catch (err) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.setHeader('Cache-Control', 'no-store')
     res.status(200).json({ videos: [] })
   }
 }
