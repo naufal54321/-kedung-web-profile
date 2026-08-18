@@ -30,6 +30,7 @@ function VideoForm() {
 
   const [rssVideos, setRssVideos] = useState([])
   const [rssError, setRssError] = useState('')
+  const [selectedId, setSelectedId] = useState('')
   const [form, setForm] = useState({ url: '', title: '', published: '' })
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
@@ -92,9 +93,10 @@ function VideoForm() {
   }
 
   const handleRssSelect = (e) => {
-    const vid = rssVideos.find(v => v.videoId === e.target.value)
+    const vid = rssVideos.find(v => v.id === e.target.value)
     if (vid) {
-      setForm({ url: `https://www.youtube.com/watch?v=${vid.videoId}`, title: vid.title, published: vid.published || '' })
+      setSelectedId(vid.id)
+      setForm({ url: `https://www.youtube.com/watch?v=${vid.id}`, title: vid.title, published: vid.published || '' })
     }
   }
 
@@ -154,10 +156,10 @@ function VideoForm() {
           <Form onSubmit={handleSubmit}>
             <div className="admin-input-group">
               <Form.Label><FaYoutube className="me-1 text-danger" /> Pilih dari Video Terbaru Channel</Form.Label>
-              <Form.Select defaultValue="" onChange={handleRssSelect} className="admin-input">
+              <Form.Select value={selectedId} onChange={handleRssSelect} className="admin-input">
                 <option value="">— Pilih video —</option>
                 {rssVideos.map((v) => (
-                  <option key={v.videoId} value={v.videoId}>{v.title} — {v.published ? formatDate(v.published) : 'Tanpa tanggal'}</option>
+                  <option key={v.id} value={v.id}>{v.title} — {v.published ? formatDate(v.published) : 'Tanpa tanggal'}</option>
                 ))}
                 {rssVideos.length === 0 && <option value="" disabled>{rssError || 'Memuat video...'}</option>}
               </Form.Select>
