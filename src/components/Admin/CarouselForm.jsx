@@ -15,7 +15,7 @@ function CarouselForm() {
     imageUrl: '',
     caption: '',
     subtitle: '',
-    sortOrder: 1
+    order: null
   })
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
@@ -33,7 +33,7 @@ function CarouselForm() {
               imageUrl: item.imageUrl || '',
               caption: item.caption || '',
               subtitle: item.subtitle || '',
-              sortOrder: item.sortOrder || 1
+              order: item.order ?? item.sortOrder ?? null
             })
           } else {
             setError('Data tidak ditemukan')
@@ -74,9 +74,11 @@ function CarouselForm() {
         await api.updateCarousel(id, form)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Slide berhasil diperbarui!', timer: 1500, showConfirmButton: false })
       } else {
-        await api.createCarousel(form)
+        const all = await api.getAllCarousels()
+        const maxOrder = all.reduce((m, c) => Math.max(m, c.order ?? c.sortOrder ?? 0), 0)
+        await api.createCarousel({ ...form, order: maxOrder + 1 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Slide berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ imageUrl: '', caption: '', subtitle: '', sortOrder: 1 })
+        setForm({ imageUrl: '', caption: '', subtitle: '', order: null })
       }
     } catch {
       setError('Gagal menyimpan slide')
@@ -122,12 +124,6 @@ function CarouselForm() {
               <div className="admin-input-group">
                 <Form.Label>Subtitle</Form.Label>
                 <Form.Control type="text" name="subtitle" value={form.subtitle} onChange={handleChange} placeholder="Website resmi Padukuhan Kedung..." className="admin-input" />
-              </div>
-
-              <div className="admin-input-group">
-                  <Form.Label>Urutan</Form.Label>
-                <Form.Control type="number" name="sortOrder" value={form.sortOrder} onChange={handleChange} min={1} className="admin-input" />
-                <Form.Text className="text-muted">Nomor urut slide (1, 2, 3...)</Form.Text>
               </div>
 
               <div className="d-flex gap-2">

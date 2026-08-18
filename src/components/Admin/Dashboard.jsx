@@ -111,7 +111,7 @@ function Dashboard() {
     if (index < 0 || target < 0 || target >= items.length) return
     const a = items[index]
     const b = items[target]
-    const updaters = { video: api.updateVideo, foto: api.updateFoto }
+    const updaters = { video: api.updateVideo, foto: api.updateFoto, carousel: api.updateCarousel }
     try {
       await Promise.all([
         updaters[key](a.id, { ...a, order: b.order }),
@@ -201,7 +201,7 @@ function Dashboard() {
         { key: 'imageUrl', label: 'Gambar', render: (item) => item.imageUrl ? <img src={item.imageUrl} alt={item.caption} style={{ width: 80, height: 40, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-danger">Tidak</span> },
         { key: 'caption', label: 'Caption' },
         { key: 'subtitle', label: 'Subtitle', className: 'd-none d-md-table-cell' },
-        { key: 'sortOrder', label: 'Urutan' },
+        { key: 'order', label: 'Urutan', render: (item) => <span className="badge bg-secondary">{items.indexOf(item) + 1}</span> },
       ],
       agenda: [
         { key: 'name', label: 'Nama' },
@@ -282,7 +282,7 @@ function Dashboard() {
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
                       )}
-                      {(tab === 'video' || tab === 'foto') && (
+                      {(tab === 'video' || tab === 'foto' || tab === 'carousel') && (
                         <>
                           <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                             onClick={() => handleMove(tab, item.id, -1)} disabled={items.indexOf(item) === 0} title="Naik"><FaArrowUp /></Button>

@@ -439,7 +439,7 @@ const api = (() => {
       const response = await fetchData('carousel.json');
       if (typeof response === 'object' && response !== null) {
         return Object.keys(response).map(key => ({ ...response[key], id: key }))
-          .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+          .sort((a, b) => (a.order ?? a.sortOrder ?? 0) - (b.order ?? b.sortOrder ?? 0));
       }
       return [];
     } catch (error) {
