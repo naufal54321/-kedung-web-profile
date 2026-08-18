@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
-import { FaCamera, FaChevronLeft, FaChevronRight, FaExpand, FaArrowRight } from 'react-icons/fa';
-import api from '../../utils/api';
+import { useState, useEffect } from 'react';
+import { Container, Modal } from 'react-bootstrap';
+import { FaCamera, FaExpand } from 'react-icons/fa';
+import api from '../utils/api';
+import ProfilHero from '../components/Profil/ProfilHero';
+import SEO from '../components/SEO';
 
-function PhotoSection() {
+function GaleriPage() {
   const [fotos, setFotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(null);
-  const stripRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -27,36 +27,26 @@ function PhotoSection() {
     return () => { cancelled = true; };
   }, []);
 
-  const scrollByCard = (dir) => {
-    const strip = stripRef.current;
-    if (!strip) return;
-    const card = strip.querySelector('.photo-card');
-    const width = card ? card.offsetWidth + 24 : 300;
-    strip.scrollBy({ left: dir * width, behavior: 'smooth' });
-  };
-
   const openPhoto = (foto) => {
     setActive(foto);
     setShow(true);
   };
 
   return (
-    <div className="container">
-      <div className="section-card" data-aos="fade-up">
-        <div className="section-header">
-          <h2 className="section-title">Galeri Foto</h2>
-          <Link to="/Galeri" className="section-link">
-            Lihat Semua <FaArrowRight size={12} />
-          </Link>
-        </div>
+    <main className="profil-page">
+      <SEO title="Galeri Foto" description="Kumpulan foto dan dokumentasi kegiatan Padukuhan Kedung" />
+      <ProfilHero title="Galeri Foto" subtitle="Dokumentasi kegiatan Padukuhan Kedung" />
 
+      <Container className="py-4">
         {loading ? (
-          <div className="d-flex gap-4 overflow-hidden">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="skeleton-card-lg p-0 photo-card-skeleton">
-                <div className="skeleton" style={{ height: 200, borderRadius: '16px 16px 0 0' }} />
-                <div className="p-3">
-                  <div className="skeleton skeleton-line w-70" />
+          <div className="row g-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="col-md-6 col-lg-4">
+                <div className="skeleton-card-lg p-0">
+                  <div className="skeleton" style={{ height: 220, borderRadius: '16px 16px 0 0' }} />
+                  <div className="p-3">
+                    <div className="skeleton skeleton-line w-70" />
+                  </div>
                 </div>
               </div>
             ))}
@@ -67,13 +57,10 @@ function PhotoSection() {
             <p className="text-muted mb-0">Belum ada foto galeri</p>
           </div>
         ) : (
-          <div className="photo-strip-wrap">
-            <button type="button" className="photo-arrow photo-arrow-left" onClick={() => scrollByCard(-1)} aria-label="Geser ke kiri">
-              <FaChevronLeft />
-            </button>
-            <div className="photo-strip" ref={stripRef}>
-              {fotos.map((foto) => (
-                <button key={foto.id} type="button" className="photo-card" onClick={() => openPhoto(foto)} data-aos="fade-up">
+          <div className="row g-4">
+            {fotos.map((foto) => (
+              <div key={foto.id} className="col-md-6 col-lg-4" data-aos="fade-up">
+                <button type="button" className="photo-card photo-card-grid w-100" onClick={() => openPhoto(foto)}>
                   <div className="photo-thumb">
                     <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" onLoad={(e) => e.currentTarget.classList.add('photo-loaded')} />
                     <span className="photo-zoom">
@@ -82,14 +69,11 @@ function PhotoSection() {
                     {foto.caption && <div className="photo-caption">{foto.caption}</div>}
                   </div>
                 </button>
-              ))}
-            </div>
-            <button type="button" className="photo-arrow photo-arrow-right" onClick={() => scrollByCard(1)} aria-label="Geser ke kanan">
-              <FaChevronRight />
-            </button>
+              </div>
+            ))}
           </div>
         )}
-      </div>
+      </Container>
 
       <Modal show={show} onHide={() => setShow(false)} centered size="lg" className="video-modal">
         <Modal.Header closeButton>
@@ -107,8 +91,8 @@ function PhotoSection() {
           )}
         </Modal.Body>
       </Modal>
-    </div>
+    </main>
   );
 }
 
-export default PhotoSection;
+export default GaleriPage;
