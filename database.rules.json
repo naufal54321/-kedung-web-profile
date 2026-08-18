@@ -4,12 +4,12 @@
     ".write": false,
     "article": {
       ".read": true,
-      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "umkm": {
       ".read": true,
       "$umkmId": {
-        ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('status').val() == 'pending' && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 200 && newData.child('owner').isString() && newData.child('owner').val().length > 0 && newData.child('owner').val().length <= 100 && newData.child('category').isString() && newData.child('category').val().length > 0 && newData.child('category').val().length <= 100 && newData.child('contact').isString() && newData.child('contact').val().length > 0 && newData.child('contact').val().length <= 30 && (!newData.hasChild('lat') || (newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90)) && (!newData.hasChild('lng') || (newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180)) && (!newData.hasChild('imgUrl') || newData.child('imgUrl').isString()) && (!newData.hasChild('price') || newData.child('price').isString()) && (!newData.hasChild('description') || newData.child('description').isString()))"
+        ".write": "(auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')) || (newData.exists() && !data.exists() && newData.child('status').val() == 'pending' && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 200 && newData.child('owner').isString() && newData.child('owner').val().length > 0 && newData.child('owner').val().length <= 100 && newData.child('category').isString() && newData.child('category').val().length > 0 && newData.child('category').val().length <= 100 && newData.child('contact').isString() && newData.child('contact').val().length > 0 && newData.child('contact').val().length <= 30 && (!newData.hasChild('lat') || (newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90)) && (!newData.hasChild('lng') || (newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180)) && (!newData.hasChild('imgUrl') || newData.child('imgUrl').isString()) && (!newData.hasChild('price') || newData.child('price').isString()) && (!newData.hasChild('description') || newData.child('description').isString()))"
       }
     },
     "penduduk": {
@@ -23,22 +23,22 @@
     },
     "struktur": {
       ".read": true,
-      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "agenda": {
       ".read": true,
-      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "toga": {
       ".read": true
     },
     "lembaga": {
       ".read": true,
-      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "carousel": {
       ".read": true,
-      ".write": "auth != null && auth.token.email == 'naufalm220@gmail.com'"
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "stats": {
       ".read": true,
@@ -56,14 +56,14 @@
     "pesan": {
       ".read": "auth != null",
       "$messageId": {
-        ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 100 && newData.child('email').isString() && newData.child('email').val().length > 0 && newData.child('email').val().length <= 120 && newData.child('subject').isString() && newData.child('subject').val().length > 0 && newData.child('subject').val().length <= 150 && newData.child('message').isString() && newData.child('message').val().length > 0 && newData.child('message').val().length <= 2000)"
+        ".write": "(auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')) || (newData.exists() && !data.exists() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 100 && newData.child('email').isString() && newData.child('email').val().length > 0 && newData.child('email').val().length <= 120 && newData.child('subject').isString() && newData.child('subject').val().length > 0 && newData.child('subject').val().length <= 150 && newData.child('message').isString() && newData.child('message').val().length > 0 && newData.child('message').val().length <= 2000)"
       }
     },
     "komentar": {
       ".read": true,
       "$articleId": {
         "$commentId": {
-          ".write": "(auth != null && auth.token.email == 'naufalm220@gmail.com') || (newData.exists() && !data.exists() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 100 && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000 && newData.child('createdAt').isNumber())"
+          ".write": "(auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')) || (newData.exists() && !data.exists() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 100 && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000 && newData.child('createdAt').isNumber())"
         }
       }
     }
