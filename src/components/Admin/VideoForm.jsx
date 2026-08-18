@@ -104,7 +104,7 @@ function VideoForm() {
     e.preventDefault()
     setError('')
     if (!videoId) {
-      setError('URL atau ID video YouTube tidak valid. Contoh: https://www.youtube.com/watch?v=xxxxx atau ID 11 karakter.')
+      setError('Pilih video dari daftar di atas, atau masukkan URL / ID video YouTube yang valid.')
       return
     }
     if (!form.title.trim()) {
@@ -167,14 +167,14 @@ function VideoForm() {
                 </Button>
                 {rssError && <span className="text-muted small">{rssError}</span>}
               </div>
-              <Form.Text className="text-muted">Atau masukkan URL / ID video secara manual di bawah.</Form.Text>
+              <Form.Text className="text-muted">Pilih video di atas — judul, URL, dan tanggal terisi otomatis. Untuk video lain, masukkan URL / ID secara manual.</Form.Text>
             </div>
 
             <Row>
               <Col md={12}>
                 <div className="admin-input-group">
-                  <Form.Label>URL atau ID YouTube <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="url" value={form.url} onChange={handleChange} required placeholder="https://www.youtube.com/watch?v=..." className="admin-input" />
+                  <Form.Label>URL atau ID YouTube (opsional)</Form.Label>
+                  <Form.Control type="text" name="url" value={form.url} onChange={handleChange} placeholder="https://www.youtube.com/watch?v=..." className="admin-input" />
                 </div>
               </Col>
             </Row>
