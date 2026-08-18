@@ -65,6 +65,12 @@
         ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
       }
     },
+    "foto": {
+      ".read": true,
+      "$fotoId": {
+        ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
+      }
+    },
     "komentar": {
       ".read": true,
       "$articleId": {

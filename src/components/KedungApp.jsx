@@ -35,6 +35,7 @@ const LembagaForm = lazy(() => import('./Admin/LembagaForm'));
 const CarouselForm = lazy(() => import('./Admin/CarouselForm'));
 const AgendaForm = lazy(() => import('./Admin/AgendaForm'));
 const VideoForm = lazy(() => import('./Admin/VideoForm'));
+const PhotoForm = lazy(() => import('./Admin/PhotoForm'));
 
 function KedungApp() {
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -94,6 +95,7 @@ function KedungApp() {
             <Route path="/admin/carousel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/agenda" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/video" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/foto" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/pesan" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/komentar" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/articles/new" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
@@ -110,6 +112,8 @@ function KedungApp() {
             <Route path="/admin/agenda/edit/:id" element={<ProtectedRoute><AgendaForm /></ProtectedRoute>} />
             <Route path="/admin/video/new" element={<ProtectedRoute><VideoForm /></ProtectedRoute>} />
             <Route path="/admin/video/edit/:id" element={<ProtectedRoute><VideoForm /></ProtectedRoute>} />
+            <Route path="/admin/foto/new" element={<ProtectedRoute><PhotoForm /></ProtectedRoute>} />
+            <Route path="/admin/foto/edit/:id" element={<ProtectedRoute><PhotoForm /></ProtectedRoute>} />
           </Routes>
           </div>
         </Suspense>

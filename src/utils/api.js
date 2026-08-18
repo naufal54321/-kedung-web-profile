@@ -378,6 +378,35 @@ const api = (() => {
     return await deleteData(`video/${id}.json`);
   }
 
+  async function getAllFotos() {
+    try {
+      const response = await fetchData('foto.json');
+      if (typeof response === 'object' && response !== null) {
+        return Object.keys(response)
+          .map(key => ({ ...response[key], id: key }))
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching fotos:', error);
+      throw error;
+    }
+  }
+
+  async function createFoto(data) {
+    const result = await postData('foto.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateFoto(id, data) {
+    await putData(`foto/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteFoto(id) {
+    return await deleteData(`foto/${id}.json`);
+  }
+
   async function getAllLembagas() {
     try {
       const response = await fetchData('lembaga.json');
@@ -582,6 +611,10 @@ const api = (() => {
     createVideo,
     updateVideo,
     deleteVideo,
+    getAllFotos,
+    createFoto,
+    updateFoto,
+    deleteFoto,
     getAllLembagas,
     createLembaga,
     updateLembaga,

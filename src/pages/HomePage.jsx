@@ -9,6 +9,7 @@ import 'aos/dist/aos.css';
 import LocationInfo from '../components/Home/LocationInfo';
 import ExploreCard from '../components/Home/ExploreCard';
 import VideoSection from '../components/Home/VideoSection';
+import PhotoSection from '../components/Home/PhotoSection';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaCalendarAlt } from 'react-icons/fa';
 import SEO from '../components/SEO';
@@ -89,6 +90,10 @@ function HomePage() {
 
       <div className='mb-5' data-aos="fade-up">
         <VideoSection />
+      </div>
+
+      <div className='mb-5' data-aos="fade-up">
+        <PhotoSection />
       </div>
 
       <div className='container' id='main-content'>

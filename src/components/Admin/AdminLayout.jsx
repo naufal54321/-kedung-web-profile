@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
-import { FaArrowLeft, FaSignOutAlt, FaBars, FaTimes, FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaHome, FaChartPie, FaUserCircle, FaEnvelope, FaComments, FaVideo } from 'react-icons/fa'
+import { FaArrowLeft, FaSignOutAlt, FaBars, FaTimes, FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaHome, FaChartPie, FaUserCircle, FaEnvelope, FaComments, FaVideo, FaCamera } from 'react-icons/fa'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
 import { useAuthState } from './useAuthState'
@@ -15,6 +15,7 @@ const sidebarItems = [
   { path: '/admin/carousel', icon: FaImage, label: 'Carousel' },
   { path: '/admin/agenda', icon: FaCalendarAlt, label: 'Agenda' },
   { path: '/admin/video', icon: FaVideo, label: 'Video' },
+  { path: '/admin/foto', icon: FaCamera, label: 'Foto' },
   { path: '/admin/pesan', icon: FaEnvelope, label: 'Pesan Masuk' },
   { path: '/admin/komentar', icon: FaComments, label: 'Komentar' },
 ]
@@ -45,6 +46,7 @@ function AdminLayout({ children, title }) {
     if (p.includes('/carousel/')) return '/admin/carousel'
     if (p.includes('/agenda/')) return '/admin/agenda'
     if (p.includes('/video/')) return '/admin/video'
+    if (p.includes('/foto/')) return '/admin/foto'
     return '/admin'
   }
 

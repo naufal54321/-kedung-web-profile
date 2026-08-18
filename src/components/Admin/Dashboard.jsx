@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', pesan: 'pesan', komentar: 'komentar' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -18,6 +18,7 @@ const tabs = [
   { key: 'carousel', icon: FaImage, label: 'Carousel', detailsLink: '/admin/carousel', color: '#fff', bg: 'linear-gradient(135deg, #00897B, #26A69A)' },
   { key: 'agenda', icon: FaCalendarAlt, label: 'Agenda', detailsLink: '/admin/agenda', color: '#fff', bg: 'linear-gradient(135deg, #F9A825, #FFD54F)' },
   { key: 'video', icon: FaVideo, label: 'Video', detailsLink: '/admin/video', color: '#fff', bg: 'linear-gradient(135deg, #C62828, #EF5350)' },
+  { key: 'foto', icon: FaCamera, label: 'Foto', detailsLink: '/admin/foto', color: '#fff', bg: 'linear-gradient(135deg, #6A1B9A, #BA68C8)' },
   { key: 'pesan', icon: FaEnvelope, label: 'Pesan Masuk', detailsLink: '/admin/pesan', color: '#fff', bg: 'linear-gradient(135deg, #00695C, #26A69A)' },
   { key: 'komentar', icon: FaComments, label: 'Komentar', detailsLink: '/admin/komentar', color: '#fff', bg: 'linear-gradient(135deg, #455A64, #78909C)' },
 ]
@@ -49,6 +50,7 @@ function Dashboard() {
       carousel: () => api.getAllCarousels(),
       agenda: () => api.getAllAgendas(),
       video: () => api.getAllVideos(),
+      foto: () => api.getAllFotos(),
       pesan: () => api.getAllMessages(),
       komentar: () => api.getAllComments(),
     }
@@ -93,32 +95,33 @@ function Dashboard() {
   }
 
   const getEditLink = (key, id) => {
-    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/' }
+    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/' }
     return paths[key] + id
   }
 
   const getNewLink = (key) => {
-    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new' }
+    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new' }
     return paths[key]
   }
 
-  const handleMove = async (id, dir) => {
-    const items = [...(data.video || [])]
+  const handleMove = async (key, id, dir) => {
+    const items = [...(data[key] || [])]
     const index = items.findIndex(x => x.id === id)
     const target = index + dir
     if (index < 0 || target < 0 || target >= items.length) return
     const a = items[index]
     const b = items[target]
+    const updaters = { video: api.updateVideo, foto: api.updateFoto }
     try {
       await Promise.all([
-        api.updateVideo(a.id, { videoId: a.videoId, title: a.title, published: a.published, order: b.order }),
-        api.updateVideo(b.id, { videoId: b.videoId, title: b.title, published: b.published, order: a.order }),
+        updaters[key](a.id, { ...a, order: b.order }),
+        updaters[key](b.id, { ...b, order: a.order }),
       ])
       const swapped = [...items]
       ;[swapped[index], swapped[target]] = [swapped[target], swapped[index]]
-      setData(prev => ({ ...prev, video: swapped }))
+      setData(prev => ({ ...prev, [key]: swapped }))
       Swal.fire({ icon: 'success', title: 'Urutan diperbarui!', timer: 1200, showConfirmButton: false })
-    } catch { setError('Gagal mengubah urutan video') }
+    } catch { setError('Gagal mengubah urutan') }
   }
 
   const getPaginated = (key) => {
@@ -211,6 +214,11 @@ function Dashboard() {
         { key: 'published', label: 'Tanggal', className: 'd-none d-md-table-cell' },
         { key: 'order', label: 'Urutan', render: (item) => <span className="badge bg-secondary">{items.indexOf(item) + 1}</span> },
       ],
+      foto: [
+        { key: 'imgUrl', label: 'Foto', render: (item) => item.imgUrl ? <img src={item.imgUrl} alt={item.caption || 'Foto'} style={{ width: 96, height: 64, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-danger">Tidak</span> },
+        { key: 'caption', label: 'Caption' },
+        { key: 'order', label: 'Urutan', render: (item) => <span className="badge bg-secondary">{items.indexOf(item) + 1}</span> },
+      ],
       pesan: [
         { key: 'name', label: 'Nama' },
         { key: 'email', label: 'Email', className: 'd-none d-md-table-cell' },
@@ -274,12 +282,12 @@ function Dashboard() {
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
                       )}
-                      {tab === 'video' && (
+                      {(tab === 'video' || tab === 'foto') && (
                         <>
                           <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
-                            onClick={() => handleMove(item.id, -1)} disabled={items.indexOf(item) === 0} title="Naik"><FaArrowUp /></Button>
+                            onClick={() => handleMove(tab, item.id, -1)} disabled={items.indexOf(item) === 0} title="Naik"><FaArrowUp /></Button>
                           <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
-                            onClick={() => handleMove(item.id, 1)} disabled={items.indexOf(item) === items.length - 1} title="Turun"><FaArrowDown /></Button>
+                            onClick={() => handleMove(tab, item.id, 1)} disabled={items.indexOf(item) === items.length - 1} title="Turun"><FaArrowDown /></Button>
                         </>
                       )}
                       {tab !== 'pesan' && tab !== 'komentar' && (
@@ -291,7 +299,7 @@ function Dashboard() {
                           if (tab === 'komentar') {
                             handleDelete(tab, item.id, item.name || item.text, (commentId) => api.deleteComment(item.articleId, commentId))
                           } else {
-                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, pesan: api.deleteMessage }
+                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, foto: api.deleteFoto, pesan: api.deleteMessage }
                             handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
                           }
                         }} title="Hapus"><FaTrash /></Button>
