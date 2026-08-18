@@ -6166,11 +6166,11 @@ textarea.admin-input {
 }
 
 .photo-nav-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: var(--card);
+  border: 1px solid rgba(44,95,45,0.25);
+  background: linear-gradient(135deg, rgba(44,95,45,0.1), rgba(44,95,45,0.03));
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -6185,7 +6185,7 @@ textarea.admin-input {
   border-color: transparent;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -8px rgba(44,95,45,0.5);
+  box-shadow: 0 12px 24px -8px rgba(44,95,45,0.55);
 }
 
 .photo-strip {
@@ -6196,6 +6196,8 @@ textarea.admin-input {
   padding: 4px 4px 12px;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
 }
 
 .photo-strip::-webkit-scrollbar {
@@ -6207,18 +6209,21 @@ textarea.admin-input {
   width: 300px;
   scroll-snap-align: start;
   padding: 0;
-  border: 1px solid var(--border-color);
-  background: var(--card);
-  border-radius: 16px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(135deg, rgba(44,95,45,0.55), rgba(44,95,45,0.12), rgba(44,95,45,0.55)) border-box;
+  border-radius: 20px;
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 12px 32px -16px rgba(44,95,45,0.28);
 }
 
 .photo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -12px rgba(27,94,32,0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px -16px rgba(44,95,45,0.4);
 }
 
 .photo-thumb {
@@ -6232,48 +6237,78 @@ textarea.admin-input {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  filter: blur(14px);
+  transform: scale(1.08);
+  transition: filter 0.7s ease, transform 0.7s ease;
 }
 
-.photo-card:hover .photo-thumb img {
-  transform: scale(1.05);
+.photo-thumb img.photo-loaded {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+.photo-card:hover .photo-thumb img.photo-loaded {
+  transform: scale(1.06);
 }
 
 .photo-zoom {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 46px;
-  height: 46px;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
+  box-shadow: 0 8px 20px -6px rgba(0,0,0,0.4);
 }
 
 .photo-card:hover .photo-zoom {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-  background: rgba(44,95,45,0.85);
+  background: rgba(44,95,45,0.88);
 }
 
 .photo-caption {
-  padding: 0.9rem 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.2rem 1rem 0.85rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.72));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.photo-card:hover .photo-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  .photo-caption {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .photo-card-skeleton {

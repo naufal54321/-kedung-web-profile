@@ -75,12 +75,12 @@ function PhotoSection() {
             {fotos.map((foto) => (
               <button key={foto.id} type="button" className="photo-card" onClick={() => openPhoto(foto)} data-aos="fade-up">
                 <div className="photo-thumb">
-                  <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" />
+                  <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" onLoad={(e) => e.currentTarget.classList.add('photo-loaded')} />
                   <span className="photo-zoom">
                     <FaExpand />
                   </span>
+                  {foto.caption && <div className="photo-caption">{foto.caption}</div>}
                 </div>
-                {foto.caption && <div className="photo-caption">{foto.caption}</div>}
               </button>
             ))}
           </div>
