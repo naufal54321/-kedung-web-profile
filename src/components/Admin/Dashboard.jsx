@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', pesan: 'pesan', komentar: 'komentar' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', pesan: 'pesan', komentar: 'komentar' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -17,6 +17,7 @@ const tabs = [
   { key: 'lembaga', icon: FaBuilding, label: 'Lembaga', detailsLink: '/admin/lembaga', color: '#fff', bg: 'linear-gradient(135deg, #E65100, #FF7043)' },
   { key: 'carousel', icon: FaImage, label: 'Carousel', detailsLink: '/admin/carousel', color: '#fff', bg: 'linear-gradient(135deg, #00897B, #26A69A)' },
   { key: 'agenda', icon: FaCalendarAlt, label: 'Agenda', detailsLink: '/admin/agenda', color: '#fff', bg: 'linear-gradient(135deg, #F9A825, #FFD54F)' },
+  { key: 'video', icon: FaVideo, label: 'Video', detailsLink: '/admin/video', color: '#fff', bg: 'linear-gradient(135deg, #C62828, #EF5350)' },
   { key: 'pesan', icon: FaEnvelope, label: 'Pesan Masuk', detailsLink: '/admin/pesan', color: '#fff', bg: 'linear-gradient(135deg, #00695C, #26A69A)' },
   { key: 'komentar', icon: FaComments, label: 'Komentar', detailsLink: '/admin/komentar', color: '#fff', bg: 'linear-gradient(135deg, #455A64, #78909C)' },
 ]
@@ -47,6 +48,7 @@ function Dashboard() {
       lembaga: () => api.getAllLembagas(),
       carousel: () => api.getAllCarousels(),
       agenda: () => api.getAllAgendas(),
+      video: () => api.getAllVideos(),
       pesan: () => api.getAllMessages(),
       komentar: () => api.getAllComments(),
     }
@@ -91,13 +93,32 @@ function Dashboard() {
   }
 
   const getEditLink = (key, id) => {
-    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/' }
+    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/' }
     return paths[key] + id
   }
 
   const getNewLink = (key) => {
-    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new' }
+    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new' }
     return paths[key]
+  }
+
+  const handleMove = async (id, dir) => {
+    const items = [...(data.video || [])]
+    const index = items.findIndex(x => x.id === id)
+    const target = index + dir
+    if (index < 0 || target < 0 || target >= items.length) return
+    const a = items[index]
+    const b = items[target]
+    try {
+      await Promise.all([
+        api.updateVideo(a.id, { videoId: a.videoId, title: a.title, published: a.published, order: b.order }),
+        api.updateVideo(b.id, { videoId: b.videoId, title: b.title, published: b.published, order: a.order }),
+      ])
+      const swapped = [...items]
+      ;[swapped[index], swapped[target]] = [swapped[target], swapped[index]]
+      setData(prev => ({ ...prev, video: swapped }))
+      Swal.fire({ icon: 'success', title: 'Urutan diperbarui!', timer: 1200, showConfirmButton: false })
+    } catch { setError('Gagal mengubah urutan video') }
   }
 
   const getPaginated = (key) => {
@@ -184,6 +205,12 @@ function Dashboard() {
         { key: 'dateStart', label: 'Tanggal', className: 'd-none d-md-table-cell', render: (item) => `${item.dateStart} - ${item.dateEnd}` },
         { key: 'lokasi', label: 'Lokasi', className: 'd-none d-md-table-cell' },
       ],
+      video: [
+        { key: 'videoId', label: 'Thumbnail', render: (item) => <img src={`https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`} alt={item.title} style={{ width: 96, height: 54, objectFit: 'cover' }} className="rounded" /> },
+        { key: 'title', label: 'Judul', render: (item) => <span className="fw-medium">{item.title}</span> },
+        { key: 'published', label: 'Tanggal', className: 'd-none d-md-table-cell' },
+        { key: 'order', label: 'Urutan', render: (item) => <span className="badge bg-secondary">{items.indexOf(item) + 1}</span> },
+      ],
       pesan: [
         { key: 'name', label: 'Nama' },
         { key: 'email', label: 'Email', className: 'd-none d-md-table-cell' },
@@ -247,6 +274,14 @@ function Dashboard() {
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                           onClick={() => handleApprove(item.id, item.name)} title="Setujui"><FaCheckCircle /></Button>
                       )}
+                      {tab === 'video' && (
+                        <>
+                          <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
+                            onClick={() => handleMove(item.id, -1)} disabled={items.indexOf(item) === 0} title="Naik"><FaArrowUp /></Button>
+                          <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
+                            onClick={() => handleMove(item.id, 1)} disabled={items.indexOf(item) === items.length - 1} title="Turun"><FaArrowDown /></Button>
+                        </>
+                      )}
                       {tab !== 'pesan' && tab !== 'komentar' && (
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
                           onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
@@ -256,7 +291,7 @@ function Dashboard() {
                           if (tab === 'komentar') {
                             handleDelete(tab, item.id, item.name || item.text, (commentId) => api.deleteComment(item.articleId, commentId))
                           } else {
-                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, pesan: api.deleteMessage }
+                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, pesan: api.deleteMessage }
                             handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
                           }
                         }} title="Hapus"><FaTrash /></Button>

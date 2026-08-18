@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { FaYoutube, FaPlay, FaExternalLinkAlt } from 'react-icons/fa';
 import { formatDate } from '../../utils/formatDate';
+import api from '../../utils/api';
 
 const CHANNEL_URL = 'https://www.youtube.com/@PemudaPemudiKedung';
 
@@ -15,6 +16,13 @@ function VideoSection() {
     let cancelled = false;
     const fetchVideos = async () => {
       try {
+        const adminVideos = await api.getAllVideos();
+        if (cancelled) return;
+        if (adminVideos.length > 0) {
+          setVideos(adminVideos.map((v) => ({ id: v.videoId, title: v.title, published: v.published })));
+          setLoading(false);
+          return;
+        }
         const response = await fetch('/api/youtube-videos.js');
         const data = await response.json();
         if (!cancelled) setVideos(Array.isArray(data.videos) ? data.videos : []);

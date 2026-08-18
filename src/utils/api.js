@@ -349,6 +349,35 @@ const api = (() => {
     return await deleteData(`struktur/${id}.json`);
   }
 
+  async function getAllVideos() {
+    try {
+      const response = await fetchData('video.json');
+      if (typeof response === 'object' && response !== null) {
+        return Object.keys(response)
+          .map(key => ({ ...response[key], id: key }))
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      throw error;
+    }
+  }
+
+  async function createVideo(data) {
+    const result = await postData('video.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateVideo(id, data) {
+    await putData(`video/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteVideo(id) {
+    return await deleteData(`video/${id}.json`);
+  }
+
   async function getAllLembagas() {
     try {
       const response = await fetchData('lembaga.json');
@@ -549,6 +578,10 @@ const api = (() => {
     createStruktur,
     updateStruktur,
     deleteStruktur,
+    getAllVideos,
+    createVideo,
+    updateVideo,
+    deleteVideo,
     getAllLembagas,
     createLembaga,
     updateLembaga,
