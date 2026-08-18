@@ -19,6 +19,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
     "firebase": "^12.16.0",
+    "heic2any": "^0.0.4",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",

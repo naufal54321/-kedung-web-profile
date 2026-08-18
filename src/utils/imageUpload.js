@@ -59,8 +59,28 @@ const compressImage = async (file) => {
   return new File([blob], 'compressed.webp', { type: 'image/webp' })
 }
 
+const isHeic = (file) => {
+  const name = String(file?.name || '').toLowerCase()
+  const type = String(file?.type || '').toLowerCase()
+  return /\.(heic|heif)$/.test(name) || type.includes('image/heic') || type.includes('image/heif')
+}
+
+const convertHeicToJpeg = async (file) => {
+  try {
+    const { default: heic2any } = await import('heic2any')
+    const result = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 })
+    const blob = Array.isArray(result) ? result[0] : result
+    if (!blob) throw new Error('Konversi HEIC menghasilkan file kosong')
+    return new File([blob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' })
+  } catch (err) {
+    console.error('HEIC conversion error:', err)
+    throw new Error('Gagal mengonversi format HEIC')
+  }
+}
+
 const uploadToImgBB = async (file) => {
-  const compressed = await compressImage(file)
+  const sourceFile = isHeic(file) ? await convertHeicToJpeg(file) : file
+  const compressed = await compressImage(sourceFile)
   const base64 = (await readFileAsDataURL(compressed)).split(',')[1]
   const res = await fetch(`https://api.imgbb.com/1/upload?key=${config.IMGBB_API_KEY}`, {
     method: 'POST',
