@@ -111,17 +111,22 @@ function Dashboard() {
     if (index < 0 || target < 0 || target >= items.length) return
     const a = items[index]
     const b = items[target]
+    const { id: idA, ...restA } = a
+    const { id: idB, ...restB } = b
     const updaters = { video: api.updateVideo, foto: api.updateFoto, carousel: api.updateCarousel }
     try {
       await Promise.all([
-        updaters[key](a.id, { ...a, order: b.order }),
-        updaters[key](b.id, { ...b, order: a.order }),
+        updaters[key](a.id, { ...restA, order: b.order ?? b.sortOrder ?? 0 }),
+        updaters[key](b.id, { ...restB, order: a.order ?? a.sortOrder ?? 0 }),
       ])
       const swapped = [...items]
       ;[swapped[index], swapped[target]] = [swapped[target], swapped[index]]
       setData(prev => ({ ...prev, [key]: swapped }))
       Swal.fire({ icon: 'success', title: 'Urutan diperbarui!', timer: 1200, showConfirmButton: false })
-    } catch { setError('Gagal mengubah urutan') }
+    } catch (err) {
+      console.error('Gagal mengubah urutan:', err)
+      setError('Gagal mengubah urutan')
+    }
   }
 
   const getPaginated = (key) => {

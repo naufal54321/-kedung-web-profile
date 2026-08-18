@@ -354,8 +354,8 @@ const api = (() => {
       const response = await fetchData('video.json');
       if (typeof response === 'object' && response !== null) {
         return Object.keys(response)
-          .map(key => ({ ...response[key], id: key }))
-          .sort((a, b) => (a.order || 0) - (b.order || 0));
+          .map(key => ({ ...response[key], id: key, order: response[key].order ?? 0 }))
+          .sort((a, b) => a.order - b.order);
       }
       return [];
     } catch (error) {
@@ -383,8 +383,8 @@ const api = (() => {
       const response = await fetchData('foto.json');
       if (typeof response === 'object' && response !== null) {
         return Object.keys(response)
-          .map(key => ({ ...response[key], id: key }))
-          .sort((a, b) => (a.order || 0) - (b.order || 0));
+          .map(key => ({ ...response[key], id: key, order: response[key].order ?? 0 }))
+          .sort((a, b) => a.order - b.order);
       }
       return [];
     } catch (error) {
@@ -438,8 +438,9 @@ const api = (() => {
     try {
       const response = await fetchData('carousel.json');
       if (typeof response === 'object' && response !== null) {
-        return Object.keys(response).map(key => ({ ...response[key], id: key }))
-          .sort((a, b) => (a.order ?? a.sortOrder ?? 0) - (b.order ?? b.sortOrder ?? 0));
+        return Object.keys(response)
+          .map(key => ({ ...response[key], id: key, order: response[key].order ?? response[key].sortOrder ?? 0 }))
+          .sort((a, b) => a.order - b.order);
       }
       return [];
     } catch (error) {
