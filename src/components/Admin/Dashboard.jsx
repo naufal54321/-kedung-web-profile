@@ -109,19 +109,15 @@ function Dashboard() {
     const index = items.findIndex(x => x.id === id)
     const target = index + dir
     if (index < 0 || target < 0 || target >= items.length) return
-    const a = items[index]
-    const b = items[target]
-    const { id: idA, ...restA } = a
-    const { id: idB, ...restB } = b
-    const updaters = { video: api.updateVideo, foto: api.updateFoto, carousel: api.updateCarousel }
+    const reordered = [...items]
+    ;[reordered[index], reordered[target]] = [reordered[target], reordered[index]]
+    const updater = { video: api.updateVideo, foto: api.updateFoto, carousel: api.updateCarousel }[key]
     try {
-      await Promise.all([
-        updaters[key](a.id, { ...restA, order: b.order ?? b.sortOrder ?? 0 }),
-        updaters[key](b.id, { ...restB, order: a.order ?? a.sortOrder ?? 0 }),
-      ])
-      const swapped = [...items]
-      ;[swapped[index], swapped[target]] = [swapped[target], swapped[index]]
-      setData(prev => ({ ...prev, [key]: swapped }))
+      await Promise.all(reordered.map((item, i) => {
+        const { id: itemId, ...rest } = item
+        return updater(itemId, { ...rest, order: i + 1 })
+      }))
+      setData(prev => ({ ...prev, [key]: reordered }))
       Swal.fire({ icon: 'success', title: 'Urutan diperbarui!', timer: 1200, showConfirmButton: false })
     } catch (err) {
       console.error('Gagal mengubah urutan:', err)

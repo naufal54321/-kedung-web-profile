@@ -31,7 +31,7 @@ function VideoForm() {
   const [rssVideos, setRssVideos] = useState([])
   const [rssError, setRssError] = useState('')
   const [selectedId, setSelectedId] = useState('')
-  const [form, setForm] = useState({ url: '', title: '', published: '' })
+  const [form, setForm] = useState({ url: '', title: '', published: '', order: null })
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
   const [error, setError] = useState('')
@@ -76,7 +76,7 @@ function VideoForm() {
         const all = await api.getAllVideos()
         const video = all.find(v => v.id === id)
         if (video) {
-          setForm({ url: video.videoId || '', title: video.title || '', published: video.published || '' })
+          setForm({ url: video.videoId || '', title: video.title || '', published: video.published || '', order: video.order ?? 0 })
         } else {
           setError('Video tidak ditemukan')
         }
@@ -96,7 +96,7 @@ function VideoForm() {
     const vid = rssVideos.find(v => v.id === e.target.value)
     if (vid) {
       setSelectedId(vid.id)
-      setForm({ url: `https://www.youtube.com/watch?v=${vid.id}`, title: vid.title, published: vid.published || '' })
+      setForm(prev => ({ url: `https://www.youtube.com/watch?v=${vid.id}`, title: vid.title, published: vid.published || '', order: prev.order }))
     }
   }
 
@@ -117,14 +117,14 @@ function VideoForm() {
     const payload = { videoId, title: form.title.trim(), published: form.published || '' }
     try {
       if (isEdit) {
-        await api.updateVideo(id, payload)
+        await api.updateVideo(id, { ...payload, order: form.order ?? 0 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Video berhasil diperbarui!', timer: 1500, showConfirmButton: false })
       } else {
         const all = await api.getAllVideos()
         const maxOrder = all.reduce((m, v) => Math.max(m, v.order || 0), 0)
         await api.createVideo({ ...payload, order: maxOrder + 1 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Video berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ url: '', title: '', published: '' })
+        setForm({ url: '', title: '', published: '', order: null })
       }
     } catch {
       setError('Gagal menyimpan video')

@@ -12,7 +12,7 @@ function PhotoForm() {
   const isEdit = Boolean(id)
   const navigate = useNavigate()
 
-  const [form, setForm] = useState({ imgUrl: '', caption: '' })
+  const [form, setForm] = useState({ imgUrl: '', caption: '', order: null })
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
   const [error, setError] = useState('')
@@ -25,7 +25,7 @@ function PhotoForm() {
         const all = await api.getAllFotos()
         const foto = all.find(f => f.id === id)
         if (foto) {
-          setForm({ imgUrl: foto.imgUrl || '', caption: foto.caption || '' })
+          setForm({ imgUrl: foto.imgUrl || '', caption: foto.caption || '', order: foto.order ?? 0 })
         } else {
           setError('Foto tidak ditemukan')
         }
@@ -65,14 +65,14 @@ function PhotoForm() {
     const payload = { imgUrl: form.imgUrl.trim(), caption: form.caption.trim() }
     try {
       if (isEdit) {
-        await api.updateFoto(id, payload)
+        await api.updateFoto(id, { ...payload, order: form.order ?? 0 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Foto berhasil diperbarui!', timer: 1500, showConfirmButton: false })
       } else {
         const all = await api.getAllFotos()
         const maxOrder = all.reduce((m, f) => Math.max(m, f.order || 0), 0)
         await api.createFoto({ ...payload, order: maxOrder + 1 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Foto berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ imgUrl: '', caption: '' })
+        setForm({ imgUrl: '', caption: '', order: null })
       }
     } catch {
       setError('Gagal menyimpan foto')
