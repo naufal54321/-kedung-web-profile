@@ -1,5 +1,3 @@
-import config from './config'
-
 const MAX_DIMENSION = 1600
 const QUALITY = 0.82
 
@@ -82,13 +80,14 @@ const uploadToImgBB = async (file) => {
   const sourceFile = isHeic(file) ? await convertHeicToJpeg(file) : file
   const compressed = await compressImage(sourceFile)
   const base64 = (await readFileAsDataURL(compressed)).split(',')[1]
-  const res = await fetch(`https://api.imgbb.com/1/upload?key=${config.IMGBB_API_KEY}`, {
+  const res = await fetch('/api/imgbb-upload', {
     method: 'POST',
-    body: new URLSearchParams({ image: base64 })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: base64 })
   })
   const data = await res.json()
-  if (data.success) return data.data.url
-  throw new Error(data.error?.message || 'Gagal upload')
+  if (data.url) return data.url
+  throw new Error(data.error || 'Gagal upload')
 }
 
 export default uploadToImgBB

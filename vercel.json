@@ -7,6 +7,19 @@
     {
       "source": "/robots.txt",
       "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-xHRFSXszWVRbzygJD5mnmnJi9nYMJwLACyYbn8NnU2I=' 'sha256-OVagwGpp2tpAOnqwwxUkuWsNII2g/v311sNViDNGYc0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://i.ibb.co https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.googleapis.com; frame-src https://www.google.com https://www.youtube-nocookie.com https://www.youtube.com https://almaata.ac.id https://wartapendidikanjogja.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+        },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), autoplay=(self)" }
+      ]
     }
   ],
   "rewrites": [

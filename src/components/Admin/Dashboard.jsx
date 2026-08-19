@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
+import TwoFactorModal from './TwoFactorModal'
 
 const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar' }
 
@@ -31,6 +32,7 @@ function Dashboard() {
   const [error, setError] = useState('')
   const [tab, setTab] = useState('artikel')
   const [page, setPage] = useState({})
+  const [showTwoFactor, setShowTwoFactor] = useState(false)
   const perPage = 10
   const navigate = useNavigate()
 
@@ -417,9 +419,14 @@ function Dashboard() {
                 : `Kelola data ${(tabs.find(t => t.key === tab)?.label || '').toLowerCase()} pada halaman ini.`}
             </p>
           </div>
-          <div className="admin-dash-date">
-            <FaCalendarDay />
-            {now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          <div className="admin-dash-actions">
+            <button className="admin-btn-2fa" onClick={() => setShowTwoFactor(true)}>
+              <FaShieldAlt /> Keamanan 2FA
+            </button>
+            <div className="admin-dash-date">
+              <FaCalendarDay />
+              {now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            </div>
           </div>
         </div>
 
@@ -466,6 +473,7 @@ function Dashboard() {
           </div>
         </>)}
       </div>
+      <TwoFactorModal show={showTwoFactor} onHide={() => setShowTwoFactor(false)} />
     </AdminLayout>
   )
 }

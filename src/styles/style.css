@@ -6579,3 +6579,25 @@ textarea.admin-input {
     -webkit-line-clamp: 1;
   }
 }
+.admin-dash-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.admin-btn-2fa { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border: 1px solid #2C5F2D; background: #2C5F2D; color: #fff; border-radius: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; }
+.admin-btn-2fa:hover { background: #245126; color: #fff; }
+.admin-login-back-btn { display: block; width: 100%; margin-top: 0.6rem; padding: 0.65rem; background: transparent; border: 1px solid rgba(44,95,45,0.35); color: #2C5F2D; border-radius: 12px; font-weight: 600; cursor: pointer; }
+.admin-login-back-btn:hover { background: rgba(44,95,45,0.08); }
+.admin-2fa-title { font-weight: 700; color: #1f2937; }
+.admin-2fa-body { color: #4b5563; }
+.admin-2fa-desc { font-size: 0.92rem; }
+.admin-2fa-empty { text-align: center; padding: 1.5rem 0; color: #6b7280; }
+.admin-2fa-empty-icon { color: #2C5F2D; margin-bottom: 0.5rem; }
+.admin-2fa-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.admin-2fa-item { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 1rem; border: 1px solid #e5e7eb; border-radius: 12px; background: #f9fafb; }
+.admin-2fa-item-sub { display: block; font-size: 0.8rem; color: #6b7280; margin-top: 2px; }
+.admin-2fa-qr-wrap { display: flex; gap: 1.25rem; align-items: flex-start; flex-wrap: wrap; }
+.admin-2fa-qr { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 0.75rem; display: flex; align-items: center; justify-content: center; }
+.admin-2fa-qr-text { flex: 1; min-width: 220px; font-size: 0.88rem; }
+.admin-2fa-step-title { font-weight: 700; color: #1f2937; margin: 0.5rem 0 0.25rem; }
+.admin-2fa-secret { margin-top: 0.75rem; font-size: 0.8rem; color: #6b7280; }
+.admin-2fa-secret code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; word-break: break-all; }
+.admin-2fa-form { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.25rem; flex-wrap: wrap; }
+.admin-2fa-code { flex: 1; min-width: 180px; padding: 0.6rem 0.9rem; border: 1px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; letter-spacing: 0.3em; text-align: center; }
+.admin-2fa-code:focus { outline: none; border-color: #2C5F2D; box-shadow: 0 0 0 3px rgba(44,95,45,0.15); }
