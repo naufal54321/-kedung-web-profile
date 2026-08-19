@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Modal, Button, Alert } from 'react-bootstrap'
-import { TotpMultiFactorGenerator } from 'firebase/auth'
+import { multiFactor, TotpMultiFactorGenerator } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
 import { FaShieldAlt, FaQrcode, FaCheckCircle, FaSpinner, FaTrash } from 'react-icons/fa'
 
@@ -19,7 +19,7 @@ function TwoFactorModal({ show, onHide }) {
   const refreshFactors = useCallback(() => {
     const user = auth.currentUser
     if (user) {
-      setFactors(user.multiFactor?.enrolledFactors || [])
+      setFactors(multiFactor(user).enrolledFactors || [])
     } else {
       setFactors([])
     }
@@ -44,10 +44,7 @@ function TwoFactorModal({ show, onHide }) {
     setSuccess('')
     setBusy(true)
     try {
-      if (!user.multiFactor) {
-        throw new Error('Multi-factor belum diaktifkan di Firebase Console (Authentication > Settings > Multi-factor)')
-      }
-      const session = await user.multiFactor.getSession()
+      const session = await multiFactor(user).getSession()
       const newSecret = await TotpMultiFactorGenerator.generateSecret(session)
       const { default: QRCode } = await import('qrcode')
       const dataUrl = await QRCode.toDataURL(
@@ -69,7 +66,7 @@ function TwoFactorModal({ show, onHide }) {
     setBusy(true)
     try {
       const assertion = TotpMultiFactorGenerator.assertionForEnrollment(secret, code.trim())
-      await auth.currentUser.multiFactor.enroll(assertion, 'Authenticator')
+      await multiFactor(auth.currentUser).enroll(assertion, 'Authenticator')
       refreshFactors()
       setStep('idle')
       setSecret(null)
@@ -88,7 +85,7 @@ function TwoFactorModal({ show, onHide }) {
     if (!window.confirm('Nonaktifkan faktor ini? Anda tidak akan lagi diminta kode saat login.')) return
     setBusy(true)
     try {
-      await auth.currentUser.multiFactor.unenroll(factor.uid)
+      await multiFactor(auth.currentUser).unenroll(factor.uid)
       refreshFactors()
       setSuccess('2FA dinonaktifkan')
     } catch (err) {
