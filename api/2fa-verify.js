@@ -11,12 +11,12 @@ export default async function handler(req, res) {
   }
   try {
     const { idToken, code, secret } = req.body || {}
-    const { email } = await verifyIdToken(idToken)
+    const { uid, email } = await verifyIdToken(idToken)
     if (!isAdminEmail(email)) {
       res.status(403).json({ error: 'Bukan akun admin' })
       return
     }
-    const path = `admin2fa/${encodeURIComponent(email)}`
+    const path = `admin2fa/${uid}`
     const existing = await readNode(path, idToken)
 
     let targetSecret = null

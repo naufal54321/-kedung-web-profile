@@ -10,12 +10,12 @@ export default async function handler(req, res) {
   }
   try {
     const { idToken } = req.body || {}
-    const { email } = await verifyIdToken(idToken)
+    const { uid, email } = await verifyIdToken(idToken)
     if (!isAdminEmail(email)) {
       res.status(403).json({ error: 'Bukan akun admin' })
       return
     }
-    const node = await readNode(`admin2fa/${encodeURIComponent(email)}`, idToken)
+    const node = await readNode(`admin2fa/${uid}`, idToken)
     res.status(200).json({ enabled: !!node })
   } catch (err) {
     res.status(400).json({ error: err.message || 'Gagal memeriksa 2FA' })

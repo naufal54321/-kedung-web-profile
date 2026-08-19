@@ -80,9 +80,9 @@
       }
     },
     "admin2fa": {
-      "$email": {
-        ".read": "auth != null && auth.token.email == $email",
-        ".write": "auth != null && auth.token.email == $email"
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
       }
     }
   }
