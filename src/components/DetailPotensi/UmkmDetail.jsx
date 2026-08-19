@@ -18,7 +18,7 @@ const UmkmDetail = ({ umkm }) => {
   return (
     <div className="umkm-detail-wrapper">
       <div className="umkm-detail-hero" data-aos="fade-up">
-        <img src={umkm.imgUrl} alt={umkm.name} loading="eager" decoding="async" />
+        <img src={umkm.imgUrl} alt={umkm.name} loading="eager" decoding="async" fetchpriority="high" />
         <div className="umkm-detail-hero-overlay" />
         <div className="umkm-detail-hero-content">
           <h1 className="umkm-detail-title">{umkm.name}</h1>

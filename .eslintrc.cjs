@@ -12,6 +12,7 @@ module.exports = {
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh', 'unused-imports'],
   rules: {
+    'react/no-unknown-property': ['error', { ignore: ['fetchpriority'] }],
     'react/jsx-no-target-blank': 'off',
     'react/prop-types': 'off',
     'react-refresh/only-export-components': [

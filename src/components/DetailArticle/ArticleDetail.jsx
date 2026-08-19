@@ -52,7 +52,7 @@ const ArticleDetail = ({ article, previous, next }) => {
       <article className="article-detail">
         {article?.imgUrl && (
           <div className="detail-hero" onClick={() => setPreview({ url: article.imgUrl, title: article.title })}>
-            <img src={article.imgUrl} alt={article.title} loading="eager" decoding="async" />
+            <img src={article.imgUrl} alt={article.title} loading="eager" decoding="async" fetchpriority="high" />
           </div>
         )}
 

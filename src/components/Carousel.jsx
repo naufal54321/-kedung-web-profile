@@ -60,6 +60,7 @@ function CarouselCustom() {
               src={slide.imageUrl}
               alt={slide.caption || `Slide ${index + 1}`}
               decoding="async"
+              fetchpriority={index === 0 ? 'high' : undefined}
             />
             <Carousel.Caption className="carousel-caption-modern d-flex flex-column justify-content-center align-items-center position-absolute top-50 start-50 translate-middle">
               <div className="caption-text">
