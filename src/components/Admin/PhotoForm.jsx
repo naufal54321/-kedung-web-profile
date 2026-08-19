@@ -29,8 +29,9 @@ function PhotoForm() {
         } else {
           setError('Foto tidak ditemukan')
         }
-      } catch {
-        setError('Gagal memuat foto')
+      } catch (error) {
+        console.error('Gagal memuat foto:', error)
+        setError('Gagal memuat foto: ' + (error?.message || error))
       }
       setFetching(false)
     }
@@ -48,8 +49,9 @@ function PhotoForm() {
     try {
       const url = await uploadToImgBB(file)
       setForm(prev => ({ ...prev, imgUrl: url }))
-    } catch {
-      setError('Gagal upload gambar')
+    } catch (error) {
+      console.error('Gagal upload gambar:', error)
+      setError('Gagal upload gambar: ' + (error?.message || error))
     }
     setUploading(false)
   }
@@ -74,8 +76,9 @@ function PhotoForm() {
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Foto berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
         setForm({ imgUrl: '', caption: '', order: null })
       }
-    } catch {
-      setError('Gagal menyimpan foto')
+    } catch (error) {
+      console.error('Gagal menyimpan foto:', error)
+      setError('Gagal menyimpan foto: ' + (error?.message || error))
     }
     setLoading(false)
   }

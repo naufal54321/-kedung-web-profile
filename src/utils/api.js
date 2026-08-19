@@ -44,6 +44,7 @@ const api = (() => {
       const data = await response.json();
       return data;
     } catch (error) {
+      console.error('fetchData error:', url, error)
       throw new Error('Error fetching data: ' + (error?.message || error));
     }
   }
@@ -53,6 +54,7 @@ const api = (() => {
       const result = await push(ref(db, url.replace(/\.json$/, '')), data);
       return { name: result.key };
     } catch (error) {
+      console.error('postData error:', url, error)
       throw new Error('Error posting data: ' + (error?.message || error));
     }
   }
@@ -62,6 +64,7 @@ const api = (() => {
       await set(ref(db, url.replace(/\.json$/, '')), data);
       return null;
     } catch (error) {
+      console.error('putData error:', url, error)
       throw new Error('Error updating data: ' + (error?.message || error));
     }
   }
@@ -71,6 +74,7 @@ const api = (() => {
       await remove(ref(db, url.replace(/\.json$/, '')));
       return null;
     } catch (error) {
+      console.error('deleteData error:', url, error)
       throw new Error('Error deleting data: ' + (error?.message || error));
     }
   }

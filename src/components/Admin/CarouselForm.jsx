@@ -38,8 +38,9 @@ function CarouselForm() {
           } else {
             setError('Data tidak ditemukan')
           }
-        } catch {
-          setError('Gagal memuat data')
+        } catch (error) {
+          console.error('Gagal memuat data:', error)
+          setError('Gagal memuat data: ' + (error?.message || error))
         }
         setFetching(false)
       }
@@ -59,8 +60,9 @@ function CarouselForm() {
     try {
       const url = await uploadToImgBB(file)
       setForm((prev) => ({ ...prev, imageUrl: url }))
-    } catch {
-      setError('Gagal upload gambar')
+    } catch (error) {
+      console.error('Gagal upload gambar:', error)
+      setError('Gagal upload gambar: ' + (error?.message || error))
     }
     setUploading(false)
   }
@@ -80,8 +82,9 @@ function CarouselForm() {
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Slide berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
         setForm({ imageUrl: '', caption: '', subtitle: '', order: null })
       }
-    } catch {
-      setError('Gagal menyimpan slide')
+    } catch (error) {
+      console.error('Gagal menyimpan slide:', error)
+      setError('Gagal menyimpan slide: ' + (error?.message || error))
     }
     setLoading(false)
   }
