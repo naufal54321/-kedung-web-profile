@@ -1,13 +1,21 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Modal, Button, Alert } from 'react-bootstrap'
-import { multiFactor, TotpMultiFactorGenerator } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
 import { FaShieldAlt, FaQrcode, FaCheckCircle, FaSpinner, FaTrash } from 'react-icons/fa'
 
-const ISSUER = 'Padukuhan Kedung'
+async function postJson(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  })
+  const data = await res.json()
+  if (!res.ok) throw new Error(data.error || 'Terjadi kesalahan')
+  return data
+}
 
 function TwoFactorModal({ show, onHide }) {
-  const [factors, setFactors] = useState([])
+  const [enabled, setEnabled] = useState(false)
   const [secret, setSecret] = useState(null)
   const [qrUrl, setQrUrl] = useState('')
   const [code, setCode] = useState('')
@@ -16,12 +24,15 @@ function TwoFactorModal({ show, onHide }) {
   const [busy, setBusy] = useState(false)
   const [step, setStep] = useState('idle')
 
-  const refreshFactors = useCallback(() => {
+  const refreshStatus = useCallback(async () => {
     const user = auth.currentUser
-    if (user) {
-      setFactors(multiFactor(user).enrolledFactors || [])
-    } else {
-      setFactors([])
+    if (!user) return
+    try {
+      const idToken = await user.getIdToken()
+      const data = await postJson('/api/2fa-status', { idToken })
+      setEnabled(data.enabled)
+    } catch (err) {
+      setError(err.message || 'Gagal memeriksa 2FA')
     }
   }, [])
 
@@ -33,9 +44,9 @@ function TwoFactorModal({ show, onHide }) {
       setSecret(null)
       setQrUrl('')
       setStep('idle')
-      refreshFactors()
+      refreshStatus()
     }
-  }, [show, refreshFactors])
+  }, [show, refreshStatus])
 
   const handleStart = async () => {
     const user = auth.currentUser
@@ -44,14 +55,14 @@ function TwoFactorModal({ show, onHide }) {
     setSuccess('')
     setBusy(true)
     try {
-      const session = await multiFactor(user).getSession()
-      const newSecret = await TotpMultiFactorGenerator.generateSecret(session)
+      const idToken = await user.getIdToken()
+      const data = await postJson('/api/2fa-enroll', { idToken })
       const { default: QRCode } = await import('qrcode')
       const dataUrl = await QRCode.toDataURL(
-        newSecret.generateQrCodeUrl(user.email || 'admin', ISSUER),
+        data.otpauth,
         { width: 220, margin: 1, color: { dark: '#1f2937', light: '#ffffff' } }
       )
-      setSecret(newSecret)
+      setSecret(data.secret)
       setQrUrl(dataUrl)
       setStep('qr')
     } catch (err) {
@@ -62,32 +73,39 @@ function TwoFactorModal({ show, onHide }) {
 
   const handleVerify = async (e) => {
     e.preventDefault()
+    const user = auth.currentUser
+    if (!user) return
     setError('')
     setBusy(true)
     try {
-      const assertion = TotpMultiFactorGenerator.assertionForEnrollment(secret, code.trim())
-      await multiFactor(auth.currentUser).enroll(assertion, 'Authenticator')
-      refreshFactors()
+      const idToken = await user.getIdToken()
+      await postJson('/api/2fa-verify', { idToken, code: code.trim(), secret })
+      setEnabled(true)
       setStep('idle')
       setSecret(null)
       setQrUrl('')
       setCode('')
       setSuccess('2FA berhasil diaktifkan!')
     } catch (err) {
-      setError(err.code === 'auth/invalid-verification-code' ? 'Kode verifikasi salah. Coba lagi' : err.message)
+      setError(err.message || 'Gagal verifikasi')
     }
     setBusy(false)
   }
 
-  const handleUnenroll = async (factor) => {
+  const handleDisable = async (e) => {
+    e.preventDefault()
+    const user = auth.currentUser
+    if (!user) return
     setError('')
-    setSuccess('')
-    if (!window.confirm('Nonaktifkan faktor ini? Anda tidak akan lagi diminta kode saat login.')) return
     setBusy(true)
     try {
-      await multiFactor(auth.currentUser).unenroll(factor.uid)
-      refreshFactors()
+      const idToken = await user.getIdToken()
+      await postJson('/api/2fa-disable', { idToken, code: code.trim() })
+      setEnabled(false)
+      setStep('idle')
+      setCode('')
       setSuccess('2FA dinonaktifkan')
+      sessionStorage.removeItem('admin2fa-ok-' + user.email)
     } catch (err) {
       setError(err.message || 'Gagal menonaktifkan')
     }
@@ -109,7 +127,7 @@ function TwoFactorModal({ show, onHide }) {
               Lindungi akun admin dengan verifikasi dua langkah. Setelah diaktifkan, login membutuhkan
               kode 6 digit dari aplikasi authenticator (Google Authenticator, Aegis, Microsoft Authenticator, dll).
             </p>
-            {factors.length === 0 ? (
+            {!enabled ? (
               <div className="admin-2fa-empty">
                 <FaQrcode size={36} className="admin-2fa-empty-icon" />
                 <p>Belum ada faktor 2FA terpasang.</p>
@@ -119,17 +137,15 @@ function TwoFactorModal({ show, onHide }) {
               </div>
             ) : (
               <div className="admin-2fa-list">
-                {factors.map((f) => (
-                  <div key={f.uid} className="admin-2fa-item">
-                    <div>
-                      <strong>{f.displayName || (f.factorId === 'totp' ? 'Authenticator' : f.factorId)}</strong>
-                      <span className="admin-2fa-item-sub">{f.factorId === 'totp' ? 'TOTP (kode 6 digit)' : f.factorId} · {f.enrollmentTime || ''}</span>
-                    </div>
-                    <Button variant="outline-danger" size="sm" onClick={() => handleUnenroll(f)} disabled={busy}>
-                      <FaTrash /> Nonaktifkan
-                    </Button>
+                <div className="admin-2fa-item">
+                  <div>
+                    <strong>Authenticator (TOTP)</strong>
+                    <span className="admin-2fa-item-sub">TOTP (kode 6 digit) · Aktif</span>
                   </div>
-                ))}
+                  <Button variant="outline-danger" size="sm" onClick={() => setStep('disable')} disabled={busy}>
+                    <FaTrash /> Nonaktifkan
+                  </Button>
+                </div>
               </div>
             )}
           </>
@@ -149,7 +165,7 @@ function TwoFactorModal({ show, onHide }) {
                 {secret && (
                   <p className="admin-2fa-secret">
                     Tidak bisa memindai? Masukkan kunci manual:<br />
-                    <code>{secret.secretKey}</code>
+                    <code>{secret}</code>
                   </p>
                 )}
               </div>
@@ -172,6 +188,30 @@ function TwoFactorModal({ show, onHide }) {
               </Button>
             </form>
           </>
+        )}
+
+        {step === 'disable' && (
+          <form onSubmit={handleDisable} className="admin-2fa-form">
+            <p className="admin-2fa-desc">Masukkan kode 6 digit saat ini untuk menonaktifkan 2FA.</p>
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={6}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, ''))}
+              placeholder="Kode 6 digit"
+              className="admin-2fa-code"
+              autoFocus
+              required
+            />
+            <Button variant="danger" type="submit" disabled={busy || code.length !== 6}>
+              {busy ? <><FaSpinner className="fa-spin me-2" />Memproses...</> : <><FaTrash className="me-1" />Nonaktifkan</>}
+            </Button>
+            <Button variant="secondary" onClick={() => { setStep('idle'); setCode(''); setError('') }} disabled={busy}>
+              Batal
+            </Button>
+          </form>
         )}
       </Modal.Body>
     </Modal>

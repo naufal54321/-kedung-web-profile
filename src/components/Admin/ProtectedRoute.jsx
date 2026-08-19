@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuthState } from './useAuthState'
+import TwoFactorGate from './TwoFactorGate'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuthState()
@@ -18,7 +19,7 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/admin/login" replace />
   }
 
-  return children
+  return <TwoFactorGate>{children}</TwoFactorGate>
 }
 
 export default ProtectedRoute

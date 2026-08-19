@@ -26,6 +26,7 @@ function AdminLayout({ children, title }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleLogout = async () => {
+    if (user?.email) sessionStorage.removeItem('admin2fa-ok-' + user.email)
     await signOut(auth)
     window.location.href = '/admin/login'
   }

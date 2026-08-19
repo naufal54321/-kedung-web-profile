@@ -78,6 +78,12 @@
           ".write": "(auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')) || (newData.exists() && !data.exists() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 100 && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000 && newData.child('createdAt').isNumber())"
         }
       }
+    },
+    "admin2fa": {
+      "$email": {
+        ".read": "auth != null && auth.token.email == $email",
+        ".write": "auth != null && auth.token.email == $email"
+      }
     }
   }
 }
