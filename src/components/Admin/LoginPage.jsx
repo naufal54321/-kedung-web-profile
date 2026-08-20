@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
-import { FaUserShield, FaArrowLeft, FaSpinner } from 'react-icons/fa'
+import { FaUserShield, FaArrowLeft, FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -58,15 +59,18 @@ function LoginPage() {
             <label>Email</label>
           </div>
 
-          <div className="admin-floating-group">
+          <div className="admin-floating-group admin-password-group">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder=" "
               required
             />
             <label>Password</label>
+            <button type="button" className="admin-password-toggle" onClick={() => setShowPassword((prev) => !prev)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           <button type="submit" className="admin-login-btn" disabled={loading}>
