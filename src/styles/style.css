@@ -1395,10 +1395,9 @@ h1, h2, h3 {
 }
 
 .home-carousel-wrapper .carousel-item img {
-  height: 100vh;
-  height: 100svh;
+  height: calc(100vh + 80px);
+  height: calc(100svh + 80px);
   min-height: 420px;
-  max-height: 720px;
   object-fit: cover;
 }
 
@@ -4261,10 +4260,9 @@ textarea.admin-input {
 
 .skeleton-hero {
   width: 100%;
-  height: 100vh;
-  height: 100svh;
+  height: calc(100vh + 80px);
+  height: calc(100svh + 80px);
   min-height: 420px;
-  max-height: 720px;
   border-radius: 0;
 }
 
