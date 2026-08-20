@@ -67,6 +67,23 @@ describe('api', () => {
     expect(refObj.path).toBe('article/abc')
   })
 
+  it('createHayati menulis via Firebase SDK push ke node hayati', async () => {
+    const result = await api.createHayati({ name: 'Sapi Ternak' })
+    expect(pushMock).toHaveBeenCalledTimes(1)
+    const [refObj, data] = pushMock.mock.calls[0]
+    expect(refObj.path).toBe('hayati')
+    expect(data).toEqual({ name: 'Sapi Ternak' })
+    expect(result.id).toBe('new-key')
+  })
+
+  it('updateNonHayati menulis via Firebase SDK set ke node Nonhayati', async () => {
+    await api.updateNonHayati('non-1', { name: 'Kapur', imgUrl: 'https://x.test/a.jpg' })
+    expect(setMock).toHaveBeenCalledTimes(1)
+    const [refObj, data] = setMock.mock.calls[0]
+    expect(refObj.path).toBe('Nonhayati/non-1')
+    expect(data).toEqual({ name: 'Kapur', imgUrl: 'https://x.test/a.jpg' })
+  })
+
   it('publicCreateUmkm tidak mengirim header Authorization', async () => {
     await api.publicCreateUmkm({ name: 'Toko Baru' })
     const [url, init] = fetch.mock.calls[0]

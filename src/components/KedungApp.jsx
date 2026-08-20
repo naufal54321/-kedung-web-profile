@@ -37,6 +37,7 @@ const CarouselForm = lazy(() => import('./Admin/CarouselForm'));
 const AgendaForm = lazy(() => import('./Admin/AgendaForm'));
 const VideoForm = lazy(() => import('./Admin/VideoForm'));
 const PhotoForm = lazy(() => import('./Admin/PhotoForm'));
+const HayatiForm = lazy(() => import('./Admin/HayatiForm'));
 
 function KedungApp() {
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -94,6 +95,8 @@ function KedungApp() {
             <Route path="/admin/umkm" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/struktur" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/lembaga" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/hayati" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/nonhayati" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/carousel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/agenda" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/video" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -108,6 +111,10 @@ function KedungApp() {
             <Route path="/admin/struktur/edit/:id" element={<ProtectedRoute><StrukturForm /></ProtectedRoute>} />
             <Route path="/admin/lembaga/new" element={<ProtectedRoute><LembagaForm /></ProtectedRoute>} />
             <Route path="/admin/lembaga/edit/:id" element={<ProtectedRoute><LembagaForm /></ProtectedRoute>} />
+            <Route path="/admin/hayati/new" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
+            <Route path="/admin/hayati/edit/:id" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
+            <Route path="/admin/nonhayati/new" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
+            <Route path="/admin/nonhayati/edit/:id" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
             <Route path="/admin/carousel/new" element={<ProtectedRoute><CarouselForm /></ProtectedRoute>} />
             <Route path="/admin/carousel/edit/:id" element={<ProtectedRoute><CarouselForm /></ProtectedRoute>} />
             <Route path="/admin/agenda/new" element={<ProtectedRoute><AgendaForm /></ProtectedRoute>} />

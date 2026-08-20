@@ -353,6 +353,34 @@ const api = (() => {
     return await deleteData(`struktur/${id}.json`);
   }
 
+  async function createHayati(data) {
+    const result = await postData('hayati.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateHayati(id, data) {
+    await putData(`hayati/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteHayati(id) {
+    return await deleteData(`hayati/${id}.json`);
+  }
+
+  async function createNonHayati(data) {
+    const result = await postData('Nonhayati.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateNonHayati(id, data) {
+    await putData(`Nonhayati/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteNonHayati(id) {
+    return await deleteData(`Nonhayati/${id}.json`);
+  }
+
   async function getAllVideos() {
     try {
       const response = await fetchData('video.json');
@@ -612,6 +640,12 @@ const api = (() => {
     createStruktur,
     updateStruktur,
     deleteStruktur,
+    createHayati,
+    updateHayati,
+    deleteHayati,
+    createNonHayati,
+    updateNonHayati,
+    deleteNonHayati,
     getAllVideos,
     createVideo,
     updateVideo,
