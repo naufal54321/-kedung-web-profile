@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import ArticleDetail from '../components/DetailArticle/ArticleDetail';
 import ArticleList from '../components/DetailArticle/ArticleList';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import BreadcrumbDetailArticle from '../components/DetailArticle/Breadcrumb';
@@ -10,6 +10,7 @@ import Comments from '../components/DetailArticle/Comments';
 import AgendaList from '../components/agenda/AgendaList';
 import SEO from '../components/SEO';
 import CustomPagination from '../components/CustomPagination';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const DetailArticlePage = () => {
   const [articles, setArticles] = useState([]);
@@ -18,6 +19,7 @@ const DetailArticlePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -102,6 +104,9 @@ const DetailArticlePage = () => {
         <div className="detail-breadcrumb" data-aos="fade-up">
           <BreadcrumbDetailArticle articleTitle={article.title} />
         </div>
+        <button type="button" onClick={() => navigate(-1)} className="btn btn-link text-decoration-none text-muted d-inline-flex align-items-center gap-1 mb-3 p-0">
+          <FaArrowLeft size={14} /> Kembali
+        </button>
         <Row>
           <Col lg={8} data-aos="fade-up">
             <ArticleDetail article={article} previous={previous} next={next} />
