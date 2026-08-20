@@ -72,7 +72,7 @@ function GaleriPage() {
               <div key={foto.id} className="col-6 col-md-4 col-lg-4" data-aos="fade-up">
                 <button type="button" className="photo-card photo-card-grid w-100" onClick={() => openPhoto(i)}>
                   <div className="photo-thumb">
-                    <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" onLoad={(e) => e.currentTarget.classList.add('photo-loaded')} />
+                    <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" />
                     <span className="photo-zoom">
                       <FaExpand />
                     </span>
