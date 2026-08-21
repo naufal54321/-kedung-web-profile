@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthState } from './Admin/useAuthState';
-import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope, FaSearch } from 'react-icons/fa';
+import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope, FaSearch, FaHome, FaBars } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
 
 function NavApp() {
@@ -16,6 +16,7 @@ function NavApp() {
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('kedung-theme') || 'light');
   const [showSearch, setShowSearch] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     AOS.init();
@@ -44,7 +45,7 @@ function NavApp() {
   const navbarState = isHome && !scrolled ? 'navbar-transparent' : 'navbar-solid';
 
   return (
-    <Navbar expand="lg" className={`${navbarState} shadow-sm py-2 fixed-top`} data-aos="fade-down">
+    <Navbar expand="lg" expanded={expanded} className={`${navbarState} shadow-sm py-2 fixed-top`} data-aos="fade-down">
       <Container className="ps-lg-3">
         <Navbar.Brand href="/" className="d-flex align-items-center gap-3">
           <img alt="" src="/img/logo-bantul.png" style={{ width: 38, height: 48, objectFit: 'contain', display: 'block' }} />
@@ -54,9 +55,11 @@ function NavApp() {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <button type="button" className="theme-toggle ms-2" onClick={toggleTheme} aria-label="Ganti tema" title="Ganti tema">
-          {theme === 'dark' ? <FaSun /> : <FaMoon />}
-        </button>
+        <div className="d-none d-lg-block">
+          <button type="button" className="theme-toggle ms-2" onClick={toggleTheme} aria-label="Ganti tema" title="Ganti tema">
+            {theme === 'dark' ? <FaSun /> : <FaMoon />}
+          </button>
+        </div>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-lg-center gap-0">
             <Nav.Item>
@@ -120,6 +123,24 @@ function NavApp() {
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <div className="d-lg-none mobile-bottom-bar">
+        <Link to="/" className="bottom-bar-btn" aria-label="Beranda">
+          <FaHome className="bottom-bar-icon" />
+          <span className="bottom-bar-label">Beranda</span>
+        </Link>
+        <button type="button" className="bottom-bar-btn" onClick={() => setShowSearch(true)} aria-label="Cari">
+          <FaSearch className="bottom-bar-icon" />
+          <span className="bottom-bar-label">Cari</span>
+        </button>
+        <button type="button" className="bottom-bar-btn" onClick={toggleTheme} aria-label="Ganti tema">
+          {theme === 'dark' ? <FaSun className="bottom-bar-icon" /> : <FaMoon className="bottom-bar-icon" />}
+          <span className="bottom-bar-label">Tema</span>
+        </button>
+        <button type="button" className="bottom-bar-btn" onClick={() => setExpanded(!expanded)} aria-label="Menu">
+          <FaBars className="bottom-bar-icon" />
+          <span className="bottom-bar-label">Menu</span>
+        </button>
+      </div>
       <SearchOverlay show={showSearch} onClose={() => setShowSearch(false)} />
     </Navbar>
   );
