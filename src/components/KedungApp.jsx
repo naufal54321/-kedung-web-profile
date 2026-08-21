@@ -38,6 +38,7 @@ const AgendaForm = lazy(() => import('./Admin/AgendaForm'));
 const VideoForm = lazy(() => import('./Admin/VideoForm'));
 const PhotoForm = lazy(() => import('./Admin/PhotoForm'));
 const HayatiForm = lazy(() => import('./Admin/HayatiForm'));
+const TogaForm = lazy(() => import('./Admin/TogaForm'));
 
 function KedungApp() {
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -97,6 +98,7 @@ function KedungApp() {
             <Route path="/admin/lembaga" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/hayati" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/nonhayati" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/toga" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/carousel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/agenda" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/video" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -115,6 +117,8 @@ function KedungApp() {
             <Route path="/admin/hayati/edit/:id" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
             <Route path="/admin/nonhayati/new" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
             <Route path="/admin/nonhayati/edit/:id" element={<ProtectedRoute><HayatiForm /></ProtectedRoute>} />
+            <Route path="/admin/toga/new" element={<ProtectedRoute><TogaForm /></ProtectedRoute>} />
+            <Route path="/admin/toga/edit/:id" element={<ProtectedRoute><TogaForm /></ProtectedRoute>} />
             <Route path="/admin/carousel/new" element={<ProtectedRoute><CarouselForm /></ProtectedRoute>} />
             <Route path="/admin/carousel/edit/:id" element={<ProtectedRoute><CarouselForm /></ProtectedRoute>} />
             <Route path="/admin/agenda/new" element={<ProtectedRoute><AgendaForm /></ProtectedRoute>} />

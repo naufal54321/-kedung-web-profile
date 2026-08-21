@@ -381,6 +381,20 @@ const api = (() => {
     return await deleteData(`Nonhayati/${id}.json`);
   }
 
+  async function createToga(data) {
+    const result = await postData('toga.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateToga(id, data) {
+    await putData(`toga/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteToga(id) {
+    return await deleteData(`toga/${id}.json`);
+  }
+
   async function getAllVideos() {
     try {
       const response = await fetchData('video.json');
@@ -646,6 +660,9 @@ const api = (() => {
     createNonHayati,
     updateNonHayati,
     deleteNonHayati,
+    createToga,
+    updateToga,
+    deleteToga,
     getAllVideos,
     createVideo,
     updateVideo,

@@ -16,10 +16,12 @@
       ".read": true
     },
     "hayati": {
-      ".read": true
+      ".read": true,
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "Nonhayati": {
-      ".read": true
+      ".read": true,
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "struktur": {
       ".read": true,
@@ -30,7 +32,8 @@
       ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "toga": {
-      ".read": true
+      ".read": true,
+      ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
     },
     "lembaga": {
       ".read": true,

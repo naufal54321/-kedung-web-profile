@@ -7,13 +7,15 @@ import { Link, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthState } from './Admin/useAuthState';
-import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope } from 'react-icons/fa';
+import { FaNewspaper, FaStore, FaCalendarAlt, FaUsers as FaUsersIcon, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope, FaSearch } from 'react-icons/fa';
+import SearchOverlay from './SearchOverlay';
 
 function NavApp() {
   const { user } = useAuthState();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('kedung-theme') || 'light');
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     AOS.init();
@@ -110,9 +112,15 @@ function NavApp() {
                 </Link>
               </Nav.Item>
             )}
+            <Nav.Item>
+              <Nav.Link as="button" className="nav-link rounded px-2 text-nowrap d-flex align-items-center gap-1" onClick={() => setShowSearch(true)} aria-label="Cari" title="Cari">
+                <FaSearch size={14} /> Cari
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <SearchOverlay show={showSearch} onClose={() => setShowSearch(false)} />
     </Navbar>
   );
 }

@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 import TwoFactorModal from './TwoFactorModal'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar', hayati: 'hayati', nonhayati: 'nonhayati' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar', hayati: 'hayati', nonhayati: 'nonhayati', toga: 'toga' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -18,6 +18,7 @@ const tabs = [
   { key: 'lembaga', icon: FaBuilding, label: 'Lembaga', detailsLink: '/admin/lembaga', color: '#fff', bg: 'linear-gradient(135deg, #E65100, #FF7043)' },
   { key: 'hayati', icon: FaLeaf, label: 'Hayati', detailsLink: '/admin/hayati', color: '#fff', bg: 'linear-gradient(135deg, #2E7D32, #66BB6A)' },
   { key: 'nonhayati', icon: FaMountain, label: 'Non Hayati', detailsLink: '/admin/nonhayati', color: '#fff', bg: 'linear-gradient(135deg, #5D4037, #A1887F)' },
+  { key: 'toga', icon: FaSeedling, label: 'TOGA', detailsLink: '/admin/toga', color: '#fff', bg: 'linear-gradient(135deg, #33691E, #8BC34A)' },
   { key: 'carousel', icon: FaImage, label: 'Carousel', detailsLink: '/admin/carousel', color: '#fff', bg: 'linear-gradient(135deg, #00897B, #26A69A)' },
   { key: 'agenda', icon: FaCalendarAlt, label: 'Agenda', detailsLink: '/admin/agenda', color: '#fff', bg: 'linear-gradient(135deg, #F9A825, #FFD54F)' },
   { key: 'video', icon: FaVideo, label: 'Video', detailsLink: '/admin/video', color: '#fff', bg: 'linear-gradient(135deg, #C62828, #EF5350)' },
@@ -53,6 +54,7 @@ function Dashboard() {
       lembaga: () => api.getAllLembagas(),
       hayati: () => api.getAllHayatis(),
       nonhayati: () => api.getAllNonHayatis(),
+      toga: () => api.getAllTogas(),
       carousel: () => api.getAllCarousels(),
       agenda: () => api.getAllAgendas(),
       video: () => api.getAllVideos(),
@@ -101,12 +103,12 @@ function Dashboard() {
   }
 
   const getEditLink = (key, id) => {
-    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/' }
+    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/', toga: '/admin/toga/edit/' }
     return paths[key] + id
   }
 
   const getNewLink = (key) => {
-    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new', hayati: '/admin/hayati/new', nonhayati: '/admin/nonhayati/new' }
+    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new', hayati: '/admin/hayati/new', nonhayati: '/admin/nonhayati/new', toga: '/admin/toga/new' }
     return paths[key]
   }
 
@@ -212,6 +214,10 @@ function Dashboard() {
         { key: 'imgUrl', label: 'Gambar', render: (item) => item.imgUrl ? <img src={item.imgUrl} alt={item.name} style={{ width: 96, height: 64, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-danger">Tidak</span> },
         { key: 'name', label: 'Nama' },
       ],
+      toga: [
+        { key: 'imgUrl', label: 'Gambar', render: (item) => item.imgUrl ? <img src={item.imgUrl} alt={item.name} style={{ width: 96, height: 64, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-danger">Tidak</span> },
+        { key: 'name', label: 'Nama' },
+      ],
       carousel: [
         { key: 'imageUrl', label: 'Gambar', render: (item) => item.imageUrl ? <img src={item.imageUrl} alt={item.caption} style={{ width: 80, height: 40, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-danger">Tidak</span> },
         { key: 'caption', label: 'Caption' },
@@ -314,7 +320,7 @@ function Dashboard() {
                           if (tab === 'komentar') {
                             handleDelete(tab, item.id, item.name || item.text, (commentId) => api.deleteComment(item.articleId, commentId))
                           } else {
-                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, foto: api.deleteFoto, pesan: api.deleteMessage, hayati: api.deleteHayati, nonhayati: api.deleteNonHayati }
+                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, foto: api.deleteFoto, pesan: api.deleteMessage, hayati: api.deleteHayati, nonhayati: api.deleteNonHayati, toga: api.deleteToga }
                             handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
                           }
                         }} title="Hapus"><FaTrash /></Button>
@@ -443,6 +449,25 @@ function Dashboard() {
         </div>
 
         {error && <Alert variant="danger" role="alert" className="admin-alert" dismissible onClose={() => setError('')}><FaExclamationTriangle /> {error}</Alert>}
+
+        {(() => {
+          const pendingCount = (data.umkm || []).filter(u => (u.status || 'approved') === 'pending').length
+          if (pendingCount === 0) return null
+          return (
+            <div className="admin-umkm-banner" role="alert">
+              <div className="admin-umkm-banner-content">
+                <div className="admin-umkm-banner-icon"><FaBell /></div>
+                <div>
+                  <div className="admin-umkm-banner-title">Ada {pendingCount} UMKM menunggu persetujuan</div>
+                  <div className="admin-umkm-banner-sub">Tinjau dan setujui pendaftaran UMKM baru dari warga</div>
+                </div>
+              </div>
+              <button type="button" className="admin-umkm-banner-btn" onClick={() => navigate('/admin/umkm')}>
+                Lihat Sekarang <FaArrowRight size={12} />
+              </button>
+            </div>
+          )
+        })()}
 
         {/* Stat Cards (shown in both views) */}
         <div className="admin-stats-row">

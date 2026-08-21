@@ -6617,3 +6617,118 @@ textarea.admin-input {
 .admin-2fa-form { display: flex; gap: 0.75rem; align-items: center; margin-top: 1.25rem; flex-wrap: wrap; }
 .admin-2fa-code { flex: 1; min-width: 180px; padding: 0.6rem 0.9rem; border: 1px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; letter-spacing: 0.3em; text-align: center; }
 .admin-2fa-code:focus { outline: none; border-color: #2C5F2D; box-shadow: 0 0 0 3px rgba(44,95,45,0.15); }
+
+/* ===== Search Overlay ===== */
+.search-overlay { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: flex-start; justify-content: center; padding: 8vh 1rem 1rem; }
+.search-overlay-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); }
+.search-overlay-panel { position: relative; width: 100%; max-width: 640px; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); overflow: hidden; }
+.search-overlay-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1rem; border-bottom: 1px solid #e5e7eb; }
+.search-overlay-header-icon { color: #2C5F2D; font-size: 1rem; flex-shrink: 0; }
+.search-overlay-input { border: none; box-shadow: none; font-size: 1rem; padding: 0.4rem 0; }
+.search-overlay-input:focus { border: none; box-shadow: none; }
+.search-overlay-close { background: transparent; border: none; color: #6b7280; font-size: 1.1rem; cursor: pointer; padding: 0.4rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.search-overlay-close:hover { background: #f3f4f6; color: #111827; }
+.search-overlay-body { max-height: 60vh; overflow-y: auto; padding: 0.75rem 1rem 1rem; }
+.search-overlay-state { text-align: center; padding: 2rem 0; font-size: 0.92rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.search-result-group { margin-bottom: 1rem; }
+.search-result-group-title { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; margin-bottom: 0.4rem; }
+.search-result-count { background: #f3f4f6; color: #6b7280; border-radius: 999px; padding: 0 0.5rem; font-size: 0.7rem; }
+.search-result-item { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; width: 100%; text-align: left; background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 10px; padding: 0.6rem 0.8rem; margin-bottom: 0.35rem; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.search-result-item:hover { background: #f0fdf4; border-color: #bbf7d0; }
+.search-result-item-text { display: flex; flex-direction: column; min-width: 0; }
+.search-result-item-title { font-size: 0.9rem; font-weight: 600; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-result-item-sub { font-size: 0.78rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-result-item-arrow { color: #9ca3af; flex-shrink: 0; }
+.search-result-item:hover .search-result-item-arrow { color: #2C5F2D; }
+[data-theme="dark"] .search-overlay-panel { background: #1f2937; }
+[data-theme="dark"] .search-overlay-header { border-bottom-color: #374151; }
+[data-theme="dark"] .search-overlay-input { background: transparent; color: #f9fafb; }
+[data-theme="dark"] .search-overlay-close { color: #9ca3af; }
+[data-theme="dark"] .search-overlay-close:hover { background: #374151; color: #fff; }
+[data-theme="dark"] .search-result-group-title { color: #9ca3af; }
+[data-theme="dark"] .search-result-count { background: #374151; color: #9ca3af; }
+[data-theme="dark"] .search-result-item { background: #111827; border-color: #374151; }
+[data-theme="dark"] .search-result-item:hover { background: #1f2937; border-color: #2C5F2D; }
+[data-theme="dark"] .search-result-item-title { color: #f9fafb; }
+[data-theme="dark"] .search-result-item-sub { color: #9ca3af; }
+[data-theme="dark"] .search-overlay-state { color: #9ca3af; }
+
+/* Admin Sidebar Badge */
+.admin-sidebar-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #F59E0B;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(245,158,11,0.4);
+}
+
+/* Admin UMKM Pending Banner */
+.admin-umkm-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  border: 1px solid #FBBF24;
+  border-left: 4px solid #F59E0B;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.18);
+}
+.admin-umkm-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.admin-umkm-banner-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(245,158,11,0.15);
+  color: #B45309;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.admin-umkm-banner-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #92400E;
+}
+.admin-umkm-banner-sub {
+  font-size: 0.78rem;
+  color: #B45309;
+}
+.admin-umkm-banner-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.55rem 1.1rem;
+  background: #D97706;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.admin-umkm-banner-btn:hover {
+  background: #B45309;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(180,83,9,0.3);
+}

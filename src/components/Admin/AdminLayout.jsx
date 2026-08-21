@@ -1,65 +1,113 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
-import { FaArrowLeft, FaSignOutAlt, FaBars, FaTimes, FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaHome, FaChartPie, FaUserCircle, FaEnvelope, FaComments, FaVideo, FaCamera, FaLeaf, FaMountain } from 'react-icons/fa'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../utils/firebase'
-import { useAuthState } from './useAuthState'
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import {
+  FaArrowLeft,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+  FaNewspaper,
+  FaStore,
+  FaUsers,
+  FaBuilding,
+  FaImage,
+  FaCalendarAlt,
+  FaHome,
+  FaChartPie,
+  FaUserCircle,
+  FaEnvelope,
+  FaComments,
+  FaVideo,
+  FaCamera,
+  FaLeaf,
+  FaMountain,
+  FaSeedling,
+} from "react-icons/fa";
+import { signOut } from "firebase/auth";
+import { auth } from "../../utils/firebase";
+import { useAuthState } from "./useAuthState";
+import api from "../../utils/api";
 
 const sidebarItems = [
-  { path: '/admin', icon: FaChartPie, label: 'Dashboard', exact: true },
-  { path: '/admin/artikel', icon: FaNewspaper, label: 'Artikel' },
-  { path: '/admin/umkm', icon: FaStore, label: 'UMKM' },
-  { path: '/admin/struktur', icon: FaUsers, label: 'Struktur' },
-  { path: '/admin/lembaga', icon: FaBuilding, label: 'Lembaga' },
-  { path: '/admin/hayati', icon: FaLeaf, label: 'Hayati' },
-  { path: '/admin/nonhayati', icon: FaMountain, label: 'Non Hayati' },
-  { path: '/admin/carousel', icon: FaImage, label: 'Carousel' },
-  { path: '/admin/agenda', icon: FaCalendarAlt, label: 'Agenda' },
-  { path: '/admin/video', icon: FaVideo, label: 'Video' },
-  { path: '/admin/foto', icon: FaCamera, label: 'Foto' },
-  { path: '/admin/pesan', icon: FaEnvelope, label: 'Pesan Masuk' },
-  { path: '/admin/komentar', icon: FaComments, label: 'Komentar' },
-]
+  { path: "/admin", icon: FaChartPie, label: "Dashboard", exact: true },
+  { path: "/admin/artikel", icon: FaNewspaper, label: "Artikel" },
+  { path: "/admin/umkm", icon: FaStore, label: "UMKM" },
+  { path: "/admin/struktur", icon: FaUsers, label: "Struktur" },
+  { path: "/admin/lembaga", icon: FaBuilding, label: "Lembaga" },
+  { path: "/admin/hayati", icon: FaLeaf, label: "Hayati" },
+  { path: "/admin/nonhayati", icon: FaMountain, label: "Non Hayati" },
+  { path: "/admin/toga", icon: FaSeedling, label: "TOGA" },
+  { path: "/admin/carousel", icon: FaImage, label: "Carousel" },
+  { path: "/admin/agenda", icon: FaCalendarAlt, label: "Agenda" },
+  { path: "/admin/video", icon: FaVideo, label: "Video" },
+  { path: "/admin/foto", icon: FaCamera, label: "Foto" },
+  { path: "/admin/pesan", icon: FaEnvelope, label: "Pesan Masuk" },
+  { path: "/admin/komentar", icon: FaComments, label: "Komentar" },
+];
 
 function AdminLayout({ children, title }) {
-  const location = useLocation()
-  const { user } = useAuthState()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const location = useLocation();
+  const { user } = useAuthState();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [pendingUmkm, setPendingUmkm] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadPending = async () => {
+      try {
+        const all = await api.getAllUmkmAdmin();
+        const pending = (all || []).filter((u) => (u.status || "approved") === "pending").length;
+        if (!cancelled) setPendingUmkm(pending);
+      } catch {
+        // abaikan
+      }
+    };
+    loadPending();
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname]);
 
   const handleLogout = async () => {
-    if (user?.email) sessionStorage.removeItem('admin2fa-ok-' + user.email)
-    await signOut(auth)
-    window.location.href = '/admin/login'
-  }
+    if (user?.email) sessionStorage.removeItem("admin2fa-ok-" + user.email);
+    await signOut(auth);
+    window.location.href = "/admin/login";
+  };
 
   const isActive = (item) => {
-    if (item.exact) return location.pathname === item.path
-    return location.pathname.startsWith(item.path.replace('/new', '').replace('/edit', ''))
-  }
+    if (item.exact) return location.pathname === item.path;
+    return location.pathname.startsWith(
+      item.path.replace("/new", "").replace("/edit", ""),
+    );
+  };
 
-  const isFormPage = location.pathname.includes('/new') || location.pathname.includes('/edit')
+  const isFormPage =
+    location.pathname.includes("/new") || location.pathname.includes("/edit");
 
   const getBackLink = () => {
-    const p = location.pathname
-    if (p.includes('/articles/')) return '/admin/artikel'
-    if (p.includes('/umkm/')) return '/admin/umkm'
-    if (p.includes('/struktur/')) return '/admin/struktur'
-    if (p.includes('/lembaga/')) return '/admin/lembaga'
-    if (p.includes('/hayati/')) return '/admin/hayati'
-    if (p.includes('/nonhayati/')) return '/admin/nonhayati'
-    if (p.includes('/carousel/')) return '/admin/carousel'
-    if (p.includes('/agenda/')) return '/admin/agenda'
-    if (p.includes('/video/')) return '/admin/video'
-    if (p.includes('/foto/')) return '/admin/foto'
-    return '/admin'
-  }
+    const p = location.pathname;
+    if (p.includes("/articles/")) return "/admin/artikel";
+    if (p.includes("/umkm/")) return "/admin/umkm";
+    if (p.includes("/struktur/")) return "/admin/struktur";
+    if (p.includes("/lembaga/")) return "/admin/lembaga";
+    if (p.includes("/hayati/")) return "/admin/hayati";
+    if (p.includes("/nonhayati/")) return "/admin/nonhayati";
+    if (p.includes("/toga/")) return "/admin/toga";
+    if (p.includes("/carousel/")) return "/admin/carousel";
+    if (p.includes("/agenda/")) return "/admin/agenda";
+    if (p.includes("/video/")) return "/admin/video";
+    if (p.includes("/foto/")) return "/admin/foto";
+    return "/admin";
+  };
 
   return (
     <div className="admin-wrapper">
       {/* Topbar */}
       <header className="admin-topbar">
-        <button className="admin-toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        <button
+          className="admin-toggle-btn"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
           {sidebarOpen ? <FaTimes /> : <FaBars />}
         </button>
         <div className="admin-topbar-brand">
@@ -67,22 +115,35 @@ function AdminLayout({ children, title }) {
           <span>Admin Panel</span>
         </div>
         <div className="admin-topbar-right">
-          <Button variant="outline-success" size="sm" href="/" className="admin-web-btn">
+          <Button
+            variant="outline-success"
+            size="sm"
+            href="/"
+            className="admin-web-btn"
+          >
             <FaHome /> <span className="d-none d-md-inline">Website</span>
           </Button>
           <div className="admin-user-info">
             <FaUserCircle size={28} className="text-success" />
             <span className="admin-user-email">{user?.email}</span>
-            <button className="admin-logout-btn" onClick={handleLogout} title="Logout">
+            <button
+              className="admin-logout-btn"
+              onClick={handleLogout}
+              title="Logout"
+            >
               <FaSignOutAlt />
             </button>
           </div>
         </div>
       </header>
 
-      {sidebarOpen && <div className="admin-overlay" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && (
+        <div className="admin-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
 
-      <aside className={`admin-sidebar admin-sidebar-luxury ${sidebarOpen ? 'open' : ''}`}>
+      <aside
+        className={`admin-sidebar admin-sidebar-luxury ${sidebarOpen ? "open" : ""}`}
+      >
         <div className="admin-sidebar-header">
           <FaChartPie size={20} />
           <span>Menu</span>
@@ -92,16 +153,24 @@ function AdminLayout({ children, title }) {
             <Link
               key={item.path}
               to={item.path}
-              className={`admin-sidebar-item admin-sidebar-item-luxury ${isActive(item) ? 'active' : ''}`}
+              className={`admin-sidebar-item admin-sidebar-item-luxury ${isActive(item) ? "active" : ""}`}
               onClick={() => setSidebarOpen(false)}
             >
               <item.icon size={16} />
               <span>{item.label}</span>
+              {item.path === "/admin/umkm" && pendingUmkm > 0 && (
+                <span className="admin-sidebar-badge" title={`${pendingUmkm} UMKM menunggu persetujuan`}>
+                  {pendingUmkm}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <button className="admin-sidebar-item admin-sidebar-item-luxury" onClick={handleLogout}>
+          <button
+            className="admin-sidebar-item admin-sidebar-item-luxury"
+            onClick={handleLogout}
+          >
             <FaSignOutAlt size={16} />
             <span>Logout</span>
           </button>
@@ -113,7 +182,10 @@ function AdminLayout({ children, title }) {
           <div className="admin-content-premium">
             <div className="d-flex align-items-center gap-3">
               {isFormPage && (
-                <a href={getBackLink()} className="text-decoration-none text-muted d-flex align-items-center gap-1 small">
+                <a
+                  href={getBackLink()}
+                  className="text-decoration-none text-muted d-flex align-items-center gap-1 small"
+                >
                   <FaArrowLeft /> Kembali
                 </a>
               )}
@@ -124,7 +196,7 @@ function AdminLayout({ children, title }) {
         {children}
       </main>
     </div>
-  )
+  );
 }
 
-export default AdminLayout
+export default AdminLayout;
