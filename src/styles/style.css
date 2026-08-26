@@ -6556,6 +6556,136 @@ textarea.admin-input {
   }
 }
 
+/* ===== GALERI FOTO MODERN (CAROUSEL) ===== */
+.photo-strip-wrap {
+  border-radius: 24px;
+}
+
+.photo-strip {
+  scroll-padding-left: 8px;
+  padding: 8px 8px 16px;
+}
+
+/* Kartu glassmorphism */
+.photo-card {
+  flex: 0 0 300px;
+  width: 300px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-radius: 20px;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+  box-shadow: 0 12px 32px -16px rgba(44, 95, 45, 0.28);
+}
+
+.photo-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 24px 48px -16px rgba(44, 95, 45, 0.4);
+}
+
+[data-theme='dark'] .photo-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Kartu non-aktif sedikit diredupkan */
+.photo-card:not(.active) {
+  opacity: 0.72;
+  filter: saturate(0.85);
+}
+
+.photo-card:not(.active):hover {
+  opacity: 0.9;
+  filter: saturate(0.95);
+}
+
+/* Kartu aktif tampil menonjol */
+.photo-card.active {
+  opacity: 1;
+  filter: saturate(1);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 24px 52px -14px rgba(44, 95, 45, 0.5);
+  border-color: rgba(76, 175, 80, 0.6);
+}
+
+[data-theme='dark'] .photo-card.active {
+  border-color: rgba(76, 175, 80, 0.8);
+  box-shadow: 0 24px 52px -14px rgba(0, 0, 0, 0.7);
+}
+
+/* Animasi zoom gambar lebih halus */
+.photo-thumb img {
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.photo-card:hover .photo-thumb img,
+.photo-card.active .photo-thumb img {
+  transform: scale(1.08);
+}
+
+/* Zoom badge lebih modern */
+.photo-zoom {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.photo-card:hover .photo-zoom {
+  background: rgba(44, 95, 45, 0.75);
+}
+
+/* Titik navigasi dengan animasi pengisi sinkron autoplay */
+.photo-dots {
+  gap: 10px;
+  margin-top: 1.1rem;
+}
+
+.photo-dot {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border-color);
+  transition: background 0.3s ease;
+}
+
+.photo-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2C5F2D, #4CAF50);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.photo-dot.active {
+  width: 26px;
+}
+
+.photo-dot.active::after {
+  animation: photoDotFill var(--autoplay-ms, 4.5s) linear forwards;
+}
+
+@keyframes photoDotFill {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@media (max-width: 767px) {
+  .photo-card {
+    flex: 0 0 calc(100vw - 4rem);
+    width: calc(100vw - 4rem);
+  }
+}
+
 /* ===== MOBILE FRIENDLY ===== */
 @media (max-width: 767px) {
   #lembaga-tabs.nav-tabs {

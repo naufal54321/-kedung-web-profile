@@ -4,12 +4,15 @@ import { Modal } from 'react-bootstrap';
 import { FaCamera, FaChevronLeft, FaChevronRight, FaExpand, FaArrowRight } from 'react-icons/fa';
 import api from '../../utils/api';
 
+const AUTOPLAY_MS = 4500;
+
 function PhotoSection() {
   const [fotos, setFotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
   const stripRef = useRef(null);
 
   useEffect(() => {
@@ -61,6 +64,26 @@ function PhotoSection() {
     setShow(true);
   };
 
+  // Auto-play: geser otomatis ke foto berikutnya, berhenti saat hover/fokus/kurang dari 2 foto
+  useEffect(() => {
+    if (fotos.length < 2 || paused) return undefined;
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % fotos.length);
+    }, AUTOPLAY_MS);
+    return () => clearInterval(timer);
+  }, [fotos.length, paused]);
+
+  // Ikuti perubahan activeIndex dengan scroll halus ke kartu aktif
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip || fotos.length === 0) return;
+    const step = cardStep();
+    const current = Math.round(strip.scrollLeft / step);
+    if (Math.abs(current - activeIndex) > 0) {
+      strip.scrollTo({ left: activeIndex * step, behavior: 'smooth' });
+    }
+  }, [activeIndex, fotos.length]);
+
   return (
     <div className="container">
       <div className="section-card" data-aos="fade-up">
@@ -89,13 +112,25 @@ function PhotoSection() {
           </div>
         ) : (
           <>
-            <div className="photo-strip-wrap" data-aos="fade-up">
+            <div
+              className="photo-strip-wrap"
+              data-aos="fade-up"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              onFocus={() => setPaused(true)}
+              onBlur={() => setPaused(false)}
+            >
               <button type="button" className="photo-arrow photo-arrow-left" onClick={() => scrollByCard(-1)} aria-label="Geser ke kiri">
                 <FaChevronLeft />
               </button>
               <div className="photo-strip" ref={stripRef} onScroll={handleScroll}>
                 {fotos.map((foto, i) => (
-                  <button key={foto.id} type="button" className="photo-card" onClick={() => openPhoto(foto, i)}>
+                  <button
+                    key={foto.id}
+                    type="button"
+                    className={`photo-card${i === activeIndex ? ' active' : ''}`}
+                    onClick={() => openPhoto(foto, i)}
+                  >
                     <div className="photo-thumb">
                       <img src={foto.imgUrl} alt={foto.caption || 'Foto galeri'} loading="lazy" decoding="async" />
                       <span className="photo-zoom">
