@@ -5,9 +5,9 @@ import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaMapMarkerAlt, FaPaperPl
 import api from '../utils/api';
 import SEO from '../components/SEO';
 import ProfilHero from '../components/Profil/ProfilHero';
+import KontakMap from '../components/KontakMap';
 
 const PETA = {
-  embed: 'https://www.google.com/maps?q=-7.8856475010263996,110.30198600000003&z=17&output=embed',
   besar: 'https://www.google.com/maps?q=-7.8856475010263996,110.30198600000003'
 };
 
@@ -88,14 +88,7 @@ function KontakPage() {
                 <div>
                   <span className="fw-semibold d-block">Peta Utama</span>
                   <div className="mt-2">
-                    <iframe
-                      src={PETA.embed}
-                      title="Peta Padukuhan Kedung"
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="kontak-map"
-                    />
+                    <KontakMap />
                     <a href={PETA.besar} target="_blank" rel="noopener noreferrer"
                       className="btn btn-sm btn-outline-success rounded-pill mt-2">
                       <FaExternalLinkAlt className="me-1" />Buka Peta Besar

@@ -6732,3 +6732,72 @@ textarea.admin-input {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(180,83,9,0.3);
 }
+
+/* ===== Kontak Leaflet Map ===== */
+.kontak-map-leaflet {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.kontak-map-leaflet .leaflet-container {
+  font-family: inherit;
+}
+
+.kontak-map-leaflet .leaflet-control-zoom {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.kontak-map-leaflet .leaflet-control-zoom a {
+  border: none;
+  background: var(--card);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.kontak-map-leaflet .leaflet-control-zoom a:hover {
+  background: var(--grey);
+  color: var(--primary);
+}
+
+.kontak-map-leaflet .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 4px 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.kontak-map-leaflet .leaflet-popup-content {
+  margin: 10px 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.kontak-marker-pin {
+  width: 34px;
+  height: 34px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: linear-gradient(135deg, #2C5F2D, #4CAF50);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+}
+
+.kontak-marker-pin span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  transform: rotate(45deg);
+  display: block;
+}
