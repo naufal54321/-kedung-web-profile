@@ -6351,11 +6351,6 @@ textarea.admin-input {
     display: none;
   }
 
-  .photo-strip {
-    mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent);
-  }
-
   .photo-card,
   .photo-card-skeleton {
     flex: 0 0 calc(100vw - 4rem);
@@ -6384,8 +6379,6 @@ textarea.admin-input {
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
 }
 
 .photo-strip::-webkit-scrollbar {
@@ -6395,7 +6388,7 @@ textarea.admin-input {
 .photo-card {
   flex: 0 0 300px;
   width: 300px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   scroll-snap-stop: always;
   padding: 0;
   border: 1px solid transparent;
@@ -6570,7 +6563,7 @@ textarea.admin-input {
 .photo-card {
   flex: 0 0 300px;
   width: 300px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   scroll-snap-stop: always;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -6595,10 +6588,10 @@ textarea.admin-input {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Kartu non-aktif sedikit diredupkan */
+/* Kartu non-aktif sedikit diredupkan agar foto aktif tetap jelas di tengah */
 .photo-card:not(.active) {
-  opacity: 0.72;
-  filter: saturate(0.85);
+  opacity: 0.85;
+  filter: saturate(0.95);
 }
 
 .photo-card:not(.active):hover {
@@ -6610,14 +6603,14 @@ textarea.admin-input {
 .photo-card.active {
   opacity: 1;
   filter: saturate(1);
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 24px 52px -14px rgba(44, 95, 45, 0.5);
-  border-color: rgba(76, 175, 80, 0.6);
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.9), 0 24px 52px -14px rgba(44, 95, 45, 0.55);
+  border-color: rgba(76, 175, 80, 0.75);
 }
 
 [data-theme='dark'] .photo-card.active {
-  border-color: rgba(76, 175, 80, 0.8);
-  box-shadow: 0 24px 52px -14px rgba(0, 0, 0, 0.7);
+  border-color: rgba(76, 175, 80, 0.9);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.85), 0 24px 52px -14px rgba(0, 0, 0, 0.75);
 }
 
 /* Animasi zoom gambar lebih halus */

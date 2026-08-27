@@ -31,31 +31,44 @@ function PhotoSection() {
     return () => { cancelled = true; };
   }, []);
 
-  const cardStep = () => {
+  // Pindah dan senterkan kartu pada indeks tertentu ke tengah container
+  const centerScrollTo = (i) => {
     const strip = stripRef.current;
-    if (!strip) return 300;
-    const card = strip.querySelector('.photo-card');
-    return card ? card.offsetWidth + 24 : 300;
+    if (!strip) return;
+    const index = Math.max(0, Math.min(fotos.length - 1, i));
+    const card = strip.children[index];
+    if (!card) return;
+    const target = card.offsetLeft - (strip.clientWidth - card.clientWidth) / 2;
+    strip.scrollTo({ left: target, behavior: 'smooth' });
+    setActiveIndex(index);
   };
 
   const scrollByCard = (dir) => {
-    const strip = stripRef.current;
-    if (!strip) return;
-    strip.scrollBy({ left: dir * cardStep(), behavior: 'smooth' });
+    centerScrollTo(activeIndex + dir);
   };
 
+  // Saat scroll manual, aktifkan kartu yang paling dekat ke tengah container
   const handleScroll = () => {
     const strip = stripRef.current;
     if (!strip || fotos.length === 0) return;
-    const idx = Math.round(strip.scrollLeft / cardStep());
-    setActiveIndex(Math.max(0, Math.min(fotos.length - 1, idx)));
+    const cards = strip.querySelectorAll('.photo-card');
+    if (cards.length === 0) return;
+    const center = strip.scrollLeft + strip.clientWidth / 2;
+    let closest = 0;
+    let min = Infinity;
+    cards.forEach((card, i) => {
+      const mid = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(mid - center);
+      if (dist < min) {
+        min = dist;
+        closest = i;
+      }
+    });
+    setActiveIndex(closest);
   };
 
   const scrollToCard = (i) => {
-    const strip = stripRef.current;
-    if (!strip) return;
-    strip.scrollTo({ left: i * cardStep(), behavior: 'smooth' });
-    setActiveIndex(i);
+    centerScrollTo(i);
   };
 
   const openPhoto = (foto, index) => {
@@ -73,15 +86,14 @@ function PhotoSection() {
     return () => clearInterval(timer);
   }, [fotos.length, paused]);
 
-  // Ikuti perubahan activeIndex dengan scroll halus ke kartu aktif
+  // Ikuti perubahan activeIndex dengan scroll sentral ke kartu aktif (dari auto-play/klik)
   useEffect(() => {
     const strip = stripRef.current;
     if (!strip || fotos.length === 0) return;
-    const step = cardStep();
-    const current = Math.round(strip.scrollLeft / step);
-    if (Math.abs(current - activeIndex) > 0) {
-      strip.scrollTo({ left: activeIndex * step, behavior: 'smooth' });
-    }
+    const card = strip.children[activeIndex];
+    if (!card) return;
+    const target = card.offsetLeft - (strip.clientWidth - card.clientWidth) / 2;
+    strip.scrollTo({ left: target, behavior: 'smooth' });
   }, [activeIndex, fotos.length]);
 
   return (
