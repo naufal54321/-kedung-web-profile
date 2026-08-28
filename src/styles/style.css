@@ -339,7 +339,7 @@ h1, h2, h3 {
 }
   
 .carousel-item img {
-    filter: brightness(60%);
+    filter: brightness(40%);
 }
 
 .carousel-item {
