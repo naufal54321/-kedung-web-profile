@@ -14,6 +14,7 @@ function PhotoSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const stripRef = useRef(null);
+  const scrollTimerRef = useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -48,23 +49,27 @@ function PhotoSection() {
   };
 
   // Saat scroll manual, aktifkan kartu yang paling dekat ke tengah container
+  // Debounce agar tidak bertabrakan dengan effect scroll otomatis (mencegah loop)
   const handleScroll = () => {
     const strip = stripRef.current;
     if (!strip || fotos.length === 0) return;
-    const cards = strip.querySelectorAll('.photo-card');
-    if (cards.length === 0) return;
-    const center = strip.scrollLeft + strip.clientWidth / 2;
-    let closest = 0;
-    let min = Infinity;
-    cards.forEach((card, i) => {
-      const mid = card.offsetLeft + card.offsetWidth / 2;
-      const dist = Math.abs(mid - center);
-      if (dist < min) {
-        min = dist;
-        closest = i;
-      }
-    });
-    setActiveIndex(closest);
+    if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+    scrollTimerRef.current = setTimeout(() => {
+      const cards = strip.querySelectorAll('.photo-card');
+      if (cards.length === 0) return;
+      const center = strip.scrollLeft + strip.clientWidth / 2;
+      let closest = 0;
+      let min = Infinity;
+      cards.forEach((card, i) => {
+        const mid = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < min) {
+          min = dist;
+          closest = i;
+        }
+      });
+      setActiveIndex(closest);
+    }, 150);
   };
 
   const scrollToCard = (i) => {
@@ -92,9 +97,20 @@ function PhotoSection() {
     if (!strip || fotos.length === 0) return;
     const card = strip.children[activeIndex];
     if (!card) return;
+    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+    const viewCenter = strip.scrollLeft + strip.clientWidth / 2;
+    // Guard: hanya scroll bila kartu aktif belum dekat pusat (hindari loop saat user drag)
+    if (Math.abs(cardCenter - viewCenter) < 12) return;
     const target = card.offsetLeft - (strip.clientWidth - card.clientWidth) / 2;
     strip.scrollTo({ left: target, behavior: 'smooth' });
   }, [activeIndex, fotos.length]);
+
+  // Bersihkan timer debounce saat unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+    };
+  }, []);
 
   return (
     <div className="container">
