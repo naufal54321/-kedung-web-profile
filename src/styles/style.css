@@ -5590,6 +5590,58 @@ textarea.admin-input {
   .umkm-map-header {
     flex-direction: column;
   }
+
+  .umkm-map-chips {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .umkm-map-layout {
+    padding: 0 0.75rem 1rem;
+  }
+
+  .umkm-map-container {
+    min-height: 280px;
+  }
+
+  .umkm-map-leaflet {
+    height: 280px;
+  }
+
+  .umkm-map-panel {
+    max-height: 260px;
+  }
+
+  .umkm-map-title {
+    font-size: 1.1rem;
+  }
+
+  .umkm-map-sub {
+    font-size: 0.8rem;
+  }
+
+  .umkm-map-count {
+    font-size: 0.75rem;
+  }
+
+  .umkm-map-item {
+    padding: 0.55rem 0.7rem;
+    gap: 0.5rem;
+  }
+
+  .umkm-map-item-name {
+    font-size: 0.85rem;
+  }
+
+  .umkm-map-item-cat {
+    font-size: 0.72rem;
+  }
+
+  .umkm-map-chip {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+  }
 }
 
 /* ===== VISI MISI & SEJARAH ===== */
