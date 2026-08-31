@@ -1930,6 +1930,7 @@ h1, h2, h3 {
 
 .detail-body p {
   margin-bottom: 1.2rem;
+  text-align: justify;
 }
 
 .detail-image-embed {
@@ -5661,6 +5662,7 @@ textarea.admin-input {
   line-height: 1.9;
   color: var(--text-primary);
   margin-bottom: 0;
+  text-align: justify;
 }
 
 .vm-list {
