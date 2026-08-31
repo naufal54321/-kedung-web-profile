@@ -20,7 +20,7 @@ const SOSMED = [
 const INFO = [
   { icon: FaHome, label: 'Alamat', text: 'Kedung, Guwosari, Kec. Pajangan, Kab. Bantul, DIY' },
   { icon: FaEnvelope, label: 'Email', text: 'padukuhankedung@gmail.com', href: 'mailto:padukuhankedung@gmail.com' },
-  { icon: FaPhoneAlt, label: 'Telepon', text: '+62 812-3456-7890', href: 'tel:+6281234567890' },
+  { icon: FaPhoneAlt, label: 'Telepon', text: '', href: '' },
   { icon: FaClock, label: 'Jam Layanan', text: 'Senin – Jumat, 08.00 – 15.00 WIB' },
 ];
 

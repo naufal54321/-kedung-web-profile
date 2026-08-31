@@ -5644,6 +5644,11 @@ textarea.admin-input {
   background: linear-gradient(135deg, #1e88e5, #64b5f6);
 }
 
+/* Dark mode filter for OSM tiles */
+[data-theme='dark'] .leaflet-tile {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
 .vm-title {
   font-size: 1.2rem;
   font-weight: 700;

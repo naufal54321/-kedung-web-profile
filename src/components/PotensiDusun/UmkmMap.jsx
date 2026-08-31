@@ -4,10 +4,18 @@ import 'leaflet/dist/leaflet.css';
 import { FaMapMarkedAlt, FaWhatsapp, FaChevronRight, FaStore } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const LIGHT_TILES = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const TILE_PROVIDERS = [
+  {
+    name: 'OpenStreetMap',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  },
+  {
+    name: 'Esri World Street Map',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+    attribution: '&copy; Esri, HERE, Garmin, OpenStreetMap contributors'
+  }
+];
 
 const esc = (s = '') =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -25,6 +33,7 @@ const UmkmMap = ({ umkmList }) => {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const tileLayerRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState('semua');
   const [selected, setSelected] = useState(null);
 
@@ -40,21 +49,46 @@ const UmkmMap = ({ umkmList }) => {
 
   useEffect(() => {
     if (!containerRef.current || items.length === 0) return;
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const map = L.map(containerRef.current, {
       scrollWheelZoom: false,
       zoomControl: false,
     });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
-    L.tileLayer(isDark ? DARK_TILES : LIGHT_TILES, {
-      attribution: TILE_ATTRIBUTION,
-      maxZoom: 19,
-    }).addTo(map);
     mapRef.current = map;
+
+    // Try first provider, fallback on tile error
+    let tileIndex = 0;
+
+    function addTiles() {
+      const provider = TILE_PROVIDERS[tileIndex];
+      if (!provider) return;
+
+      const layer = L.tileLayer(provider.url, {
+        attribution: provider.attribution,
+        maxZoom: 19,
+      });
+
+      let errorCount = 0;
+      layer.on('tileerror', () => {
+        errorCount++;
+        if (errorCount >= 3 && tileIndex < TILE_PROVIDERS.length - 1) {
+          map.removeLayer(layer);
+          tileIndex++;
+          addTiles();
+        }
+      });
+
+      layer.addTo(map);
+      tileLayerRef.current = layer;
+    }
+
+    addTiles();
+
     return () => {
       map.remove();
       mapRef.current = null;
       markersRef.current = [];
+      tileLayerRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [umkmList]);
