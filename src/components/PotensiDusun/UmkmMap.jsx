@@ -4,18 +4,15 @@ import 'leaflet/dist/leaflet.css';
 import { FaMapMarkedAlt, FaWhatsapp, FaChevronRight, FaStore } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const TILE_PROVIDERS = [
-  {
-    name: 'OpenStreetMap',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  },
-  {
-    name: 'Esri World Street Map',
-    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-    attribution: '&copy; Esri, HERE, Garmin, OpenStreetMap contributors'
-  }
-];
+const STREET_TILE = {
+  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+};
+
+const SATELLITE_TILE = {
+  url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+};
 
 const esc = (s = '') =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -36,6 +33,7 @@ const UmkmMap = ({ umkmList }) => {
   const tileLayerRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState('semua');
   const [selected, setSelected] = useState(null);
+  const [isSatellite, setIsSatellite] = useState(false);
 
   const items = useMemo(() => (umkmList || []).filter((u) => u.lat && u.lng), [umkmList]);
   const visibleItems = useMemo(
@@ -56,34 +54,6 @@ const UmkmMap = ({ umkmList }) => {
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     mapRef.current = map;
 
-    // Try first provider, fallback on tile error
-    let tileIndex = 0;
-
-    function addTiles() {
-      const provider = TILE_PROVIDERS[tileIndex];
-      if (!provider) return;
-
-      const layer = L.tileLayer(provider.url, {
-        attribution: provider.attribution,
-        maxZoom: 19,
-      });
-
-      let errorCount = 0;
-      layer.on('tileerror', () => {
-        errorCount++;
-        if (errorCount >= 3 && tileIndex < TILE_PROVIDERS.length - 1) {
-          map.removeLayer(layer);
-          tileIndex++;
-          addTiles();
-        }
-      });
-
-      layer.addTo(map);
-      tileLayerRef.current = layer;
-    }
-
-    addTiles();
-
     return () => {
       map.remove();
       mapRef.current = null;
@@ -92,6 +62,23 @@ const UmkmMap = ({ umkmList }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [umkmList]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (tileLayerRef.current) {
+      map.removeLayer(tileLayerRef.current);
+    }
+
+    const tile = isSatellite ? SATELLITE_TILE : STREET_TILE;
+    const layer = L.tileLayer(tile.url, {
+      attribution: tile.attribution,
+      maxZoom: 19,
+    }).addTo(map);
+
+    tileLayerRef.current = layer;
+  }, [isSatellite, umkmList]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -235,8 +222,30 @@ const UmkmMap = ({ umkmList }) => {
             })
           )}
         </div>
-        <div className="umkm-map-container">
+        <div className="umkm-map-container" style={{ position: 'relative' }}>
           <div ref={containerRef} className="umkm-map-leaflet" />
+          <button
+            onClick={() => setIsSatellite((prev) => !prev)}
+            className="map-toggle-btn"
+            title={isSatellite ? 'Tampilkan Peta' : 'Tampilkan Satelit'}
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              zIndex: 1000,
+              background: 'var(--card, #fff)',
+              border: '1px solid var(--border-color, #ccc)',
+              borderRadius: 8,
+              padding: '6px 12px',
+              cursor: 'pointer',
+              fontSize: 13,
+              fontWeight: 600,
+              color: 'var(--text-primary, #333)',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+            }}
+          >
+            {isSatellite ? '🗺️ Peta' : '🛰️ Satelit'}
+          </button>
         </div>
       </div>
     </div>
