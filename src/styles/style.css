@@ -6562,6 +6562,8 @@ textarea.admin-input {
 .photo-strip {
   scroll-padding-left: 8px;
   padding: 8px 8px 16px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Kartu glassmorphism */
@@ -6571,7 +6573,7 @@ textarea.admin-input {
   scroll-snap-align: center;
   scroll-snap-stop: always;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: none;
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
@@ -6579,8 +6581,9 @@ textarea.admin-input {
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
   box-shadow: 0 12px 32px -16px rgba(44, 95, 45, 0.28);
+  will-change: transform;
 }
 
 .photo-card:hover {
@@ -6590,7 +6593,6 @@ textarea.admin-input {
 
 [data-theme='dark'] .photo-card {
   background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Kartu non-aktif sedikit diredupkan agar foto aktif tetap jelas di tengah */
@@ -6609,13 +6611,11 @@ textarea.admin-input {
   opacity: 1;
   filter: saturate(1);
   transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.9), 0 24px 52px -14px rgba(44, 95, 45, 0.55);
-  border-color: rgba(76, 175, 80, 0.75);
+  box-shadow: 0 24px 52px -14px rgba(44, 95, 45, 0.55);
 }
 
 [data-theme='dark'] .photo-card.active {
-  border-color: rgba(76, 175, 80, 0.9);
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.85), 0 24px 52px -14px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 24px 52px -14px rgba(0, 0, 0, 0.75);
 }
 
 /* Animasi zoom gambar lebih halus */
