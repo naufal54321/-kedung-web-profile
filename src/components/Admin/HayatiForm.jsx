@@ -78,8 +78,9 @@ function HayatiForm() {
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
         setForm({ name: '', imgUrl: '' })
       }
-    } catch {
-      setError('Gagal menyimpan data')
+    } catch (err) {
+      console.error('HayatiForm save error:', err)
+      setError(err?.message || 'Gagal menyimpan data')
     }
     setLoading(false)
   }
