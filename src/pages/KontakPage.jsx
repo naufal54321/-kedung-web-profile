@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Alert, Spinner } from 'react-bootstrap';
-import Swal from 'sweetalert2';
 import { FaEnvelope, FaInstagram, FaTiktok, FaYoutube, FaPaperPlane, FaHome, FaExternalLinkAlt, FaPhoneAlt, FaClock } from 'react-icons/fa';
 import api from '../utils/api';
 import SEO from '../components/SEO';
@@ -51,6 +50,7 @@ function KontakPage() {
       const payload = { ...form };
       delete payload.website;
       await api.publicCreateMessage(payload);
+      const { default: Swal } = await import('sweetalert2');
       Swal.fire({ icon: 'success', title: 'Pesan Terkirim!', text: 'Terima kasih, pesan Anda akan kami tindak lanjuti.', timer: 3000, showConfirmButton: false });
       setForm({ name: '', email: '', phone: '', subject: '', message: '', website: '' });
     } catch {

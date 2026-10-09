@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import PurgeCSS from 'vite-plugin-purgecss'
 
 export default defineConfig({
   plugins: [
@@ -22,7 +23,17 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpeg,webp}'],
+        globIgnores: ['**/heic2any-*.js'],
       },
+    }),
+    PurgeCSS({
+      content: ['./src/**/*.{js,jsx}', './index.html'],
+      safelist: {
+        standard: [/^(carousel|modal|offcanvas|collapse|show|fade|active|btn|form|is-invalid|was-validated)/, /^admin-/],
+        deep: [/^leaflet/, /^sweetalert2/, /^swal2/, /^fc/, /^chart/],
+      },
+      fontFace: false,
+      variables: false,
     }),
   ],
   build: {
@@ -32,9 +43,6 @@ export default defineConfig({
           vendor: ['react', 'react-dom', 'react-router-dom'],
           firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
           ui: ['bootstrap', 'react-bootstrap', 'react-icons'],
-          charts: ['chart.js', 'react-chartjs-2'],
-          calendar: ['@fullcalendar/core', '@fullcalendar/daygrid', '@fullcalendar/interaction', '@fullcalendar/react'],
-          maps: ['leaflet'],
         }
       }
     },

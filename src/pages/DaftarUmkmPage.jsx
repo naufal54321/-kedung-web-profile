@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Alert, Spinner, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { FaArrowLeft, FaStore } from 'react-icons/fa';
 import api from '../utils/api';
 import uploadToImgBB from '../utils/imageUpload';
@@ -51,6 +50,7 @@ function DaftarUmkmPage() {
       const payload = { ...form };
       delete payload.website;
       await api.publicCreateUmkm(payload);
+      const { default: Swal } = await import('sweetalert2');
       Swal.fire({ icon: 'success', title: 'Terdaftar!', text: 'UMKM berhasil didaftarkan! Data akan ditinjau oleh admin.', timer: 3000, showConfirmButton: false })
       setForm({ name: '', owner: '', category: '', price: '', contact: '', description: '', imgUrl: '', website: '' });
     } catch {
