@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import CarouselCustom from '../components/Carousel';
-import DeveloperCard from '../components/Home/DeveloperList';
 import ArticleList from '../components/Home/ArticleList';
 import api from '../utils/api';
 import KedungList from '../components/Home/KedungList';
@@ -157,17 +156,6 @@ function HomePage() {
           </div>
         </div>
 
-        <div className='row mt-4 mb-5' data-aos="fade-up">
-          <div className="col-12">
-            <div className="section-card">
-              <div className="section-header">
-                <h2 className="section-title" id='about-developer'>Tentang Developer</h2>
-              </div>
-              <p className="section-subtitle">Mari kenal dengan para Developer kami</p>
-              <DeveloperCard />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
