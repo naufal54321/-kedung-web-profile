@@ -27,6 +27,7 @@ const AgendaPage = lazy(() => import('../pages/AgendaPage'));
 const DaftarUmkmPage = lazy(() => import('../pages/DaftarUmkmPage'));
 const KontakPage = lazy(() => import('../pages/KontakPage'));
 const GaleriPage = lazy(() => import('../pages/GaleriPage'));
+const PersyaratanPage = lazy(() => import('../pages/PersyaratanPage'));
 const LoginPage = lazy(() => import('./Admin/LoginPage'));
 const Dashboard = lazy(() => import('./Admin/Dashboard'));
 const ArticleForm = lazy(() => import('./Admin/ArticleForm'));
@@ -90,6 +91,7 @@ function KedungApp() {
             <Route path="/Daftar-UMKM" element={<DaftarUmkmPage />} />
             <Route path="/Kontak" element={<KontakPage />} />
             <Route path="/Galeri" element={<GaleriPage />} />
+            <Route path="/Persyaratan-Pelayanan" element={<PersyaratanPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/artikel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

@@ -20,6 +20,7 @@ const pathLabels = {
   'Daftar-UMKM': 'Daftar UMKM',
   'Kontak': 'Kontak',
   'Agenda': 'Agenda',
+  'Persyaratan-Pelayanan': 'Persyaratan Pelayanan',
   'Sejarah': 'Sejarah',
 };
 

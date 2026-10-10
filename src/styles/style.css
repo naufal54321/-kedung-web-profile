@@ -7119,4 +7119,369 @@ textarea.admin-input {
 
 .kontak-form-card .public-form-header {
   border-bottom-color: rgba(13, 110, 253, 0.15);
+
+/* ===== PERSYARATAN PELAYANAN ===== */
+.persyaratan-search-wrapper {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+.persyaratan-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.persyaratan-search {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.persyaratan-search:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+.persyaratan-search::placeholder {
+  color: var(--text-muted);
+}
+
+.persyaratan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.persyaratan-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.persyaratan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #4CAF50;
+}
+
+.persyaratan-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(44, 95, 45, 0.1);
+  color: #2C5F2D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.persyaratan-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.persyaratan-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  color: var(--text);
+}
+
+.persyaratan-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.persyaratan-card-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.persyaratan-card:hover .persyaratan-card-arrow {
+  transform: translateX(4px);
+  color: #4CAF50;
+}
+
+.persyaratan-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+/* Detail */
+.persyaratan-detail {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.persyaratan-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.persyaratan-detail-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(44, 95, 45, 0.1);
+  color: #2C5F2D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.persyaratan-detail-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+  color: var(--text);
+}
+
+.persyaratan-detail-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* Checklist */
+.persyaratan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.persyaratan-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.persyaratan-item:last-child {
+  border-bottom: none;
+}
+
+.persyaratan-item.checked .persyaratan-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.persyaratan-check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.persyaratan-checkbox {
+  display: none;
+}
+
+.persyaratan-check-custom {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  color: transparent;
+}
+
+.persyaratan-item.checked .persyaratan-check-custom {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: #fff;
+}
+
+.persyaratan-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.persyaratan-note {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Sub-tabs (Pengantar Nikah) */
+.persyaratan-sub-tabs .nav-tabs {
+  border-bottom: 2px solid var(--border-color);
+  gap: 0.5rem;
+}
+
+.persyaratan-sub-tabs .nav-tabs .nav-link {
+  border: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+.persyaratan-sub-tabs .nav-tabs .nav-link.active {
+  color: #2C5F2D;
+  background: rgba(44, 95, 45, 0.08);
+  border-bottom: 2px solid #2C5F2D;
+}
+
+/* Action buttons */
+.persyaratan-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.persyaratan-btn-back,
+.persyaratan-btn-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.persyaratan-btn-back {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border-color);
+}
+
+.persyaratan-btn-back:hover {
+  background: var(--border-color);
+}
+
+.persyaratan-btn-print {
+  background: linear-gradient(135deg, #2C5F2D, #4CAF50);
+  color: #fff;
+}
+
+.persyaratan-btn-print:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 95, 45, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .persyaratan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .persyaratan-detail-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .persyaratan-actions {
+    flex-direction: column;
+  }
+
+  .persyaratan-btn-back,
+  .persyaratan-btn-print {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Dark theme */
+[data-theme='dark'] .persyaratan-card-icon,
+[data-theme='dark'] .persyaratan-detail-icon {
+  background: rgba(76, 175, 80, 0.15);
+  color: #81c784;
+}
+
+[data-theme='dark'] .persyaratan-sub-tabs .nav-tabs .nav-link.active {
+  color: #81c784;
+  background: rgba(76, 175, 80, 0.1);
+  border-bottom-color: #81c784;
+}
+
+/* Print */
+@media print {
+  .no-print,
+  header,
+  footer,
+  .app-footer,
+  .footer-social,
+  .scroll-top-fab,
+  .update-prompt {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  .persyaratan-detail {
+    max-width: 100%;
+  }
+
+  .persyaratan-detail-header {
+    margin-bottom: 1rem;
+  }
+
+  .persyaratan-item {
+    page-break-inside: avoid;
+  }
+
+  .persyaratan-check-custom {
+    border: 1px solid #333;
+  }
+
+  .persyaratan-note {
+    background: #f5f5f5;
+    border-color: #ccc;
+  }
+
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+}
 }

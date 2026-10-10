@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthState } from './Admin/useAuthState';
-import { FaNewspaper, FaStore, FaCalendarAlt, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope, FaSearch } from 'react-icons/fa';
+import { FaNewspaper, FaStore, FaCalendarAlt, FaCode, FaShieldAlt, FaSun, FaMoon, FaEnvelope, FaSearch, FaClipboardList } from 'react-icons/fa';
 import SearchOverlay from './SearchOverlay';
 
 function NavApp() {
@@ -84,6 +84,12 @@ function NavApp() {
               <Link to="/Agenda" className={`nav-link rounded px-2 text-nowrap d-flex align-items-center gap-1 ${location.pathname === '/Agenda' ? 'active' : ''}`}
                 aria-current={location.pathname === '/Agenda' ? 'page' : undefined}>
                 <FaCalendarAlt size={14} /> Agenda
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link to="/Persyaratan-Pelayanan" className={`nav-link rounded px-2 text-nowrap d-flex align-items-center gap-1 ${location.pathname === '/Persyaratan-Pelayanan' ? 'active' : ''}`}
+                aria-current={location.pathname === '/Persyaratan-Pelayanan' ? 'page' : undefined}>
+                <FaClipboardList size={14} /> Persyaratan
               </Link>
             </Nav.Item>
             <Nav.Item>
