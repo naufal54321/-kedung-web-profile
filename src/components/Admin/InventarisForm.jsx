@@ -86,8 +86,9 @@ function InventarisForm() {
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data inventaris berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
         setForm({ namaBarang: '', jumlah: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', statusPinjam: 'tidak_dipinjam', foto: '' })
       }
-    } catch {
-      setError('Gagal menyimpan data inventaris')
+    } catch (err) {
+      console.error('Inventaris save error:', err)
+      setError('Gagal menyimpan: ' + (err?.message || 'Unknown error'))
     }
     setLoading(false)
   }
