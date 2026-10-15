@@ -17,7 +17,8 @@ function InventarisForm() {
     kondisi: 'baik',
     tanggalPerolehan: '',
     keterangan: '',
-    rt: '',
+    pemilik: '',
+    statusPinjam: 'tidak_dipinjam',
     foto: ''
   })
   const [loading, setLoading] = useState(false)
@@ -36,7 +37,8 @@ function InventarisForm() {
           kondisi: item.kondisi || 'baik',
           tanggalPerolehan: item.tanggalPerolehan || '',
           keterangan: item.keterangan || '',
-          rt: item.rt || '',
+          pemilik: item.pemilik || '',
+          statusPinjam: item.statusPinjam || 'tidak_dipinjam',
           foto: item.foto || ''
         })
       } catch {
@@ -82,7 +84,7 @@ function InventarisForm() {
       } else {
         await api.createInventaris(payload)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data inventaris berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ namaBarang: '', jumlah: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', rt: '', foto: '' })
+        setForm({ namaBarang: '', jumlah: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', statusPinjam: 'tidak_dipinjam', foto: '' })
       }
     } catch {
       setError('Gagal menyimpan data inventaris')
@@ -129,25 +131,26 @@ function InventarisForm() {
             <Row>
               <Col md={6}>
                 <div className="admin-input-group">
-                  <Form.Label>RT <span className="text-danger">*</span></Form.Label>
-                  <Form.Select name="rt" value={form.rt} onChange={handleChange} required className="admin-input">
-                    <option value="">Pilih RT</option>
-                    <option value="RT 01">RT 01</option>
-                    <option value="RT 02">RT 02</option>
-                    <option value="RT 03">RT 03</option>
-                    <option value="RT 04">RT 04</option>
-                    <option value="RT 05">RT 05</option>
-                    <option value="RT 06">RT 06</option>
-                  </Form.Select>
+                  <Form.Label>Pemilik <span className="text-danger">*</span></Form.Label>
+                  <Form.Control type="text" name="pemilik" value={form.pemilik} onChange={handleChange} required className="admin-input" placeholder="Contoh: RT 01, Karang Taruna, Dukuh" />
                 </div>
               </Col>
-              <Col md={6}>
+              <Col md={3}>
                 <div className="admin-input-group">
                   <Form.Label>Kondisi <span className="text-danger">*</span></Form.Label>
                   <Form.Select name="kondisi" value={form.kondisi} onChange={handleChange} required className="admin-input">
                     <option value="baik">Baik</option>
                     <option value="rusak_ringan">Rusak Ringan</option>
                     <option value="rusak_berat">Rusak Berat</option>
+                  </Form.Select>
+                </div>
+              </Col>
+              <Col md={3}>
+                <div className="admin-input-group">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select name="statusPinjam" value={form.statusPinjam} onChange={handleChange} className="admin-input">
+                    <option value="tidak_dipinjam">Tersedia</option>
+                    <option value="dipinjam">Dipinjam</option>
                   </Form.Select>
                 </div>
               </Col>

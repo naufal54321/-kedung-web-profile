@@ -7528,3 +7528,21 @@ textarea.admin-input {
     padding: 1rem;
   }
 }
+
+.inventaris-dipinjam {
+  opacity: 0.8;
+}
+
+.inventaris-dipinjam::after {
+  content: 'DIPINJAM';
+  position: absolute;
+  top: 12px;
+  right: -30px;
+  background: #dc3545;
+  color: #fff;
+  padding: 4px 40px;
+  font-size: 10px;
+  font-weight: bold;
+  transform: rotate(45deg);
+  letter-spacing: 1px;
+}

@@ -267,12 +267,17 @@ function Dashboard() {
       ],
       inventaris: [
         { key: 'namaBarang', label: 'Nama Barang', render: (item) => <span className="fw-medium">{item.namaBarang}</span> },
-        { key: 'rt', label: 'RT', render: (item) => <span className="badge bg-primary">{item.rt || '-'}</span> },
+        { key: 'pemilik', label: 'Pemilik', render: (item) => <span className="badge bg-primary">{item.pemilik || '-'}</span> },
         { key: 'jumlah', label: 'Jumlah', className: 'd-none d-md-table-cell' },
         { key: 'kondisi', label: 'Kondisi', render: (item) => {
           const kondisiMap = { baik: { text: 'Baik', class: 'bg-success' }, rusak_ringan: { text: 'Rusak Ringan', class: 'bg-warning text-dark' }, rusak_berat: { text: 'Rusak Berat', class: 'bg-danger' } }
           const k = kondisiMap[item.kondisi] || kondisiMap.baik
           return <span className={`badge ${k.class}`}>{k.text}</span>
+        }},
+        { key: 'statusPinjam', label: 'Status', render: (item) => {
+          const statusMap = { tidak_dipinjam: { text: 'Tersedia', class: 'bg-success' }, dipinjam: { text: 'Dipinjam', class: 'bg-danger' } }
+          const s = statusMap[item.statusPinjam] || statusMap.tidak_dipinjam
+          return <span className={`badge ${s.class}`}>{s.text}</span>
         }},
         { key: 'foto', label: 'Foto', className: 'd-none d-md-table-cell', render: (item) => item.foto ? <img src={item.foto} alt={item.namaBarang} style={{ width: 60, height: 40, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-secondary">Tidak</span> },
       ],

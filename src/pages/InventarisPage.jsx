@@ -4,17 +4,20 @@ import api from '../utils/api'
 import ProfilHero from '../components/Profil/ProfilHero'
 import SEO from '../components/SEO'
 
-const RT_OPTIONS = ['Semua', 'RT 01', 'RT 02', 'RT 03', 'RT 04', 'RT 05', 'RT 06']
-
 const KONDISI_CONFIG = {
   baik: { text: 'Baik', bg: 'success' },
   rusak_ringan: { text: 'Rusak Ringan', bg: 'warning text-dark' },
   rusak_berat: { text: 'Rusak Berat', bg: 'danger' }
 }
 
+const STATUS_PINJAM_CONFIG = {
+  tidak_dipinjam: { text: 'Tersedia', bg: 'success' },
+  dipinjam: { text: 'Dipinjam', bg: 'danger' }
+}
+
 function InventarisPage() {
   const [inventarisList, setInventarisList] = useState([])
-  const [filterRt, setFilterRt] = useState('Semua')
+  const [filterPemilik, setFilterPemilik] = useState('Semua')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -30,16 +33,18 @@ function InventarisPage() {
     fetchInventaris()
   }, [])
 
-  const filteredData = filterRt === 'Semua'
+  const pemilikOptions = ['Semua', ...new Set(inventarisList.map(item => item.pemilik).filter(Boolean))]
+
+  const filteredData = filterPemilik === 'Semua'
     ? inventarisList
-    : inventarisList.filter(item => item.rt === filterRt)
+    : inventarisList.filter(item => item.pemilik === filterPemilik)
 
   return (
     <>
-      <SEO title="Inventaris RT" description="Daftar inventaris barang Padukuhan Kedung" />
+      <SEO title="Inventaris" description="Daftar inventaris barang Padukuhan Kedung" />
       <ProfilHero
-        title="Inventaris RT"
-        subtitle="Daftar inventaris barang milik RT di Padukuhan Kedung"
+        title="Inventaris"
+        subtitle="Daftar inventaris barang milik RT dan Karang Taruna Padukuhan Kedung"
       />
 
       <section className="py-5">
@@ -48,18 +53,20 @@ function InventarisPage() {
             <h5 className="fw-bold m-0" style={{ color: '#2C5F2D' }}>
               Daftar Inventaris Barang
             </h5>
-            <div className="d-flex align-items-center gap-2">
-              <label className="m-0 text-muted small">Filter RT:</label>
-              <Form.Select
-                value={filterRt}
-                onChange={(e) => setFilterRt(e.target.value)}
-                style={{ width: 'auto', minWidth: 140 }}
-              >
-                {RT_OPTIONS.map(rt => (
-                  <option key={rt} value={rt}>{rt}</option>
-                ))}
-              </Form.Select>
-            </div>
+            {pemilikOptions.length > 1 && (
+              <div className="d-flex align-items-center gap-2">
+                <label className="m-0 text-muted small">Filter:</label>
+                <Form.Select
+                  value={filterPemilik}
+                  onChange={(e) => setFilterPemilik(e.target.value)}
+                  style={{ width: 'auto', minWidth: 160 }}
+                >
+                  {pemilikOptions.map(p => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </Form.Select>
+              </div>
+            )}
           </div>
 
           {loading ? (
@@ -76,9 +83,10 @@ function InventarisPage() {
             <Row className="g-4">
               {filteredData.map(item => {
                 const kondisi = KONDISI_CONFIG[item.kondisi] || KONDISI_CONFIG.baik
+                const statusPinjam = STATUS_PINJAM_CONFIG[item.statusPinjam] || STATUS_PINJAM_CONFIG.tidak_dipinjam
                 return (
                   <Col md={6} lg={4} key={item.id}>
-                    <Card className="inventaris-card h-100 border-0 shadow-sm">
+                    <Card className={`inventaris-card h-100 border-0 shadow-sm ${item.statusPinjam === 'dipinjam' ? 'inventaris-dipinjam' : ''}`}>
                       {item.foto && (
                         <div className="inventaris-card-img">
                           <Image src={item.foto} alt={item.namaBarang} fluid className="w-100" style={{ height: 180, objectFit: 'cover' }} />
@@ -87,8 +95,9 @@ function InventarisPage() {
                       <Card.Body className="d-flex flex-column">
                         <Card.Title className="fw-bold fs-6 mb-2">{item.namaBarang}</Card.Title>
                         <div className="d-flex flex-wrap gap-2 mb-2">
-                          <Badge bg="primary">{item.rt || '-'}</Badge>
+                          <Badge bg="primary">{item.pemilik || '-'}</Badge>
                           <Badge bg={kondisi.bg}>{kondisi.text}</Badge>
+                          <Badge bg={statusPinjam.bg}>{statusPinjam.text}</Badge>
                           <Badge bg="secondary">Jumlah: {item.jumlah || 0}</Badge>
                         </div>
                         {item.tanggalPerolehan && (
