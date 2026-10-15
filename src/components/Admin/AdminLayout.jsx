@@ -22,6 +22,7 @@ import {
   FaLeaf,
   FaMountain,
   FaSeedling,
+  FaClipboardList,
 } from "react-icons/fa";
 import { signOut } from "firebase/auth";
 import { auth } from "../../utils/firebase";
@@ -43,6 +44,7 @@ const sidebarItems = [
   { path: "/admin/foto", icon: FaCamera, label: "Foto" },
   { path: "/admin/pesan", icon: FaEnvelope, label: "Pesan Masuk" },
   { path: "/admin/komentar", icon: FaComments, label: "Komentar" },
+  { path: "/admin/inventaris", icon: FaClipboardList, label: "Inventaris RT" },
 ];
 
 function AdminLayout({ children, title }) {
@@ -97,6 +99,7 @@ function AdminLayout({ children, title }) {
     if (p.includes("/agenda/")) return "/admin/agenda";
     if (p.includes("/video/")) return "/admin/video";
     if (p.includes("/foto/")) return "/admin/foto";
+    if (p.includes("/inventaris/")) return "/admin/inventaris";
     return "/admin";
   };
 

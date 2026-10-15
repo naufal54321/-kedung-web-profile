@@ -28,6 +28,7 @@ const DaftarUmkmPage = lazy(() => import('../pages/DaftarUmkmPage'));
 const KontakPage = lazy(() => import('../pages/KontakPage'));
 const GaleriPage = lazy(() => import('../pages/GaleriPage'));
 const PersyaratanPage = lazy(() => import('../pages/PersyaratanPage'));
+const InventarisPage = lazy(() => import('../pages/InventarisPage'));
 const LoginPage = lazy(() => import('./Admin/LoginPage'));
 const Dashboard = lazy(() => import('./Admin/Dashboard'));
 const ArticleForm = lazy(() => import('./Admin/ArticleForm'));
@@ -40,6 +41,7 @@ const VideoForm = lazy(() => import('./Admin/VideoForm'));
 const PhotoForm = lazy(() => import('./Admin/PhotoForm'));
 const HayatiForm = lazy(() => import('./Admin/HayatiForm'));
 const TogaForm = lazy(() => import('./Admin/TogaForm'));
+const InventarisForm = lazy(() => import('./Admin/InventarisForm'));
 
 function KedungApp() {
   const [showAgendaModal, setShowAgendaModal] = useState(false);
@@ -91,7 +93,8 @@ function KedungApp() {
             <Route path="/Daftar-UMKM" element={<DaftarUmkmPage />} />
             <Route path="/Kontak" element={<KontakPage />} />
             <Route path="/Galeri" element={<GaleriPage />} />
-            <Route path="/Persyaratan-Pelayanan" element={<PersyaratanPage />} />
+              <Route path="/Persyaratan-Pelayanan" element={<PersyaratanPage />} />
+              <Route path="/Inventaris-RT" element={<InventarisPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/artikel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -106,7 +109,8 @@ function KedungApp() {
             <Route path="/admin/video" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/foto" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/pesan" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/komentar" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/admin/komentar" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/admin/inventaris" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/articles/new" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/articles/edit/:id" element={<ProtectedRoute><ArticleForm /></ProtectedRoute>} />
             <Route path="/admin/umkm/new" element={<ProtectedRoute><UmkmForm /></ProtectedRoute>} />
@@ -128,7 +132,9 @@ function KedungApp() {
             <Route path="/admin/video/new" element={<ProtectedRoute><VideoForm /></ProtectedRoute>} />
             <Route path="/admin/video/edit/:id" element={<ProtectedRoute><VideoForm /></ProtectedRoute>} />
             <Route path="/admin/foto/new" element={<ProtectedRoute><PhotoForm /></ProtectedRoute>} />
-            <Route path="/admin/foto/edit/:id" element={<ProtectedRoute><PhotoForm /></ProtectedRoute>} />
+              <Route path="/admin/foto/edit/:id" element={<ProtectedRoute><PhotoForm /></ProtectedRoute>} />
+              <Route path="/admin/inventaris/new" element={<ProtectedRoute><InventarisForm /></ProtectedRoute>} />
+              <Route path="/admin/inventaris/edit/:id" element={<ProtectedRoute><InventarisForm /></ProtectedRoute>} />
           </Routes>
           </div>
         </Suspense>

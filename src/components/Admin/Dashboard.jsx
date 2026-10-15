@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 import TwoFactorModal from './TwoFactorModal'
 
-const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar', hayati: 'hayati', nonhayati: 'nonhayati', toga: 'toga' }
+const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar', hayati: 'hayati', nonhayati: 'nonhayati', toga: 'toga', inventaris: 'inventaris' }
 
 const tabs = [
   { key: 'artikel', icon: FaNewspaper, label: 'Artikel', detailsLink: '/admin/artikel', color: '#fff', bg: 'linear-gradient(135deg, #2C5F2D, #4CAF50)' },
@@ -25,6 +25,7 @@ const tabs = [
   { key: 'foto', icon: FaCamera, label: 'Foto', detailsLink: '/admin/foto', color: '#fff', bg: 'linear-gradient(135deg, #6A1B9A, #BA68C8)' },
   { key: 'pesan', icon: FaEnvelope, label: 'Pesan Masuk', detailsLink: '/admin/pesan', color: '#fff', bg: 'linear-gradient(135deg, #00695C, #26A69A)' },
   { key: 'komentar', icon: FaComments, label: 'Komentar', detailsLink: '/admin/komentar', color: '#fff', bg: 'linear-gradient(135deg, #455A64, #78909C)' },
+  { key: 'inventaris', icon: FaClipboardList, label: 'Inventaris RT', detailsLink: '/admin/inventaris', color: '#fff', bg: 'linear-gradient(135deg, #5D4037, #8D6E63)' },
 ]
 
 function Dashboard() {
@@ -61,6 +62,7 @@ function Dashboard() {
       foto: () => api.getAllFotos(),
       pesan: () => api.getAllMessages(),
       komentar: () => api.getAllComments(),
+      inventaris: () => api.getAllInventaris(),
     }
     for (const [key, fn] of Object.entries(fetchers)) {
       setLoading(prev => ({ ...prev, [key]: true }))
@@ -103,12 +105,12 @@ function Dashboard() {
   }
 
   const getEditLink = (key, id) => {
-    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/', toga: '/admin/toga/edit/' }
+    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/', toga: '/admin/toga/edit/', inventaris: '/admin/inventaris/edit/' }
     return paths[key] + id
   }
 
   const getNewLink = (key) => {
-    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new', hayati: '/admin/hayati/new', nonhayati: '/admin/nonhayati/new', toga: '/admin/toga/new' }
+    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new', hayati: '/admin/hayati/new', nonhayati: '/admin/nonhayati/new', toga: '/admin/toga/new', inventaris: '/admin/inventaris/new' }
     return paths[key]
   }
 
@@ -263,6 +265,17 @@ function Dashboard() {
         { key: 'text', label: 'Komentar', render: (item) => <div><span className="fw-medium">{item.text}</span></div> },
         { key: 'createdAt', label: 'Waktu', className: 'd-none d-md-table-cell', render: (item) => item.createdAt ? new Date(item.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-' },
       ],
+      inventaris: [
+        { key: 'namaBarang', label: 'Nama Barang', render: (item) => <span className="fw-medium">{item.namaBarang}</span> },
+        { key: 'rt', label: 'RT', render: (item) => <span className="badge bg-primary">{item.rt || '-'}</span> },
+        { key: 'jumlah', label: 'Jumlah', className: 'd-none d-md-table-cell' },
+        { key: 'kondisi', label: 'Kondisi', render: (item) => {
+          const kondisiMap = { baik: { text: 'Baik', class: 'bg-success' }, rusak_ringan: { text: 'Rusak Ringan', class: 'bg-warning text-dark' }, rusak_berat: { text: 'Rusak Berat', class: 'bg-danger' } }
+          const k = kondisiMap[item.kondisi] || kondisiMap.baik
+          return <span className={`badge ${k.class}`}>{k.text}</span>
+        }},
+        { key: 'foto', label: 'Foto', className: 'd-none d-md-table-cell', render: (item) => item.foto ? <img src={item.foto} alt={item.namaBarang} style={{ width: 60, height: 40, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-secondary">Tidak</span> },
+      ],
     }
 
     return (
@@ -320,7 +333,7 @@ function Dashboard() {
                           if (tab === 'komentar') {
                             handleDelete(tab, item.id, item.name || item.text, (commentId) => api.deleteComment(item.articleId, commentId))
                           } else {
-                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, foto: api.deleteFoto, pesan: api.deleteMessage, hayati: api.deleteHayati, nonhayati: api.deleteNonHayati, toga: api.deleteToga }
+                            const deletes = { artikel: api.deleteArticle, umkm: api.deleteUmkm, struktur: api.deleteStruktur, lembaga: api.deleteLembaga, carousel: api.deleteCarousel, agenda: api.deleteAgenda, video: api.deleteVideo, foto: api.deleteFoto, pesan: api.deleteMessage, hayati: api.deleteHayati, nonhayati: api.deleteNonHayati, toga: api.deleteToga, inventaris: api.deleteInventaris }
                             handleDelete(tab, item.id, item.name || item.title || item.subject || item.caption, deletes[tab])
                           }
                         }} title="Hapus"><FaTrash /></Button>

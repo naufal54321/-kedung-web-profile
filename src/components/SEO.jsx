@@ -21,6 +21,7 @@ const pathLabels = {
   'Kontak': 'Kontak',
   'Agenda': 'Agenda',
   'Persyaratan-Pelayanan': 'Persyaratan Pelayanan',
+  'Inventaris-RT': 'Inventaris RT',
   'Sejarah': 'Sejarah',
 };
 

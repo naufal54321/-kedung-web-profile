@@ -29,6 +29,7 @@ function FooterApp() {
               <Link to="/Visi-Misi" className="text-white-50 text-decoration-none small">Visi & Misi</Link>
               <Link to="/Hayati-NonHayati" className="text-white-50 text-decoration-none small">Hayati & Non-Hayati</Link>
               <Link to="/Persyaratan-Pelayanan" className="text-white-50 text-decoration-none small">Persyaratan Pelayanan</Link>
+              <Link to="/Inventaris-RT" className="text-white-50 text-decoration-none small">Inventaris RT</Link>
               <Link to="/Potensi-Dukuh" className="text-white-50 text-decoration-none small">Potensi Dukuh</Link>
               <Link to="/Agenda" className="text-white-50 text-decoration-none small">Agenda</Link>
               <Link to="/Lembaga-Masyarakat" className="text-white-50 text-decoration-none small">Lembaga</Link>

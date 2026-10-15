@@ -87,6 +87,12 @@
         ".read": "auth != null && auth.uid == $uid",
         ".write": "auth != null && auth.uid == $uid"
       }
+    },
+    "inventaris": {
+      ".read": true,
+      "$inventarisId": {
+        ".write": "auth != null && (auth.token.email == 'naufalm220@gmail.com' || auth.token.email == 'padukuhankedung@gmail.com')"
+      }
     }
   }
 }

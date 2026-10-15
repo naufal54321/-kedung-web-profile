@@ -7485,3 +7485,46 @@ textarea.admin-input {
     background: #fff;
   }
 }
+
+/* ===== INVENTARIS RT ===== */
+.inventaris-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventaris-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+}
+
+.inventaris-card-img {
+  overflow: hidden;
+}
+
+.inventaris-card-img img {
+  transition: transform 0.3s ease;
+}
+
+.inventaris-card:hover .inventaris-card-img img {
+  transform: scale(1.05);
+}
+
+.inventaris-card .card-body {
+  padding: 1.25rem;
+}
+
+[data-theme="dark"] .inventaris-card {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+[data-theme="dark"] .inventaris-card .card-title {
+  color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .inventaris-card .card-body {
+    padding: 1rem;
+  }
+}

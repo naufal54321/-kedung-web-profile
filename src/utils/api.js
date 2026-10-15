@@ -617,6 +617,49 @@ const api = (() => {
     }
   }
 
+  async function getAllInventaris() {
+    try {
+      const response = await fetchData('inventaris.json');
+      if (typeof response === 'object' && response !== null) {
+        return Object.keys(response).map(key => ({
+          ...response[key],
+          id: key
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching inventaris:', error);
+      return [];
+    }
+  }
+
+  async function getInventarisDetail(id) {
+    try {
+      const response = await fetchData(`inventaris/${id}.json`);
+      if (response && typeof response === 'object') {
+        return { id, ...response };
+      }
+      throw new Error('Invalid response format');
+    } catch (error) {
+      console.error('Error fetching inventaris detail:', error);
+      throw error;
+    }
+  }
+
+  async function createInventaris(data) {
+    const result = await postData('inventaris.json', data);
+    return { id: result.name, ...data };
+  }
+
+  async function updateInventaris(id, data) {
+    await putData(`inventaris/${id}.json`, data);
+    return { id, ...data };
+  }
+
+  async function deleteInventaris(id) {
+    return await deleteData(`inventaris/${id}.json`);
+  }
+
   async function trackVisit() {
     const dateKey = visitKeyFor();
     if (!isNewVisit(dateKey)) return false;
@@ -695,6 +738,11 @@ const api = (() => {
     getComments,
     deleteComment,
     getAllComments,
+    getAllInventaris,
+    getInventarisDetail,
+    createInventaris,
+    updateInventaris,
+    deleteInventaris,
     trackVisit,
     getStats,
   };  
