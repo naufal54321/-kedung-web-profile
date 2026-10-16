@@ -1,6 +1,6 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
-import { FaHistory, FaUsers, FaBullseye, FaLeaf, FaHandshake } from 'react-icons/fa';
+import { FaHistory, FaUsers, FaBullseye, FaLeaf, FaHandshake, FaBoxes } from 'react-icons/fa';
 
 function DropdownButton() {
   return (
@@ -24,6 +24,9 @@ function DropdownButton() {
         </Dropdown.Item>
         <Dropdown.Item as={Link} to="/Hayati-NonHayati" className="py-2 d-flex align-items-center gap-2">
           <FaLeaf className="text-success" /> Sumber Hayati & Non-Hayati
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to="/Inventaris-RT" className="py-2 d-flex align-items-center gap-2">
+          <FaBoxes className="text-success" /> Inventaris
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
-import { Table, Button, Alert } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList } from 'react-icons/fa'
+import { Table, Button, Alert, Modal, Form, Row, Col } from 'react-bootstrap'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList, FaHandHolding, FaUndo, FaCheckDouble } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
@@ -37,6 +37,10 @@ function Dashboard() {
   const [tab, setTab] = useState('artikel')
   const [page, setPage] = useState({})
   const [showTwoFactor, setShowTwoFactor] = useState(false)
+  const [showPinjamModal, setShowPinjamModal] = useState(false)
+  const [pinjamItem, setPinjamItem] = useState(null)
+  const [pinjamForm, setPinjamForm] = useState({ nama: '', noHp: '', alasan: '', tanggalPinjam: '', tanggalKembali: '' })
+  const [pinjamLoading, setPinjamLoading] = useState(false)
   const perPage = 10
   const navigate = useNavigate()
 
@@ -102,6 +106,39 @@ function Dashboard() {
       setData(prev => ({ ...prev, umkm: prev.umkm.map((u) => (u.id === id ? { ...u, status: 'approved' } : u)) }))
       Swal.fire({ icon: 'success', title: 'Disetujui!', timer: 1500, showConfirmButton: false })
     } catch { setError('Gagal menyetujui UMKM') }
+  }
+
+  const openPinjamModal = (item) => {
+    setPinjamItem(item)
+    setPinjamForm({ nama: item.peminjam?.nama || '', noHp: item.peminjam?.noHp || '', alasan: item.peminjam?.alasan || '', tanggalPinjam: item.peminjam?.tanggalPinjam || '', tanggalKembali: item.peminjam?.tanggalKembali || '' })
+    setShowPinjamModal(true)
+  }
+
+  const handlePinjamSubmit = async () => {
+    if (!pinjamItem || !pinjamForm.nama) return
+    setPinjamLoading(true)
+    try {
+      const updated = { ...pinjamItem, statusPinjam: 'dipinjam', peminjam: pinjamForm }
+      await api.updateInventaris(pinjamItem.id, updated)
+      setData(prev => ({ ...prev, inventaris: prev.inventaris.map((x) => (x.id === pinjamItem.id ? updated : x)) }))
+      setShowPinjamModal(false)
+      Swal.fire({ icon: 'success', title: 'Barang Dipinjamkan!', timer: 1500, showConfirmButton: false })
+    } catch (err) {
+      console.error('Pinjam error:', err)
+      Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal memproses peminjaman' })
+    }
+    setPinjamLoading(false)
+  }
+
+  const handleKembalikan = async (item) => {
+    const ok = await confirmSwal('Kembalikan Barang?', `Kembalikan "${item.namaBarang}" dari ${item.peminjam?.nama || 'peminjam'}?`, 'success')
+    if (!ok) return
+    try {
+      const updated = { ...item, statusPinjam: 'tidak_dipinjam', peminjam: null }
+      await api.updateInventaris(item.id, updated)
+      setData(prev => ({ ...prev, inventaris: prev.inventaris.map((x) => (x.id === item.id ? updated : x)) }))
+      Swal.fire({ icon: 'success', title: 'Dikembalikan!', timer: 1500, showConfirmButton: false })
+    } catch { setError('Gagal mengembalikan barang') }
   }
 
   const getEditLink = (key, id) => {
@@ -277,9 +314,15 @@ function Dashboard() {
         { key: 'statusPinjam', label: 'Status', render: (item) => {
           const statusMap = { tidak_dipinjam: { text: 'Tersedia', class: 'bg-success' }, dipinjam: { text: 'Dipinjam', class: 'bg-danger' } }
           const s = statusMap[item.statusPinjam] || statusMap.tidak_dipinjam
-          return <span className={`badge ${s.class}`}>{s.text}</span>
+          return (
+            <div>
+              <span className={`badge ${s.class}`}>{s.text}</span>
+              {item.statusPinjam === 'dipinjam' && item.peminjam?.nama && (
+                <div className="small text-muted mt-1">oleh: {item.peminjam.nama}</div>
+              )}
+            </div>
+          )
         }},
-        { key: 'foto', label: 'Foto', className: 'd-none d-md-table-cell', render: (item) => item.foto ? <img src={item.foto} alt={item.namaBarang} style={{ width: 60, height: 40, objectFit: 'cover' }} className="rounded" /> : <span className="badge bg-secondary">Tidak</span> },
       ],
     }
 
@@ -332,6 +375,15 @@ function Dashboard() {
                       {tab !== 'pesan' && tab !== 'komentar' && (
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
                           onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
+                      )}
+                      {tab === 'inventaris' && (
+                        item.statusPinjam === 'dipinjam' ? (
+                          <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
+                            onClick={() => handleKembalikan(item)} title="Kembalikan"><FaUndo /></Button>
+                        ) : (
+                          <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
+                            onClick={() => openPinjamModal(item)} title="Pinjamkan"><FaHandHolding /></Button>
+                        )
                       )}
                       <Button variant="none" size="sm" className="admin-action-btn admin-action-delete"
                         onClick={() => {
@@ -529,6 +581,56 @@ function Dashboard() {
         </>)}
       </div>
       <TwoFactorModal show={showTwoFactor} onHide={() => setShowTwoFactor(false)} />
+      <Modal show={showPinjamModal} onHide={() => setShowPinjamModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title><FaHandHolding className="me-2 text-success" />Pinjamkan Barang</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {pinjamItem && (
+            <>
+              <p className="text-muted small mb-3">Barang: <strong>{pinjamItem.namaBarang}</strong> ({pinjamItem.pemilik})</p>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Nama Peminjam <span className="text-danger">*</span></Form.Label>
+                    <Form.Control type="text" value={pinjamForm.nama} onChange={(e) => setPinjamForm(prev => ({ ...prev, nama: e.target.value }))} placeholder="Nama peminjam" />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>No. HP</Form.Label>
+                    <Form.Control type="tel" value={pinjamForm.noHp} onChange={(e) => setPinjamForm(prev => ({ ...prev, noHp: e.target.value }))} placeholder="08xxxxxxxxxx" />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Form.Group className="mb-3">
+                <Form.Label>Alasan Peminjaman</Form.Label>
+                <Form.Control type="text" value={pinjamForm.alasan} onChange={(e) => setPinjamForm(prev => ({ ...prev, alasan: e.target.value }))} placeholder="Alasan meminjam barang" />
+              </Form.Group>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Tanggal Pinjam</Form.Label>
+                    <Form.Control type="date" value={pinjamForm.tanggalPinjam} onChange={(e) => setPinjamForm(prev => ({ ...prev, tanggalPinjam: e.target.value }))} />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Tanggal Kembali</Form.Label>
+                    <Form.Control type="date" value={pinjamForm.tanggalKembali} onChange={(e) => setPinjamForm(prev => ({ ...prev, tanggalKembali: e.target.value }))} />
+                  </Form.Group>
+                </Col>
+              </Row>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPinjamModal(false)}>Batal</Button>
+          <Button variant="success" onClick={handlePinjamSubmit} disabled={pinjamLoading || !pinjamForm.nama}>
+            {pinjamLoading ? 'Memproses...' : 'Konfirmasi Pinjam'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </AdminLayout>
   )
 }

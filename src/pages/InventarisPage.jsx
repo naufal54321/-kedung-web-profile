@@ -100,6 +100,18 @@ function InventarisPage() {
                           <Badge bg={statusPinjam.bg}>{statusPinjam.text}</Badge>
                           <Badge bg="secondary">Jumlah: {item.jumlah || 0}</Badge>
                         </div>
+                        {item.statusPinjam === 'dipinjam' && item.peminjam && (
+                          <div className="inventaris-peminjam-info mb-2">
+                            <small className="d-block"><strong>Peminjam:</strong> {item.peminjam.nama}</small>
+                            {item.peminjam.alasan && <small className="d-block text-muted">Alasan: {item.peminjam.alasan}</small>}
+                            {item.peminjam.tanggalPinjam && (
+                              <small className="d-block text-muted">
+                                Pinjam: {item.peminjam.tanggalPinjam}
+                                {item.peminjam.tanggalKembali ? ` - ${item.peminjam.tanggalKembali}` : ''}
+                              </small>
+                            )}
+                          </div>
+                        )}
                         {item.tanggalPerolehan && (
                           <small className="text-muted d-block mb-2">
                             Diperoleh: {new Date(item.tanggalPerolehan).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
