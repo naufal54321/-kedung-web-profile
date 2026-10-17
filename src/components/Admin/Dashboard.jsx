@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert, Modal, Form, Row, Col } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList, FaHandHolding, FaUndo, FaHistory } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList, FaHandHolding, FaUndo, FaHistory, FaPrint } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
@@ -123,9 +123,8 @@ function Dashboard() {
   }
 
   const hitungTotalBiaya = () => {
-    if (!pinjamItem || !pinjamForm.jumlahSewa || !pinjamForm.tanggalPinjam || !pinjamForm.tanggalKembali) return 0
-    const hari = Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))
-    return (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa * hari
+    if (!pinjamItem || !pinjamForm.jumlahSewa) return 0
+    return (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa
   }
 
   const handlePinjamSubmit = async () => {
@@ -137,8 +136,7 @@ function Dashboard() {
     }
     setPinjamLoading(true)
     try {
-      const hari = Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))
-      const totalBiaya = (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa * hari
+      const totalBiaya = (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa
       const sewaAktif = { ...pinjamForm, totalBiaya, dikembalikanPada: null }
       const updated = {
         ...pinjamItem,
@@ -637,6 +635,11 @@ function Dashboard() {
                 Daftar {tabs.find(t => t.key === tab)?.label}
               </h6>
               <div className="admin-section-actions">
+                {tab === 'inventaris' && (
+                  <button className="admin-btn-secondary me-2" onClick={() => window.print()} title="Cetak Laporan">
+                    <FaPrint /> Cetak
+                  </button>
+                )}
                 {tab !== 'pesan' && tab !== 'komentar' && (
                   <button className="admin-btn-primary" onClick={() => navigate(getNewLink(tab))}>
                     <FaPlus /> Tambah
@@ -645,6 +648,51 @@ function Dashboard() {
               </div>
             </div>
             {renderTable()}
+            {tab === 'inventaris' && (
+              <div className="inventaris-print-table d-none">
+                <h3 className="mb-2">Laporan Inventaris - Padukuhan Kedung</h3>
+                <p className="text-muted mb-3">Dicetak: {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <Table bordered size="sm">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Barang</th>
+                      <th>Pemilik</th>
+                      <th>Total</th>
+                      <th>Sisa</th>
+                      <th>Harga Sewa</th>
+                      <th>Lokasi</th>
+                      <th>Kondisi</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(data.inventaris || []).map((item, i) => {
+                      const sisa = (item.jumlah || 0) - (item.jumlahDisewa || 0)
+                      const jumlah = item.jumlah || 0
+                      const disewa = item.jumlahDisewa || 0
+                      let statusText = 'Tersedia'
+                      if (disewa >= jumlah && jumlah > 0) statusText = 'Habis Disewa'
+                      else if (disewa > 0) statusText = 'Sebagian Disewa'
+                      const kondisiMap = { baik: 'Baik', rusak_ringan: 'Rusak Ringan', rusak_berat: 'Rusak Berat' }
+                      return (
+                        <tr key={item.id}>
+                          <td>{i + 1}</td>
+                          <td>{item.namaBarang}</td>
+                          <td>{item.pemilik || '-'}</td>
+                          <td>{jumlah}</td>
+                          <td>{sisa}</td>
+                          <td>{item.hargaSewa ? `Rp ${(item.hargaSewa || 0).toLocaleString('id-ID')}` : '-'}</td>
+                          <td>{item.lokasiPenyimpanan || '-'}</td>
+                          <td>{kondisiMap[item.kondisi] || item.kondisi}</td>
+                          <td>{statusText}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            )}
           </div>
         </>)}
       </div>
@@ -703,11 +751,11 @@ function Dashboard() {
                   </Form.Group>
                 </Col>
               </Row>
-              {pinjamItem.hargaSewa > 0 && pinjamForm.tanggalPinjam && pinjamForm.tanggalKembali && (
+              {pinjamItem.hargaSewa > 0 && (
                 <div className="alert alert-success py-2 small mb-0">
                   <strong>Total Biaya:</strong> Rp {hitungTotalBiaya().toLocaleString('id-ID')}
                   <span className="text-muted ms-1">
-                    (Rp {pinjamItem.hargaSewa.toLocaleString('id-ID')} × {pinjamForm.jumlahSewa} × {Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))} hari)
+                    (Rp {pinjamItem.hargaSewa.toLocaleString('id-ID')} × {pinjamForm.jumlahSewa} unit)
                   </span>
                 </div>
               )}

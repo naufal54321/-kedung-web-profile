@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Container, Row, Col, Card, Badge, Form, Image, Button, Table } from 'react-bootstrap'
-import { FaPrint } from 'react-icons/fa'
+import { Container, Row, Col, Card, Badge, Form, Image } from 'react-bootstrap'
 import api from '../utils/api'
 import ProfilHero from '../components/Profil/ProfilHero'
 import SEO from '../components/SEO'
@@ -95,9 +94,6 @@ function InventarisPage() {
                   ))}
                 </Form.Select>
               )}
-              <Button variant="outline-dark" size="sm" onClick={() => window.print()} title="Cetak Laporan">
-                <FaPrint /> Cetak
-              </Button>
             </div>
           </div>
 
@@ -172,44 +168,6 @@ function InventarisPage() {
                 })}
               </Row>
 
-              <div className="inventaris-print-table d-none">
-                <h3 className="mb-3">Laporan Inventaris - Padukuhan Kedung</h3>
-                <p className="text-muted">Dicetak: {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                <Table bordered size="sm" className="mt-3">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Barang</th>
-                      <th>Pemilik</th>
-                      <th>Total</th>
-                      <th>Sisa</th>
-                      <th>Harga Sewa</th>
-                      <th>Lokasi</th>
-                      <th>Kondisi</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredData.map((item, i) => {
-                      const status = getStatusDerived(item)
-                      const sisa = (item.jumlah || 0) - (item.jumlahDisewa || 0)
-                      return (
-                        <tr key={item.id}>
-                          <td>{i + 1}</td>
-                          <td>{item.namaBarang}</td>
-                          <td>{item.pemilik || '-'}</td>
-                          <td>{item.jumlah || 0}</td>
-                          <td>{sisa}</td>
-                          <td>{item.hargaSewa ? formatRupiah(item.hargaSewa) : '-'}</td>
-                          <td>{item.lokasiPenyimpanan || '-'}</td>
-                          <td>{KONDISI_CONFIG[item.kondisi]?.text || item.kondisi}</td>
-                          <td>{status.text}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </Table>
-              </div>
             </>
           )}
         </Container>

@@ -7553,20 +7553,36 @@ textarea.admin-input {
 }
 
 @media print {
-  .navbar, footer, .scroll-top-fab, .update-prompt, .inventaris-card-img,
-  .theme-toggle, .admin-wrapper, .app-footer {
+  .admin-topbar, .admin-sidebar, .admin-overlay, .admin-dashboard-header,
+  .admin-stats-row, .admin-section-actions, .admin-breadcrumb,
+  .admin-back-link, .admin-umkm-banner, .admin-btn-2fa, .admin-dash-actions,
+  .navbar, footer, .scroll-top-fab, .update-prompt, .theme-toggle {
+    display: none !important;
+  }
+
+  .admin-main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .admin-section-card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .admin-section-card .admin-section-header {
     display: none !important;
   }
 
   .inventaris-print-table {
     display: block !important;
-    margin-top: 2rem;
+    margin-top: 0;
     font-size: 10pt;
     color: #000;
     background: #fff;
   }
 
-  .inventaris-card {
+  .admin-table-wrapper {
     display: none !important;
   }
 
