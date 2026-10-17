@@ -7548,6 +7548,53 @@ textarea.admin-input {
   background: rgba(220, 53, 69, 0.15);
 }
 
+.inventaris-print-table {
+  display: none !important;
+}
+
+@media print {
+  .navbar, footer, .scroll-top-fab, .update-prompt, .inventaris-card-img,
+  .theme-toggle, .admin-wrapper, .app-footer {
+    display: none !important;
+  }
+
+  .inventaris-print-table {
+    display: block !important;
+    margin-top: 2rem;
+    font-size: 10pt;
+    color: #000;
+    background: #fff;
+  }
+
+  .inventaris-card {
+    display: none !important;
+  }
+
+  .inventaris-print-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .inventaris-print-table th,
+  .inventaris-print-table td {
+    border: 1px solid #333;
+    padding: 6px 8px;
+    color: #000;
+    background: #fff;
+  }
+
+  .inventaris-print-table th {
+    background: #f0f0f0 !important;
+    font-weight: bold;
+  }
+
+  body {
+    font-size: 10pt;
+    color: #000;
+    background: #fff;
+  }
+}
+
 .inventaris-dipinjam::after {
   content: 'DIPINJAM';
   position: absolute;

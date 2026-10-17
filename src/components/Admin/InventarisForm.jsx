@@ -14,13 +14,16 @@ function InventarisForm() {
   const [form, setForm] = useState({
     namaBarang: '',
     jumlah: '',
+    hargaSewa: '',
     kondisi: 'baik',
     tanggalPerolehan: '',
     keterangan: '',
     pemilik: '',
+    lokasiPenyimpanan: '',
     statusPinjam: 'tidak_dipinjam',
     foto: ''
   })
+  const [existingData, setExistingData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(isEdit)
   const [error, setError] = useState('')
@@ -31,13 +34,16 @@ function InventarisForm() {
     const loadInventaris = async () => {
       try {
         const item = await api.getInventarisDetail(id)
+        setExistingData(item)
         setForm({
           namaBarang: item.namaBarang || '',
           jumlah: item.jumlah || '',
+          hargaSewa: item.hargaSewa || '',
           kondisi: item.kondisi || 'baik',
           tanggalPerolehan: item.tanggalPerolehan || '',
           keterangan: item.keterangan || '',
           pemilik: item.pemilik || '',
+          lokasiPenyimpanan: item.lokasiPenyimpanan || '',
           statusPinjam: item.statusPinjam || 'tidak_dipinjam',
           foto: item.foto || ''
         })
@@ -74,7 +80,11 @@ function InventarisForm() {
     const payload = {
       ...form,
       jumlah: parseInt(form.jumlah) || 0,
-      createdAt: isEdit ? form.createdAt : new Date().toISOString()
+      hargaSewa: parseInt(form.hargaSewa) || 0,
+      createdAt: isEdit ? (existingData?.createdAt || form.createdAt) : new Date().toISOString(),
+      sewaAktif: isEdit ? (existingData?.sewaAktif || null) : null,
+      riwayatSewa: isEdit ? (existingData?.riwayatSewa || []) : [],
+      jumlahDisewa: isEdit ? (existingData?.jumlahDisewa || 0) : 0
     }
 
     try {
@@ -84,7 +94,7 @@ function InventarisForm() {
       } else {
         await api.createInventaris(payload)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data inventaris berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ namaBarang: '', jumlah: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', statusPinjam: 'tidak_dipinjam', foto: '' })
+        setForm({ namaBarang: '', jumlah: '', hargaSewa: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', lokasiPenyimpanan: '', statusPinjam: 'tidak_dipinjam', foto: '' })
       }
     } catch (err) {
       console.error('Inventaris save error:', err)
@@ -138,12 +148,8 @@ function InventarisForm() {
               </Col>
               <Col md={3}>
                 <div className="admin-input-group">
-                  <Form.Label>Kondisi <span className="text-danger">*</span></Form.Label>
-                  <Form.Select name="kondisi" value={form.kondisi} onChange={handleChange} required className="admin-input">
-                    <option value="baik">Baik</option>
-                    <option value="rusak_ringan">Rusak Ringan</option>
-                    <option value="rusak_berat">Rusak Berat</option>
-                  </Form.Select>
+                  <Form.Label>Harga Sewa (Rp/unit)</Form.Label>
+                  <Form.Control type="number" name="hargaSewa" value={form.hargaSewa} onChange={handleChange} min="0" className="admin-input" placeholder="50000" />
                 </div>
               </Col>
               <Col md={3}>
@@ -153,6 +159,25 @@ function InventarisForm() {
                     <option value="tidak_dipinjam">Tersedia</option>
                     <option value="dipinjam">Dipinjam</option>
                   </Form.Select>
+                </div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md={4}>
+                <div className="admin-input-group">
+                  <Form.Label>Kondisi <span className="text-danger">*</span></Form.Label>
+                  <Form.Select name="kondisi" value={form.kondisi} onChange={handleChange} required className="admin-input">
+                    <option value="baik">Baik</option>
+                    <option value="rusak_ringan">Rusak Ringan</option>
+                    <option value="rusak_berat">Rusak Berat</option>
+                  </Form.Select>
+                </div>
+              </Col>
+              <Col md={8}>
+                <div className="admin-input-group">
+                  <Form.Label>Lokasi Penyimpanan</Form.Label>
+                  <Form.Control type="text" name="lokasiPenyimpanan" value={form.lokasiPenyimpanan} onChange={handleChange} className="admin-input" placeholder="Contoh: Balai RT, Rumah Dukuh, Gudang" />
                 </div>
               </Col>
             </Row>

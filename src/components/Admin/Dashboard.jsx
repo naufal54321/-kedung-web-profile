@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import api from '../../utils/api'
 import { Table, Button, Alert, Modal, Form, Row, Col } from 'react-bootstrap'
-import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList, FaHandHolding, FaUndo, FaCheckDouble } from 'react-icons/fa'
+import { FaNewspaper, FaStore, FaUsers, FaBuilding, FaImage, FaCalendarAlt, FaPlus, FaEdit, FaTrash, FaExternalLinkAlt, FaCheckCircle, FaArrowRight, FaArrowLeft, FaChartBar, FaCalendarCheck, FaThLarge, FaClock, FaInbox, FaExclamationTriangle, FaChevronRight, FaHome, FaCalendarDay, FaEnvelope, FaComments, FaVideo, FaArrowUp, FaArrowDown, FaCamera, FaShieldAlt, FaLeaf, FaMountain, FaSeedling, FaBell, FaClipboardList, FaHandHolding, FaUndo, FaHistory } from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
@@ -39,8 +39,11 @@ function Dashboard() {
   const [showTwoFactor, setShowTwoFactor] = useState(false)
   const [showPinjamModal, setShowPinjamModal] = useState(false)
   const [pinjamItem, setPinjamItem] = useState(null)
-  const [pinjamForm, setPinjamForm] = useState({ nama: '', noHp: '', alasan: '', tanggalPinjam: '', tanggalKembali: '' })
+  const [pinjamForm, setPinjamForm] = useState({ nama: '', noHp: '', alasan: '', tanggalPinjam: '', tanggalKembali: '', jumlahSewa: 1 })
   const [pinjamLoading, setPinjamLoading] = useState(false)
+  const [showRiwayatModal, setShowRiwayatModal] = useState(false)
+  const [riwayatItem, setRiwayatItem] = useState(null)
+  const [filterStatusInventaris, setFilterStatusInventaris] = useState('semua')
   const perPage = 10
   const navigate = useNavigate()
 
@@ -110,19 +113,43 @@ function Dashboard() {
 
   const openPinjamModal = (item) => {
     setPinjamItem(item)
-    setPinjamForm({ nama: item.peminjam?.nama || '', noHp: item.peminjam?.noHp || '', alasan: item.peminjam?.alasan || '', tanggalPinjam: item.peminjam?.tanggalPinjam || '', tanggalKembali: item.peminjam?.tanggalKembali || '' })
+    setPinjamForm({ nama: '', noHp: '', alasan: '', tanggalPinjam: '', tanggalKembali: '', jumlahSewa: 1 })
     setShowPinjamModal(true)
   }
 
+  const openRiwayatModal = (item) => {
+    setRiwayatItem(item)
+    setShowRiwayatModal(true)
+  }
+
+  const hitungTotalBiaya = () => {
+    if (!pinjamItem || !pinjamForm.jumlahSewa || !pinjamForm.tanggalPinjam || !pinjamForm.tanggalKembali) return 0
+    const hari = Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))
+    return (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa * hari
+  }
+
   const handlePinjamSubmit = async () => {
-    if (!pinjamItem || !pinjamForm.nama) return
+    if (!pinjamItem || !pinjamForm.nama || !pinjamForm.jumlahSewa) return
+    const sisa = (pinjamItem.jumlah || 0) - (pinjamItem.jumlahDisewa || 0)
+    if (pinjamForm.jumlahSewa > sisa) {
+      Swal.fire({ icon: 'warning', title: 'Melebihi Sisa', text: `Jumlah sewa melebihi sisa yang tersedia (${sisa})` })
+      return
+    }
     setPinjamLoading(true)
     try {
-      const updated = { ...pinjamItem, statusPinjam: 'dipinjam', peminjam: pinjamForm }
+      const hari = Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))
+      const totalBiaya = (pinjamItem.hargaSewa || 0) * pinjamForm.jumlahSewa * hari
+      const sewaAktif = { ...pinjamForm, totalBiaya, dikembalikanPada: null }
+      const updated = {
+        ...pinjamItem,
+        jumlahDisewa: (pinjamItem.jumlahDisewa || 0) + pinjamForm.jumlahSewa,
+        sewaAktif,
+        peminjam: { nama: pinjamForm.nama, noHp: pinjamForm.noHp, alasan: pinjamForm.alasan, tanggalPinjam: pinjamForm.tanggalPinjam, tanggalKembali: pinjamForm.tanggalKembali }
+      }
       await api.updateInventaris(pinjamItem.id, updated)
       setData(prev => ({ ...prev, inventaris: prev.inventaris.map((x) => (x.id === pinjamItem.id ? updated : x)) }))
       setShowPinjamModal(false)
-      Swal.fire({ icon: 'success', title: 'Barang Dipinjamkan!', timer: 1500, showConfirmButton: false })
+      Swal.fire({ icon: 'success', title: 'Barang Dipinjamkan!', text: `Total biaya: Rp ${totalBiaya.toLocaleString('id-ID')}`, timer: 2000, showConfirmButton: false })
     } catch (err) {
       console.error('Pinjam error:', err)
       Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal memproses peminjaman' })
@@ -131,10 +158,14 @@ function Dashboard() {
   }
 
   const handleKembalikan = async (item) => {
-    const ok = await confirmSwal('Kembalikan Barang?', `Kembalikan "${item.namaBarang}" dari ${item.peminjam?.nama || 'peminjam'}?`, 'success')
+    const ok = await confirmSwal('Kembalikan Barang?', `Kembalikan semua unit "${item.namaBarang}" dari ${item.sewaAktif?.nama || item.peminjam?.nama || 'peminjam'}?`, 'success')
     if (!ok) return
     try {
-      const updated = { ...item, statusPinjam: 'tidak_dipinjam', peminjam: null }
+      const riwayatBaru = [...(item.riwayatSewa || [])]
+      if (item.sewaAktif) {
+        riwayatBaru.push({ ...item.sewaAktif, dikembalikanPada: new Date().toISOString() })
+      }
+      const updated = { ...item, jumlahDisewa: 0, sewaAktif: null, peminjam: null, riwayatSewa: riwayatBaru }
       await api.updateInventaris(item.id, updated)
       setData(prev => ({ ...prev, inventaris: prev.inventaris.map((x) => (x.id === item.id ? updated : x)) }))
       Swal.fire({ icon: 'success', title: 'Dikembalikan!', timer: 1500, showConfirmButton: false })
@@ -214,6 +245,13 @@ function Dashboard() {
       backgroundColor: ['#4CAF50', '#FFC107', '#EF5350'],
     }]
   }
+
+  const totalPendapatanSewa = (data.inventaris || []).reduce((total, item) => {
+    const riwayat = item.riwayatSewa || []
+    const sumRiwayat = riwayat.reduce((s, r) => s + (r.totalBiaya || 0), 0)
+    const sewaAktif = item.sewaAktif?.totalBiaya || 0
+    return total + sumRiwayat + sewaAktif
+  }, 0)
 
   // ===== RENDER TABLE =====
   const renderTable = () => {
@@ -306,19 +344,28 @@ function Dashboard() {
         { key: 'namaBarang', label: 'Nama Barang', render: (item) => <span className="fw-medium">{item.namaBarang}</span> },
         { key: 'pemilik', label: 'Pemilik', render: (item) => <span className="badge bg-primary">{item.pemilik || '-'}</span> },
         { key: 'jumlah', label: 'Jumlah', className: 'd-none d-md-table-cell' },
-        { key: 'kondisi', label: 'Kondisi', render: (item) => {
-          const kondisiMap = { baik: { text: 'Baik', class: 'bg-success' }, rusak_ringan: { text: 'Rusak Ringan', class: 'bg-warning text-dark' }, rusak_berat: { text: 'Rusak Berat', class: 'bg-danger' } }
-          const k = kondisiMap[item.kondisi] || kondisiMap.baik
-          return <span className={`badge ${k.class}`}>{k.text}</span>
+        { key: 'sisa', label: 'Sisa', render: (item) => {
+          const sisa = (item.jumlah || 0) - (item.jumlahDisewa || 0)
+          return <span className={`badge ${sisa === 0 ? 'bg-danger' : sisa < (item.jumlah || 0) ? 'bg-warning text-dark' : 'bg-success'}`}>{sisa} unit</span>
         }},
-        { key: 'statusPinjam', label: 'Status', render: (item) => {
-          const statusMap = { tidak_dipinjam: { text: 'Tersedia', class: 'bg-success' }, dipinjam: { text: 'Dipinjam', class: 'bg-danger' } }
-          const s = statusMap[item.statusPinjam] || statusMap.tidak_dipinjam
+        { key: 'hargaSewa', label: 'Harga Sewa', className: 'd-none d-md-table-cell', render: (item) => item.hargaSewa ? `Rp ${(item.hargaSewa || 0).toLocaleString('id-ID')}/unit` : '-' },
+        { key: 'lokasiPenyimpanan', label: 'Lokasi', className: 'd-none d-md-table-cell', render: (item) => item.lokasiPenyimpanan || '-' },
+        { key: 'status', label: 'Status', render: (item) => {
+          const jumlah = item.jumlah || 0
+          const disewa = item.jumlahDisewa || 0
+          let status = { text: 'Tersedia', class: 'bg-success' }
+          if (disewa >= jumlah && jumlah > 0) status = { text: 'Habis Disewa', class: 'bg-danger' }
+          else if (disewa > 0) status = { text: 'Sebagian', class: 'bg-warning text-dark' }
           return (
             <div>
-              <span className={`badge ${s.class}`}>{s.text}</span>
-              {item.statusPinjam === 'dipinjam' && item.peminjam?.nama && (
-                <div className="small text-muted mt-1">oleh: {item.peminjam.nama}</div>
+              <span className={`badge ${status.class}`}>{status.text}</span>
+              {disewa > 0 && item.sewaAktif?.nama && (
+                <div className="small text-muted mt-1">oleh: {item.sewaAktif.nama} ({disewa} unit)</div>
+              )}
+              {(item.riwayatSewa?.length > 0) && (
+                <button className="btn btn-link btn-sm p-0 mt-1 small text-primary" onClick={() => openRiwayatModal(item)}>
+                  Riwayat ({item.riwayatSewa.length})
+                </button>
               )}
             </div>
           )
@@ -377,7 +424,7 @@ function Dashboard() {
                           onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
                       )}
                       {tab === 'inventaris' && (
-                        item.statusPinjam === 'dipinjam' ? (
+                        (item.jumlahDisewa || 0) > 0 ? (
                           <Button variant="none" size="sm" className="admin-action-btn admin-action-approve me-1"
                             onClick={() => handleKembalikan(item)} title="Kembalikan"><FaUndo /></Button>
                         ) : (
@@ -438,6 +485,27 @@ function Dashboard() {
             </div>
             <div className="p-3">
               {loading.agenda ? <div className="admin-skeleton admin-skeleton-chart" /> : <AdminChart type="doughnut" data={agendaChartData} height={220} />}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="row g-4 mb-4">
+        <div className="col-md-12">
+          <div className="admin-section-card">
+            <div className="admin-section-header">
+              <h6 className="admin-section-title"><FaHandHolding /> Total Pendapatan Sewa Inventaris</h6>
+            </div>
+            <div className="p-3">
+              <div className="d-flex align-items-center gap-3">
+                <div className="admin-stat-icon" style={{ background: 'linear-gradient(135deg, #2E7D32, #66BB6A)', color: '#fff', width: 56, height: 56, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FaHandHolding size={24} />
+                </div>
+                <div>
+                  <div className="fs-3 fw-bold text-success">Rp {totalPendapatanSewa.toLocaleString('id-ID')}</div>
+                  <small className="text-muted">Akumulasi seluruh riwayat & sewa aktif inventaris</small>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -588,25 +656,39 @@ function Dashboard() {
         <Modal.Body>
           {pinjamItem && (
             <>
-              <p className="text-muted small mb-3">Barang: <strong>{pinjamItem.namaBarang}</strong> ({pinjamItem.pemilik})</p>
+              <p className="text-muted small mb-1">Barang: <strong>{pinjamItem.namaBarang}</strong> ({pinjamItem.pemilik})</p>
+              <p className="text-muted small mb-3">
+                Sisa: <strong className="text-success">{(pinjamItem.jumlah || 0) - (pinjamItem.jumlahDisewa || 0)} unit</strong>
+                {pinjamItem.hargaSewa ? ` · Harga: Rp ${pinjamItem.hargaSewa.toLocaleString('id-ID')}/unit` : ''}
+              </p>
               <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Jumlah Disewa <span className="text-danger">*</span></Form.Label>
+                    <Form.Control type="number" min="1" max={(pinjamItem.jumlah || 0) - (pinjamItem.jumlahDisewa || 0)} value={pinjamForm.jumlahSewa} onChange={(e) => setPinjamForm(prev => ({ ...prev, jumlahSewa: parseInt(e.target.value) || 1 }))} />
+                  </Form.Group>
+                </Col>
                 <Col md={6}>
                   <Form.Group className="mb-3">
                     <Form.Label>Nama Peminjam <span className="text-danger">*</span></Form.Label>
                     <Form.Control type="text" value={pinjamForm.nama} onChange={(e) => setPinjamForm(prev => ({ ...prev, nama: e.target.value }))} placeholder="Nama peminjam" />
                   </Form.Group>
                 </Col>
+              </Row>
+              <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
                     <Form.Label>No. HP</Form.Label>
                     <Form.Control type="tel" value={pinjamForm.noHp} onChange={(e) => setPinjamForm(prev => ({ ...prev, noHp: e.target.value }))} placeholder="08xxxxxxxxxx" />
                   </Form.Group>
                 </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Alasan Peminjaman</Form.Label>
+                    <Form.Control type="text" value={pinjamForm.alasan} onChange={(e) => setPinjamForm(prev => ({ ...prev, alasan: e.target.value }))} placeholder="Alasan meminjam" />
+                  </Form.Group>
+                </Col>
               </Row>
-              <Form.Group className="mb-3">
-                <Form.Label>Alasan Peminjaman</Form.Label>
-                <Form.Control type="text" value={pinjamForm.alasan} onChange={(e) => setPinjamForm(prev => ({ ...prev, alasan: e.target.value }))} placeholder="Alasan meminjam barang" />
-              </Form.Group>
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
@@ -621,6 +703,14 @@ function Dashboard() {
                   </Form.Group>
                 </Col>
               </Row>
+              {pinjamItem.hargaSewa > 0 && pinjamForm.tanggalPinjam && pinjamForm.tanggalKembali && (
+                <div className="alert alert-success py-2 small mb-0">
+                  <strong>Total Biaya:</strong> Rp {hitungTotalBiaya().toLocaleString('id-ID')}
+                  <span className="text-muted ms-1">
+                    (Rp {pinjamItem.hargaSewa.toLocaleString('id-ID')} × {pinjamForm.jumlahSewa} × {Math.max(1, Math.ceil((new Date(pinjamForm.tanggalKembali) - new Date(pinjamForm.tanggalPinjam)) / 86400000))} hari)
+                  </span>
+                </div>
+              )}
             </>
           )}
         </Modal.Body>
@@ -630,6 +720,42 @@ function Dashboard() {
             {pinjamLoading ? 'Memproses...' : 'Konfirmasi Pinjam'}
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={showRiwayatModal} onHide={() => setShowRiwayatModal(false)} centered size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title><FaHistory className="me-2 text-success" />Riwayat Peminjaman: {riwayatItem?.namaBarang}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {riwayatItem && (
+            <>
+              {riwayatItem.sewaAktif && (
+                <div className="alert alert-danger py-2 small">
+                  <strong>Aktif:</strong> {riwayatItem.sewaAktif.nama} ({riwayatItem.sewaAktif.jumlahSewa} unit) · {riwayatItem.sewaAktif.tanggalPinjam} - {riwayatItem.sewaAktif.tanggalKembali} · Rp {(riwayatItem.sewaAktif.totalBiaya || 0).toLocaleString('id-ID')}
+                </div>
+              )}
+              {riwayatItem.riwayatSewa?.length > 0 ? (
+                <Table hover size="sm" className="mb-0">
+                  <thead>
+                    <tr><th>Peminjam</th><th>Jumlah</th><th>Tanggal</th><th>Biaya</th><th>Dikembalikan</th></tr>
+                  </thead>
+                  <tbody>
+                    {riwayatItem.riwayatSewa.map((r, i) => (
+                      <tr key={i}>
+                        <td>{r.nama}</td>
+                        <td>{r.jumlahSewa} unit</td>
+                        <td>{r.tanggalPinjam} - {r.tanggalKembali}</td>
+                        <td>Rp {(r.totalBiaya || 0).toLocaleString('id-ID')}</td>
+                        <td>{r.dikembalikanPada ? new Date(r.dikembalikanPada).toLocaleDateString('id-ID') : '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              ) : (
+                <p className="text-muted text-center mb-0">Belum ada riwayat peminjaman</p>
+              )}
+            </>
+          )}
+        </Modal.Body>
       </Modal>
     </AdminLayout>
   )
