@@ -20,7 +20,6 @@ function InventarisForm() {
     keterangan: '',
     pemilik: '',
     lokasiPenyimpanan: '',
-    statusPinjam: 'tidak_dipinjam',
     foto: ''
   })
   const [existingData, setExistingData] = useState(null)
@@ -44,7 +43,6 @@ function InventarisForm() {
           keterangan: item.keterangan || '',
           pemilik: item.pemilik || '',
           lokasiPenyimpanan: item.lokasiPenyimpanan || '',
-          statusPinjam: item.statusPinjam || 'tidak_dipinjam',
           foto: item.foto || ''
         })
       } catch {
@@ -81,6 +79,7 @@ function InventarisForm() {
       ...form,
       jumlah: parseInt(form.jumlah) || 0,
       hargaSewa: parseInt(form.hargaSewa) || 0,
+      statusPinjam: isEdit ? (existingData?.statusPinjam || 'tidak_dipinjam') : 'tidak_dipinjam',
       createdAt: isEdit ? (existingData?.createdAt || form.createdAt) : new Date().toISOString(),
       sewaAktif: isEdit ? (existingData?.sewaAktif || null) : null,
       riwayatSewa: isEdit ? (existingData?.riwayatSewa || []) : [],
@@ -94,7 +93,7 @@ function InventarisForm() {
       } else {
         await api.createInventaris(payload)
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data inventaris berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ namaBarang: '', jumlah: '', hargaSewa: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', lokasiPenyimpanan: '', statusPinjam: 'tidak_dipinjam', foto: '' })
+        setForm({ namaBarang: '', jumlah: '', hargaSewa: '', kondisi: 'baik', tanggalPerolehan: '', keterangan: '', pemilik: '', lokasiPenyimpanan: '', foto: '' })
       }
     } catch (err) {
       console.error('Inventaris save error:', err)
@@ -124,6 +123,11 @@ function InventarisForm() {
           </div>
 
           <Form onSubmit={handleSubmit}>
+            <div className="mb-2 fw-bold text-success small text-uppercase" style={{ letterSpacing: '0.5px' }}>
+              Informasi Barang
+            </div>
+            <hr className="mt-0 mb-3" />
+
             <Row>
               <Col md={8}>
                 <div className="admin-input-group">
@@ -140,30 +144,18 @@ function InventarisForm() {
             </Row>
 
             <Row>
-              <Col md={6}>
+              <Col md={4}>
                 <div className="admin-input-group">
                   <Form.Label>Pemilik <span className="text-danger">*</span></Form.Label>
-                  <Form.Control type="text" name="pemilik" value={form.pemilik} onChange={handleChange} required className="admin-input" placeholder="Contoh: RT 01, Karang Taruna, Dukuh" />
+                  <Form.Control type="text" name="pemilik" value={form.pemilik} onChange={handleChange} required className="admin-input" placeholder="Contoh: RT 01, Karang Taruna" />
                 </div>
               </Col>
-              <Col md={3}>
+              <Col md={4}>
                 <div className="admin-input-group">
                   <Form.Label>Harga Sewa (Rp/unit)</Form.Label>
                   <Form.Control type="number" name="hargaSewa" value={form.hargaSewa} onChange={handleChange} min="0" className="admin-input" placeholder="50000" />
                 </div>
               </Col>
-              <Col md={3}>
-                <div className="admin-input-group">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select name="statusPinjam" value={form.statusPinjam} onChange={handleChange} className="admin-input">
-                    <option value="tidak_dipinjam">Tersedia</option>
-                    <option value="dipinjam">Dipinjam</option>
-                  </Form.Select>
-                </div>
-              </Col>
-            </Row>
-
-            <Row>
               <Col md={4}>
                 <div className="admin-input-group">
                   <Form.Label>Kondisi <span className="text-danger">*</span></Form.Label>
@@ -174,13 +166,21 @@ function InventarisForm() {
                   </Form.Select>
                 </div>
               </Col>
-              <Col md={8}>
+            </Row>
+
+            <Row>
+              <Col md={12}>
                 <div className="admin-input-group">
                   <Form.Label>Lokasi Penyimpanan</Form.Label>
                   <Form.Control type="text" name="lokasiPenyimpanan" value={form.lokasiPenyimpanan} onChange={handleChange} className="admin-input" placeholder="Contoh: Balai RT, Rumah Dukuh, Gudang" />
                 </div>
               </Col>
             </Row>
+
+            <div className="mb-2 fw-bold text-success small text-uppercase mt-4" style={{ letterSpacing: '0.5px' }}>
+              Dokumen & Foto
+            </div>
+            <hr className="mt-0 mb-3" />
 
             <Row>
               <Col md={6}>
@@ -204,10 +204,14 @@ function InventarisForm() {
               </Col>
             </Row>
 
-            <div className="admin-input-group">
-              <Form.Label>Keterangan</Form.Label>
-              <Form.Control as="textarea" rows={3} name="keterangan" value={form.keterangan} onChange={handleChange} className="admin-input" placeholder="Keterangan tambahan..." />
-            </div>
+            <Row>
+              <Col md={12}>
+                <div className="admin-input-group">
+                  <Form.Label>Keterangan</Form.Label>
+                  <Form.Control as="textarea" rows={3} name="keterangan" value={form.keterangan} onChange={handleChange} className="admin-input" placeholder="Keterangan tambahan..." />
+                </div>
+              </Col>
+            </Row>
 
             <div className="d-flex gap-2 mt-4">
               <Button className="admin-btn-primary" type="submit" disabled={loading || uploading}>

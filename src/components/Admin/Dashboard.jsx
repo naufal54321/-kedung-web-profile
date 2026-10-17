@@ -170,6 +170,19 @@ function Dashboard() {
     } catch { setError('Gagal mengembalikan barang') }
   }
 
+  const handleHapusRiwayat = async (item, riwayatIndex) => {
+    const ok = await confirmSwal('Hapus Riwayat?', `Hapus riwayat peminjaman "${item.riwayatSewa[riwayatIndex]?.nama}"?`, 'warning')
+    if (!ok) return
+    try {
+      const riwayatBaru = item.riwayatSewa.filter((_, i) => i !== riwayatIndex)
+      const updated = { ...item, riwayatSewa: riwayatBaru }
+      await api.updateInventaris(item.id, updated)
+      setData(prev => ({ ...prev, inventaris: prev.inventaris.map((x) => (x.id === item.id ? updated : x)) }))
+      setRiwayatItem(updated)
+      Swal.fire({ icon: 'success', title: 'Riwayat Dihapus!', timer: 1200, showConfirmButton: false })
+    } catch { setError('Gagal menghapus riwayat') }
+  }
+
   const getEditLink = (key, id) => {
     const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/', toga: '/admin/toga/edit/', inventaris: '/admin/inventaris/edit/' }
     return paths[key] + id
@@ -605,23 +618,24 @@ function Dashboard() {
           )
         })()}
 
-        {/* Stat Cards (shown in both views) */}
-        <div className="admin-stats-row">
-          {tabs.map((t) => {
-            const count = (data[t.key] || []).length
-            const pending = t.key === 'umkm' ? (data.umkm || []).filter(u => (u.status || 'approved') === 'pending').length : 0
-            return (
-              <div key={t.key} className="admin-stat-card admin-stat-gradient">
-                <div className="admin-stat-icon" style={{ background: t.bg, color: t.color }}><t.icon /></div>
-                <div className="admin-stat-info">
-                  <span className="admin-stat-count"><CountUp value={count} /></span>
-                  <span className="admin-stat-label">{t.label}</span>
+        {isOverview && (
+          <div className="admin-stats-row">
+            {tabs.map((t) => {
+              const count = (data[t.key] || []).length
+              const pending = t.key === 'umkm' ? (data.umkm || []).filter(u => (u.status || 'approved') === 'pending').length : 0
+              return (
+                <div key={t.key} className="admin-stat-card admin-stat-gradient">
+                  <div className="admin-stat-icon" style={{ background: t.bg, color: t.color }}><t.icon /></div>
+                  <div className="admin-stat-info">
+                    <span className="admin-stat-count"><CountUp value={count} /></span>
+                    <span className="admin-stat-label">{t.label}</span>
+                  </div>
+                  {pending > 0 && <span className="admin-stat-badge">{pending} pending</span>}
                 </div>
-                {pending > 0 && <span className="admin-stat-badge">{pending} pending</span>}
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        )}
 
         {isOverview ? renderOverview() : (<>
           <div className="mb-3">
@@ -784,7 +798,7 @@ function Dashboard() {
               {riwayatItem.riwayatSewa?.length > 0 ? (
                 <Table hover size="sm" className="mb-0">
                   <thead>
-                    <tr><th>Peminjam</th><th>Jumlah</th><th>Tanggal</th><th>Biaya</th><th>Dikembalikan</th></tr>
+                    <tr><th>Peminjam</th><th>Jumlah</th><th>Tanggal</th><th>Biaya</th><th>Dikembalikan</th><th>Aksi</th></tr>
                   </thead>
                   <tbody>
                     {riwayatItem.riwayatSewa.map((r, i) => (
@@ -794,6 +808,10 @@ function Dashboard() {
                         <td>{r.tanggalPinjam} - {r.tanggalKembali}</td>
                         <td>Rp {(r.totalBiaya || 0).toLocaleString('id-ID')}</td>
                         <td>{r.dikembalikanPada ? new Date(r.dikembalikanPada).toLocaleDateString('id-ID') : '-'}</td>
+                        <td>
+                          <Button variant="none" size="sm" className="admin-action-btn admin-action-delete"
+                            onClick={() => handleHapusRiwayat(riwayatItem, i)} title="Hapus Riwayat"><FaTrash /></Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
