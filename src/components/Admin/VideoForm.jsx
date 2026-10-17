@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../utils/api'
-import { Container, Card, Form, Button, Alert, Spinner, Image, Row, Col } from 'react-bootstrap'
+import { Modal, Form, Button, Alert, Spinner, Image, Row, Col } from 'react-bootstrap'
 import { FaYoutube, FaSync } from 'react-icons/fa'
 import Swal from 'sweetalert2'
-import AdminLayout from './AdminLayout'
 import { formatDate } from '../../utils/formatDate'
 
 function parseYouTubeId(input) {
@@ -23,10 +21,9 @@ function parseYouTubeId(input) {
   return null
 }
 
-function VideoForm() {
-  const { id } = useParams()
+function VideoForm({ show, onHide, editId, onSuccess }) {
+  const id = editId
   const isEdit = Boolean(id)
-  const navigate = useNavigate()
 
   const [rssVideos, setRssVideos] = useState([])
   const [rssError, setRssError] = useState('')
@@ -43,54 +40,36 @@ function VideoForm() {
       const res = await fetch(`/api/youtube-videos.js${cacheBust}`)
       const data = await res.json()
       const videos = Array.isArray(data.videos) ? data.videos : []
-      if (videos.length > 0) {
-        setRssVideos(videos)
-        return
-      }
+      if (videos.length > 0) { setRssVideos(videos); return }
       for (let attempt = 0; attempt < 3; attempt++) {
         await new Promise(resolve => setTimeout(resolve, 1000))
         const res2 = await fetch(`/api/youtube-videos.js?refresh=${Date.now()}`)
         const data2 = await res2.json()
         const videos2 = Array.isArray(data2.videos) ? data2.videos : []
-        if (videos2.length > 0) {
-          setRssVideos(videos2)
-          return
-        }
+        if (videos2.length > 0) { setRssVideos(videos2); return }
       }
-      setRssVideos([])
-      setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.')
-    } catch {
-      setRssVideos([])
-      setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.')
-    }
+      setRssVideos([]); setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.')
+    } catch { setRssVideos([]); setRssError('Gagal memuat video. Coba lagi atau masukkan URL secara manual.') }
   }
 
-  useEffect(() => {
-    loadRssVideos()
-  }, [])
+  useEffect(() => { if (show) { loadRssVideos(); setForm({ url: '', title: '', published: '', order: null }); setSelectedId(''); setError('') } }, [show])
 
   useEffect(() => {
-    if (!isEdit) return
+    if (!show || !isEdit) return
+    setFetching(true)
     const loadVideo = async () => {
       try {
         const all = await api.getAllVideos()
         const video = all.find(v => v.id === id)
-        if (video) {
-          setForm({ url: video.videoId || '', title: video.title || '', published: video.published || '', order: video.order ?? 0 })
-        } else {
-          setError('Video tidak ditemukan')
-        }
-      } catch {
-        setError('Gagal memuat video')
-      }
+        if (video) setForm({ url: video.videoId || '', title: video.title || '', published: video.published || '', order: video.order ?? 0 })
+        else setError('Video tidak ditemukan')
+      } catch { setError('Gagal memuat video') }
       setFetching(false)
     }
     loadVideo()
-  }, [id, isEdit])
+  }, [show, id, isEdit])
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const handleRssSelect = (e) => {
     const vid = rssVideos.find(v => v.id === e.target.value)
@@ -103,16 +82,9 @@ function VideoForm() {
   const videoId = parseYouTubeId(form.url)
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    if (!videoId) {
-      setError('Pilih video dari daftar di atas, atau masukkan URL / ID video YouTube yang valid.')
-      return
-    }
-    if (!form.title.trim()) {
-      setError('Judul video wajib diisi.')
-      return
-    }
+    e.preventDefault(); setError('')
+    if (!videoId) { setError('Pilih video dari daftar, atau masukkan URL / ID video YouTube yang valid.'); return }
+    if (!form.title.trim()) { setError('Judul video wajib diisi.'); return }
     setLoading(true)
     const payload = { videoId, title: form.title.trim(), published: form.published || '' }
     try {
@@ -124,37 +96,24 @@ function VideoForm() {
         const maxOrder = all.reduce((m, v) => Math.max(m, v.order || 0), 0)
         await api.createVideo({ ...payload, order: maxOrder + 1 })
         Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Video berhasil ditambahkan!', timer: 1500, showConfirmButton: false })
-        setForm({ url: '', title: '', published: '', order: null })
       }
-    } catch {
-      setError('Gagal menyimpan video')
-    }
+      onSuccess?.(); onHide()
+    } catch { setError('Gagal menyimpan video') }
     setLoading(false)
   }
 
-  if (fetching) {
-    return (
-      <div className="d-flex justify-content-center py-5">
-        <Spinner animation="border" variant="success" />
-      </div>
-    )
-  }
-
   return (
-    <AdminLayout title={isEdit ? 'Edit Video' : 'Tambah Video'}>
-    <Container className="pb-4" style={{ maxWidth: 800 }}>
-      <Card className="admin-form-card">
-        <Card.Body className="admin-form-body">
-
-          {error && <Alert variant="danger" role="alert" className="py-2">{error}</Alert>}
-
-          <div className="admin-form-header">
-            <h5>{isEdit ? 'Edit' : 'Tambah'} Data</h5>
-            <p className="mb-0 text-muted small">Video yang ditambahkan akan tampil di halaman Beranda. Gunakan tombol naik/turun di daftar Video untuk mengatur urutannya.</p>
-          </div>
-
-          <Form onSubmit={handleSubmit}>
-            <div className="admin-input-group">
+    <Modal show={show} onHide={onHide} centered size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>{isEdit ? 'Edit' : 'Tambah'} Video</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {error && <Alert variant="danger" className="py-2">{error}</Alert>}
+        {fetching ? (
+          <div className="d-flex justify-content-center py-4"><Spinner animation="border" variant="success" /></div>
+        ) : (
+          <Form onSubmit={handleSubmit} id="form-video">
+            <Form.Group className="mb-3">
               <Form.Label><FaYoutube className="me-1 text-danger" /> Pilih dari Video Terbaru Channel</Form.Label>
               <Form.Select value={selectedId} onChange={handleRssSelect} className="admin-input">
                 <option value="">— Pilih video —</option>
@@ -164,62 +123,48 @@ function VideoForm() {
                 {rssVideos.length === 0 && <option value="" disabled>{rssError || 'Memuat video...'}</option>}
               </Form.Select>
               <div className="d-flex align-items-center gap-2 mt-2">
-                <Button variant="outline-success" size="sm" onClick={() => loadRssVideos(true)}>
-                  <FaSync className="me-1" /> Muat Ulang Daftar
-                </Button>
+                <Button variant="outline-success" size="sm" onClick={() => loadRssVideos(true)}><FaSync className="me-1" /> Muat Ulang</Button>
                 {rssError && <span className="text-muted small">{rssError}</span>}
               </div>
-              <Form.Text className="text-muted">Pilih video di atas — judul, URL, dan tanggal terisi otomatis. Untuk video lain, masukkan URL / ID secara manual.</Form.Text>
-            </div>
-
-            <Row>
-              <Col md={12}>
-                <div className="admin-input-group">
-                  <Form.Label>URL atau ID YouTube (opsional)</Form.Label>
-                  <Form.Control type="text" name="url" value={form.url} onChange={handleChange} placeholder="https://www.youtube.com/watch?v=..." className="admin-input" />
-                </div>
-              </Col>
-            </Row>
-
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>URL atau ID YouTube (opsional)</Form.Label>
+              <Form.Control type="text" name="url" value={form.url} onChange={handleChange} placeholder="https://www.youtube.com/watch?v=..." className="admin-input" />
+            </Form.Group>
             <Row>
               <Col md={8}>
-                <div className="admin-input-group">
+                <Form.Group className="mb-3">
                   <Form.Label>Judul Video <span className="text-danger">*</span></Form.Label>
                   <Form.Control type="text" name="title" value={form.title} onChange={handleChange} required className="admin-input" />
-                </div>
+                </Form.Group>
               </Col>
               <Col md={4}>
-                <div className="admin-input-group">
+                <Form.Group className="mb-3">
                   <Form.Label>Tanggal Upload</Form.Label>
                   <Form.Control type="text" name="published" value={form.published} onChange={handleChange} placeholder="2026-08-01" className="admin-input" />
                   <Form.Text className="text-muted">Format: YYYY-MM-DD</Form.Text>
-                </div>
+                </Form.Group>
               </Col>
             </Row>
-
             {videoId && (
-              <div className="d-flex align-items-center gap-3 mt-3 p-3 bg-light rounded">
+              <div className="d-flex align-items-center gap-3 mt-2 p-3 bg-light rounded">
                 <Image src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`} rounded style={{ width: 160, height: 90, objectFit: 'cover' }} />
                 <div>
                   <p className="fw-medium mb-1">{form.title || 'Judul akan tampil di sini'}</p>
-                  <a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="small text-decoration-none">
-                    youtube.com/watch?v={videoId}
-                  </a>
+                  <a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="small text-decoration-none">youtube.com/watch?v={videoId}</a>
                 </div>
               </div>
             )}
-
-            <div className="d-flex gap-2 mt-4">
-              <Button className="admin-btn-primary" type="submit" disabled={loading}>
-                {loading ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Video'}
-              </Button>
-              <Button className="admin-btn-secondary" onClick={() => navigate('/admin/video')}>Batal</Button>
-            </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </Container>
-    </AdminLayout>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>Batal</Button>
+        <Button variant="success" type="submit" form="form-video" disabled={loading || fetching}>
+          {loading ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Video'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   )
 }
 

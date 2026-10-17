@@ -8,6 +8,17 @@ import AdminLayout from './AdminLayout'
 import AdminChart from './AdminChart'
 import CountUp from '../CountUp'
 import TwoFactorModal from './TwoFactorModal'
+import ArticleForm from './ArticleForm'
+import UmkmForm from './UmkmForm'
+import StrukturForm from './StrukturForm'
+import LembagaForm from './LembagaForm'
+import CarouselForm from './CarouselForm'
+import AgendaForm from './AgendaForm'
+import VideoForm from './VideoForm'
+import PhotoForm from './PhotoForm'
+import HayatiForm from './HayatiForm'
+import TogaForm from './TogaForm'
+import InventarisForm from './InventarisForm'
 
 const PATH_TO_TAB = { artikel: 'artikel', umkm: 'umkm', struktur: 'struktur', lembaga: 'lembaga', carousel: 'carousel', agenda: 'agenda', video: 'video', foto: 'foto', pesan: 'pesan', komentar: 'komentar', hayati: 'hayati', nonhayati: 'nonhayati', toga: 'toga', inventaris: 'inventaris' }
 
@@ -44,6 +55,7 @@ function Dashboard() {
   const [showRiwayatModal, setShowRiwayatModal] = useState(false)
   const [riwayatItem, setRiwayatItem] = useState(null)
   const [filterStatusInventaris, setFilterStatusInventaris] = useState('semua')
+  const [formModal, setFormModal] = useState({ show: false, type: '', editId: null })
   const perPage = 10
   const navigate = useNavigate()
 
@@ -183,14 +195,16 @@ function Dashboard() {
     } catch { setError('Gagal menghapus riwayat') }
   }
 
-  const getEditLink = (key, id) => {
-    const paths = { artikel: '/admin/articles/edit/', umkm: '/admin/umkm/edit/', struktur: '/admin/struktur/edit/', lembaga: '/admin/lembaga/edit/', carousel: '/admin/carousel/edit/', agenda: '/admin/agenda/edit/', video: '/admin/video/edit/', foto: '/admin/foto/edit/', hayati: '/admin/hayati/edit/', nonhayati: '/admin/nonhayati/edit/', toga: '/admin/toga/edit/', inventaris: '/admin/inventaris/edit/' }
-    return paths[key] + id
+  const openFormModal = (type, editId = null) => {
+    setFormModal({ show: true, type, editId })
   }
 
-  const getNewLink = (key) => {
-    const paths = { artikel: '/admin/articles/new', umkm: '/admin/umkm/new', struktur: '/admin/struktur/new', lembaga: '/admin/lembaga/new', carousel: '/admin/carousel/new', agenda: '/admin/agenda/new', video: '/admin/video/new', foto: '/admin/foto/new', hayati: '/admin/hayati/new', nonhayati: '/admin/nonhayati/new', toga: '/admin/toga/new', inventaris: '/admin/inventaris/new' }
-    return paths[key]
+  const closeFormModal = () => {
+    setFormModal({ show: false, type: '', editId: null })
+  }
+
+  const handleFormSuccess = () => {
+    fetchAll()
   }
 
   const handleMove = async (key, id, dir) => {
@@ -432,7 +446,7 @@ function Dashboard() {
                       )}
                       {tab !== 'pesan' && tab !== 'komentar' && (
                         <Button variant="none" size="sm" className="admin-action-btn admin-action-edit me-1"
-                          onClick={() => navigate(getEditLink(tab, item.id))} title="Edit"><FaEdit /></Button>
+                          onClick={() => openFormModal(tab, item.id)} title="Edit"><FaEdit /></Button>
                       )}
                       {tab === 'inventaris' && (
                         (item.jumlahDisewa || 0) > 0 ? (
@@ -655,7 +669,7 @@ function Dashboard() {
                   </button>
                 )}
                 {tab !== 'pesan' && tab !== 'komentar' && (
-                  <button className="admin-btn-primary" onClick={() => navigate(getNewLink(tab))}>
+                  <button className="admin-btn-primary" onClick={() => openFormModal(tab)}>
                     <FaPlus /> Tambah
                   </button>
                 )}
@@ -711,6 +725,18 @@ function Dashboard() {
         </>)}
       </div>
       <TwoFactorModal show={showTwoFactor} onHide={() => setShowTwoFactor(false)} />
+      <ArticleForm show={formModal.show && formModal.type === 'artikel'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <UmkmForm show={formModal.show && formModal.type === 'umkm'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <StrukturForm show={formModal.show && formModal.type === 'struktur'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <LembagaForm show={formModal.show && formModal.type === 'lembaga'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <HayatiForm show={formModal.show && formModal.type === 'hayati'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <HayatiForm show={formModal.show && formModal.type === 'nonhayati'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} isNonHayati={true} />
+      <TogaForm show={formModal.show && formModal.type === 'toga'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <CarouselForm show={formModal.show && formModal.type === 'carousel'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <AgendaForm show={formModal.show && formModal.type === 'agenda'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <VideoForm show={formModal.show && formModal.type === 'video'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <PhotoForm show={formModal.show && formModal.type === 'foto'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
+      <InventarisForm show={formModal.show && formModal.type === 'inventaris'} onHide={closeFormModal} editId={formModal.editId} onSuccess={handleFormSuccess} />
       <Modal show={showPinjamModal} onHide={() => setShowPinjamModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title><FaHandHolding className="me-2 text-success" />Pinjamkan Barang</Modal.Title>
