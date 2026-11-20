@@ -42,15 +42,19 @@ const DetailUmkmPage = () => {
   }
 
   return (
-    <main className="detail-page">
-      <SEO />
+    <div className="detail-page">
+      <SEO
+        title={umkm.name}
+        description={umkm.description || `Detail potensi UMKM ${umkm.name} di Padukuhan Kedung`}
+        image={umkm.imgUrl}
+      />
       <Container>
         <div className="detail-breadcrumb" data-aos="fade-up">
           <BreadcrumbDetailUmkm umkmName={umkm.name} />
         </div>
         <UmkmDetail umkm={umkm} />
       </Container>
-    </main>
+    </div>
   );
 };
 

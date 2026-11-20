@@ -46,7 +46,7 @@ function NavApp() {
   return (
     <Navbar expand="lg" className={`${navbarState} shadow-sm py-2 fixed-top`} data-aos="fade-down">
       <Container className="ps-lg-3">
-        <Navbar.Brand href="/" className="d-flex align-items-center gap-3">
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-3">
           <img alt="" src="/img/logo-bantul.png" style={{ width: 38, height: 48, objectFit: 'contain', display: 'block' }} />
           <div className="brand-text-container">
             <span className="brand-text">Padukuhan Kedung</span>

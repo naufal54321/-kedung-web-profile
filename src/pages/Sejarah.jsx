@@ -4,7 +4,7 @@ import { FaLandmark, FaHistory, FaUsers, FaShieldAlt } from 'react-icons/fa';
 
 function Sejarah() {
   return (
-    <main className="profil-page">
+    <div className="profil-page">
       <SEO title="Sejarah" description="Sejarah berdirinya Padukuhan Kedung, Kalurahan Guwosari, Kecamatan Pajangan, Kabupaten Bantul, Yogyakarta." />
       <ProfilHero
         title="Sejarah Padukuhan"
@@ -29,12 +29,12 @@ function Sejarah() {
           <div className="vm-icon vm-icon-misi">
             <FaHistory />
           </div>
-          <h3 className="vm-title">Asal-usul Nama "Kedung"</h3>
+          <h3 className="vm-title">Asal-usul Nama &quot;Kedung&quot;</h3>
           <p className="vm-text">
-            Menurut tradisi lokal dan catatan budaya setempat, nama "Kedung" mengacu
+            Menurut tradisi lokal dan catatan budaya setempat, nama &quot;Kedung&quot; mengacu
             pada kondisi alam di wilayah tersebut. Padukuhan Kedung meskipun berada
             di dataran pegunungan, memiliki sumber air yang sangat melimpah pada
-            cekungan atau kolam alami di daerah itu. Dalam bahasa Jawa, "kedung"
+            cekungan atau kolam alami di daerah itu. Dalam bahasa Jawa, &quot;kedung&quot;
             memang berarti lubuk atau kolam di sungai. Situs Desa Budaya Guwosari
             mencatat bahwa padukuhan ini dinamai Kedung karena adanya sumber mata
             air yang melimpah dalam kedung (kolam). Dengan kata lain, keberadaan
@@ -109,7 +109,7 @@ function Sejarah() {
           <div className="vm-info-badge">Informasi segera menyusul</div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

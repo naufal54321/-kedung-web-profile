@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../utils/firebase'
 import { FaUserShield, FaArrowLeft, FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa'
@@ -78,9 +78,9 @@ function LoginPage() {
           </button>
         </form>
 
-        <a href="/" className="admin-login-back">
+        <Link to="/" className="admin-login-back">
           <FaArrowLeft size={12} /> Kembali ke Website
-        </a>
+        </Link>
       </div>
     </div>
   )

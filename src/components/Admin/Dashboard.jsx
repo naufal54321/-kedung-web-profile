@@ -54,7 +54,6 @@ function Dashboard() {
   const [pinjamLoading, setPinjamLoading] = useState(false)
   const [showRiwayatModal, setShowRiwayatModal] = useState(false)
   const [riwayatItem, setRiwayatItem] = useState(null)
-  const [filterStatusInventaris, setFilterStatusInventaris] = useState('semua')
   const [formModal, setFormModal] = useState({ show: false, type: '', editId: null })
   const perPage = 10
   const navigate = useNavigate()

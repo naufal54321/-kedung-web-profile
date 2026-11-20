@@ -31,6 +31,7 @@ const SEARCHABLE = [
     icon: FaCalendarAlt,
     color: '#F9A825',
     link: () => `/Agenda`,
+    fetch: () => api.getAllAgendas(),
     searchFields: ['name', 'lokasi', 'description'],
     display: (item) => ({ title: item.name, subtitle: `${item.dateStart || ''} • ${item.lokasi || ''}` })
   },

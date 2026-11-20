@@ -159,7 +159,7 @@ function TwoFactorModal({ show, onHide }) {
               </div>
               <div className="admin-2fa-qr-text">
                 <h6 className="admin-2fa-step-title">1. Pindai kode QR</h6>
-                <p>Buka aplikasi authenticator di HP, pilih "Add account" → "Scan QR code", lalu arahkan ke kode di samping.</p>
+                <p>Buka aplikasi authenticator di HP, pilih &quot;Add account&quot; &rarr; &quot;Scan QR code&quot;, lalu arahkan ke kode di samping.</p>
                 <h6 className="admin-2fa-step-title">2. Masukkan kode</h6>
                 <p>Ketik kode 6 digit yang muncul di aplikasi untuk mengonfirmasi aktivasi.</p>
                 {secret && (

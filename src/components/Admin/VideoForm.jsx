@@ -37,13 +37,13 @@ function VideoForm({ show, onHide, editId, onSuccess }) {
     setRssError('')
     try {
       const cacheBust = force ? `?refresh=${Date.now()}` : ''
-      const res = await fetch(`/api/youtube-videos.js${cacheBust}`)
+      const res = await fetch(`/api/youtube-videos${cacheBust}`)
       const data = await res.json()
       const videos = Array.isArray(data.videos) ? data.videos : []
       if (videos.length > 0) { setRssVideos(videos); return }
       for (let attempt = 0; attempt < 3; attempt++) {
         await new Promise(resolve => setTimeout(resolve, 1000))
-        const res2 = await fetch(`/api/youtube-videos.js?refresh=${Date.now()}`)
+        const res2 = await fetch(`/api/youtube-videos?refresh=${Date.now()}`)
         const data2 = await res2.json()
         const videos2 = Array.isArray(data2.videos) ? data2.videos : []
         if (videos2.length > 0) { setRssVideos(videos2); return }

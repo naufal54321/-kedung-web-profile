@@ -23,7 +23,7 @@ function VideoSection() {
           setLoading(false);
           return;
         }
-        const response = await fetch('/api/youtube-videos.js');
+        const response = await fetch('/api/youtube-videos');
         const data = await response.json();
         if (!cancelled) setVideos(Array.isArray(data.videos) ? data.videos : []);
       } catch (error) {

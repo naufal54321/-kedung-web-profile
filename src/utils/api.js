@@ -95,12 +95,11 @@ const api = (() => {
           if (dB !== dA) return dB - dA
           return b.id.localeCompare(a.id)
         });
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching articles:', error);
-      throw error;
+      return [];
     }
   }
   
@@ -151,12 +150,11 @@ const api = (() => {
         return umkms
           .filter(u => u.status === 'approved' || !u.status)
           .sort(compareUmkm);
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching UMKM:', error);
-      throw error;
+      return [];
     }
   }
 
@@ -195,103 +193,80 @@ const api = (() => {
   async function getAllHayatis() {
     try {
       const response = await fetchData('hayati.json');
-      // console.log('Hayati List:', response); // Tambahkan pernyataan log
-      // Pastikan response adalah objek
       if (typeof response === 'object' && response !== null) {
-        // Ubah objek artikel menjadi array
-        const hayatis = Object.keys(response).map(key => ({
+        return Object.keys(response).map(key => ({
           ...response[key],
           id: key
         }));
-        return hayatis;
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching hayatis:', error);
-      throw error;
+      return [];
     }
   }
 
   async function getAllNonHayatis() {
     try {
       const response = await fetchData('Nonhayati.json');
-      // console.log('Non Hayati List:', response); // Tambahkan pernyataan log
-      // Pastikan response adalah objek
       if (typeof response === 'object' && response !== null) {
-        // Ubah objek artikel menjadi array
-        const nonhayatis = Object.keys(response).map(key => ({
+        return Object.keys(response).map(key => ({
           ...response[key],
           id: key
         }));
-        return nonhayatis;
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching nonhayatis:', error);
-      throw error;
+      return [];
     }
   }
 
   async function getAllStrukturs() {
     try {
       const response = await fetchData('struktur.json');
-      // console.log('Struktur List:', response);
       if (typeof response === 'object' && response !== null) {
-        const strukturs = Object.keys(response).map(key => ({
+        return Object.keys(response).map(key => ({
           ...response[key],
           id: key
         }));
-        return strukturs;
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching strukturs:', error);
-      throw error;
+      return [];
     }
   }
 
   async function getAllAgendas() {
     try {
       const response = await fetchData('agenda.json');
-      // console.log('Agenda List:', response);
-      // Pastikan response adalah objek
       if (typeof response === 'object' && response !== null) {
-        // Ubah objek artikel menjadi array
-        const agendas = Object.keys(response).map(key => ({
+        return Object.keys(response).map(key => ({
           ...response[key],
           id: key
         }));
-        return agendas;
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching agendas:', error);
-      throw error;
+      return [];
     }
   }
 
   async function getAllTogas() {
     try {
       const response = await fetchData('toga.json');
-      // console.log('Toga List:', response); // Tambahkan pernyataan log
-      // Pastikan response adalah objek
       if (typeof response === 'object' && response !== null) {
-        // Ubah objek toga menjadi array
-        const togas = Object.keys(response).map(key => ({
+        return Object.keys(response).map(key => ({
           ...response[key],
           id: key
         }));
-        return togas;
-      } else {
-        throw new Error('Invalid response format');
       }
+      return [];
     } catch (error) {
       console.error('Error fetching togas:', error);
-      throw error;
+      return [];
     }
   }
   
